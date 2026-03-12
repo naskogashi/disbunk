@@ -1,4 +1,4 @@
-import { Sun, Moon, Globe, Bell, LogOut } from "lucide-react";
+import { Sun, Moon, Bell, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useTheme } from "@/hooks/useTheme";
@@ -56,11 +56,15 @@ export function AppHeader() {
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-muted-foreground hover:text-foreground"
+          className="h-8 w-8"
           onClick={toggleTheme}
           title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
         >
-          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          {theme === "dark" ? (
+            <Sun className="h-4 w-4 text-[hsl(189,100%,50%)]" />
+          ) : (
+            <Moon className="h-4 w-4 text-primary" />
+          )}
         </Button>
 
         <DropdownMenu>
