@@ -28,7 +28,7 @@ export default function Landing() {
           <Button variant="ghost" size="sm" className="text-muted-foreground text-xs">
             EN / SQ
           </Button>
-          <Link to="/dashboard">
+          <Link to="/login">
             <Button size="sm">Sign In</Button>
           </Link>
         </div>
