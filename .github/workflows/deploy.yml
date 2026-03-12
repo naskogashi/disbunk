@@ -24,10 +24,10 @@ jobs:
 
       - name: Deploy via SSH
         uses: easingthemes/ssh-deploy@main
-        with:
+        env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_USER: ${{ secrets.SSH_USER }}
-          SOURCE: "dist/"
           TARGET: ${{ secrets.SSH_DEPLOY_PATH }}
+          SOURCE: "dist/"
           ARGS: "-avz --delete"
