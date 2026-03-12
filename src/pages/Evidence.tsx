@@ -322,14 +322,12 @@ export default function Evidence() {
 
                   {/* Download */}
                   {item.file_url && (
-                    <a
-                      href={item.file_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      onClick={() => handleDownload(item.file_url!)}
                       className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-1"
                     >
                       <Download className="h-3 w-3" /> {t("evidence.download")}
-                    </a>
+                    </button>
                   )}
                 </CardContent>
               </Card>
