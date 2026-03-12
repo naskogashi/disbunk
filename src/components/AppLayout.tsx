@@ -1,9 +1,12 @@
+import { useTranslation } from "react-i18next";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Outlet } from "react-router-dom";
 
 export function AppLayout() {
+  const { t } = useTranslation();
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -15,7 +18,7 @@ export function AppLayout() {
           </main>
           <footer className="border-t border-border px-6 py-4">
             <p className="text-[11px] text-muted-foreground leading-relaxed max-w-4xl">
-              This web page is produced as part of the Hackathon activity under the CIVICUS Digital Democracy Initiative (DDI), implemented by Metamorphosis Foundation in partnership with Civic Literacy Initiative.
+              {t("common.footer")}
             </p>
           </footer>
         </div>

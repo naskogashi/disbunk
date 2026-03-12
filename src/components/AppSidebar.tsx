@@ -13,6 +13,7 @@ import {
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 import {
   Sidebar,
   SidebarContent,
@@ -26,28 +27,29 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const mainNav = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Claims", url: "/claims", icon: FileText },
-  { title: "Evidence Vault", url: "/evidence", icon: Shield },
-  { title: "Campaigns", url: "/campaigns", icon: Target },
-  { title: "Sbunker Feed", url: "/sbunker", icon: Rss },
-  { title: "Teams", url: "/teams", icon: Users },
-  { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "Documentation", url: "/docs", icon: BookOpen },
-  { title: "Settings", url: "/settings", icon: Settings },
-];
-
-const adminNav = [
-  { title: "Admin Panel", url: "/admin", icon: Lock },
-];
-
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
   const { hasRole } = useAuth();
+  const { t } = useTranslation();
   const isAdmin = hasRole("admin");
+
+  const mainNav = [
+    { title: t("nav.dashboard"), url: "/dashboard", icon: LayoutDashboard },
+    { title: t("nav.claims"), url: "/claims", icon: FileText },
+    { title: t("nav.evidence"), url: "/evidence", icon: Shield },
+    { title: t("nav.campaigns"), url: "/campaigns", icon: Target },
+    { title: t("nav.sbunker"), url: "/sbunker", icon: Rss },
+    { title: t("nav.teams"), url: "/teams", icon: Users },
+    { title: t("nav.analytics"), url: "/analytics", icon: BarChart3 },
+    { title: t("nav.docs"), url: "/docs", icon: BookOpen },
+    { title: t("nav.settings"), url: "/settings", icon: Settings },
+  ];
+
+  const adminNav = [
+    { title: t("nav.admin"), url: "/admin", icon: Lock },
+  ];
 
   const isActive = (path: string) => location.pathname.startsWith(path);
 
@@ -60,11 +62,9 @@ export function AppSidebar() {
           </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="text-sm font-bold text-sidebar-foreground">
-                Disbunk.org
-              </span>
+              <span className="text-sm font-bold text-sidebar-foreground">Disbunk.org</span>
               <span className="text-[10px] text-muted-foreground tracking-wide uppercase">
-                Rapid, credible, coordinated.
+                {t("landing.tagline")}
               </span>
             </div>
           )}
@@ -76,12 +76,8 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {mainNav.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.url)}
-                    tooltip={item.title}
-                  >
+                <SidebarMenuItem key={item.url}>
+                  <SidebarMenuButton asChild isActive={isActive(item.url)} tooltip={item.title}>
                     <NavLink
                       to={item.url}
                       end={item.url === "/dashboard"}
@@ -103,12 +99,8 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 {adminNav.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive(item.url)}
-                      tooltip={item.title}
-                    >
+                  <SidebarMenuItem key={item.url}>
+                    <SidebarMenuButton asChild isActive={isActive(item.url)} tooltip={item.title}>
                       <NavLink
                         to={item.url}
                         className="hover:bg-sidebar-accent"
