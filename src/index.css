@@ -6,111 +6,113 @@
 
 @layer base {
   /* ============================================================
-     LIGHT THEME — Editorial Intelligence Brief
-     Inspired by: FT, Reuters, Jane's Intelligence, Le Monde
+     LIGHT THEME — Clean Intel Brief
+     Inspired by: Bloomberg light panels, Palantir docs
      ============================================================ */
   :root {
-    /* #F5F0E8 warm newsprint */
-    --background: 38 30% 93%;
-    /* #1A1A1A */
-    --foreground: 0 0% 10%;
+    /* #F0F2F5 cool silver-grey */
+    --background: 216 14% 95%;
+    /* #0F1114 near-black */
+    --foreground: 216 18% 7%;
 
-    /* #FDFAF5 warm white cards */
-    --card: 40 50% 97%;
-    --card-foreground: 0 0% 10%;
+    /* #FFFFFF crisp white panels */
+    --card: 0 0% 100%;
+    --card-foreground: 216 18% 7%;
 
-    /* #FFFFFF modals/dropdowns */
+    /* #FFFFFF */
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
+    --popover-foreground: 216 18% 7%;
 
-    /* #0066CC deep ink blue */
-    --primary: 210 100% 40%;
+    /* #0891B2 teal-cyan */
+    --primary: 189 88% 37%;
     --primary-foreground: 0 0% 100%;
 
-    /* #EDE8DE warm off-white secondary */
-    --secondary: 38 25% 89%;
-    --secondary-foreground: 0 0% 10%;
+    /* #E8EAED cool grey */
+    --secondary: 216 10% 92%;
+    --secondary-foreground: 216 18% 7%;
 
-    /* #EDE8DE muted warm */
-    --muted: 38 25% 89%;
-    /* #8A8A8A */
-    --muted-foreground: 0 0% 54%;
+    /* #E8EAED */
+    --muted: 216 10% 92%;
+    /* #6B7280 */
+    --muted-foreground: 220 9% 46%;
 
-    /* #E8E2D6 */
-    --accent: 38 22% 87%;
-    --accent-foreground: 0 0% 10%;
+    /* #DFE2E6 */
+    --accent: 216 10% 89%;
+    --accent-foreground: 216 18% 7%;
 
-    /* #C41230 deep red */
-    --destructive: 351 82% 42%;
+    /* #DC2626 signal red */
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* #007A5E forest green */
-    --success: 162 100% 24%;
+    /* #059669 ops green */
+    --success: 160 84% 30%;
     --success-foreground: 0 0% 100%;
 
-    /* #B85C00 burnt amber */
-    --warning: 30 100% 36%;
+    /* #D97706 amber alert */
+    --warning: 38 92% 44%;
     --warning-foreground: 0 0% 100%;
 
-    /* #D4C9B5 warm grey borders */
-    --border: 34 20% 77%;
+    /* #D1D5DB */
+    --border: 216 12% 84%;
     --input: 0 0% 100%;
-    --ring: 210 100% 40%;
+    --ring: 189 88% 37%;
 
     --radius: 0.375rem;
 
-    /* Dark sidebar in light mode for contrast (FT-style) */
-    /* #1A1A2E */
-    --sidebar-background: 240 27% 14%;
-    /* #E6EDF3 */
-    --sidebar-foreground: 210 33% 93%;
-    /* #00D4FF cyan active */
+    /* Dark sidebar always */
+    --sidebar-background: 220 20% 8%;
+    --sidebar-foreground: 189 30% 80%;
     --sidebar-primary: 189 100% 50%;
-    --sidebar-primary-foreground: 240 27% 14%;
-    /* #2A2A42 */
-    --sidebar-accent: 240 24% 21%;
-    --sidebar-accent-foreground: 210 33% 93%;
-    /* #2A2A42 */
-    --sidebar-border: 240 24% 21%;
+    --sidebar-primary-foreground: 220 20% 8%;
+    --sidebar-accent: 220 18% 14%;
+    --sidebar-accent-foreground: 189 30% 90%;
+    --sidebar-border: 220 16% 16%;
     --sidebar-ring: 189 100% 50%;
 
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Glow tokens */
+    --glow-primary: 189 100% 50%;
+    --glow-success: 160 84% 40%;
+    --glow-warning: 38 92% 50%;
+    --glow-destructive: 0 72% 55%;
   }
 
   /* ============================================================
-     DARK THEME — Ops Console / Intelligence Dashboard
+     DARK THEME — Command Center / Ops Console
+     Inspired by: Bloomberg Terminal, Palantir, NASA MCC
      ============================================================ */
   .dark {
-    /* #0D0D14 deep navy-black */
-    --background: 240 27% 6%;
-    /* #E6EDF3 */
-    --foreground: 210 33% 93%;
+    /* #0A0C10 deep void */
+    --background: 220 22% 4%;
+    /* #E2E8F0 */
+    --foreground: 214 32% 91%;
 
-    /* #141422 */
-    --card: 240 27% 10%;
-    --card-foreground: 210 33% 93%;
+    /* #0F1218 panel */
+    --card: 220 22% 7%;
+    --card-foreground: 214 32% 91%;
 
-    /* #1A1A2E */
-    --popover: 240 27% 14%;
-    --popover-foreground: 210 33% 93%;
+    /* #141820 */
+    --popover: 220 22% 10%;
+    --popover-foreground: 214 32% 91%;
 
-    /* #3B82F6 bright blue */
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
+    /* #06B6D4 electric cyan */
+    --primary: 189 94% 43%;
+    --primary-foreground: 220 22% 4%;
 
-    /* #1E1E32 */
-    --secondary: 240 25% 16%;
-    --secondary-foreground: 210 33% 93%;
+    /* #161B24 */
+    --secondary: 218 22% 11%;
+    --secondary-foreground: 214 32% 91%;
 
-    /* #1E1E32 */
-    --muted: 240 25% 16%;
-    /* #6B7280 */
-    --muted-foreground: 220 9% 46%;
+    /* #161B24 */
+    --muted: 218 22% 11%;
+    /* #64748B slate */
+    --muted-foreground: 215 16% 47%;
 
-    /* #252540 */
-    --accent: 240 24% 20%;
-    --accent-foreground: 210 33% 93%;
+    /* #1C2230 */
+    --accent: 218 22% 15%;
+    --accent-foreground: 214 32% 91%;
 
     /* #EF4444 */
     --destructive: 0 84% 60%;
@@ -122,28 +124,29 @@
 
     /* #F59E0B */
     --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning-foreground: 220 22% 4%;
 
-    /* #2A2A42 */
-    --border: 240 24% 21%;
-    /* #1E1E32 */
-    --input: 240 25% 16%;
-    --ring: 217 91% 60%;
+    /* #1E2432 */
+    --border: 218 22% 16%;
+    /* #161B24 */
+    --input: 218 22% 11%;
+    --ring: 189 94% 43%;
 
-    /* Sidebar in dark mode */
-    /* #0D0D14 */
-    --sidebar-background: 240 27% 6%;
-    /* #9CA3AF */
-    --sidebar-foreground: 218 11% 65%;
-    /* #00D4FF */
+    /* Sidebar */
+    --sidebar-background: 220 22% 4%;
+    --sidebar-foreground: 215 16% 57%;
     --sidebar-primary: 189 100% 50%;
-    --sidebar-primary-foreground: 240 27% 6%;
-    /* #1E1E32 */
-    --sidebar-accent: 240 25% 16%;
-    --sidebar-accent-foreground: 210 33% 93%;
-    /* #2A2A42 */
-    --sidebar-border: 240 24% 21%;
+    --sidebar-primary-foreground: 220 22% 4%;
+    --sidebar-accent: 218 22% 11%;
+    --sidebar-accent-foreground: 214 32% 91%;
+    --sidebar-border: 218 22% 16%;
     --sidebar-ring: 189 100% 50%;
+
+    /* Glow tokens */
+    --glow-primary: 189 100% 50%;
+    --glow-success: 160 64% 50%;
+    --glow-warning: 38 92% 55%;
+    --glow-destructive: 0 84% 60%;
   }
 }
 
@@ -154,7 +157,6 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    transition: background-color 200ms ease, color 200ms ease;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -163,70 +165,150 @@
 }
 
 @layer components {
+  /* === CLAIM ID — monospace data label === */
   .claim-id {
     @apply font-mono text-xs tracking-wider text-primary;
   }
 
+  /* === STATUS BADGES — glowing indicators === */
   .status-badge {
     @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium font-mono uppercase tracking-wider;
   }
 
   .status-pending {
-    @apply bg-warning/15 text-warning;
+    @apply bg-warning/10 text-warning;
   }
-
   .status-investigating {
-    @apply bg-primary/15 text-primary;
+    @apply bg-primary/10 text-primary;
   }
-
   .status-verified {
-    @apply bg-success/15 text-success;
+    @apply bg-success/10 text-success;
   }
-
   .status-debunked {
-    @apply bg-destructive/15 text-destructive;
+    @apply bg-destructive/10 text-destructive;
   }
-
   .status-escalated {
-    @apply bg-destructive/15 text-destructive;
+    @apply bg-destructive/10 text-destructive;
   }
 
-  /* Light mode: static dots, no glow, warm shadow hover on cards */
+  /* Light: static dots */
   :root .status-badge span[class*="rounded-full"] {
     animation: none !important;
   }
 
-  /* Dark mode: pulse dots */
-  .dark .status-badge span[class*="rounded-full"] {
-    animation: pulse-dot 2s ease-in-out infinite;
+  /* Dark: pulsing glow dots */
+  .dark .status-pending span[class*="rounded-full"] {
+    animation: pulse-glow-warning 2s ease-in-out infinite;
+  }
+  .dark .status-investigating span[class*="rounded-full"] {
+    animation: pulse-glow-primary 2s ease-in-out infinite;
+  }
+  .dark .status-verified span[class*="rounded-full"] {
+    animation: pulse-glow-success 2s ease-in-out infinite;
+  }
+  .dark .status-debunked span[class*="rounded-full"],
+  .dark .status-escalated span[class*="rounded-full"] {
+    animation: pulse-glow-destructive 2s ease-in-out infinite;
   }
 
-  /* Card hover: warm shadow in light, glow in dark */
+  /* === CARD HOVER — ops panel lift === */
   .card-hover {
-    @apply transition-all duration-150 ease-in-out;
+    @apply transition-all duration-200 ease-out;
   }
 
   :root .card-hover:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-left: 2px solid hsl(210 100% 40%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border-left: 2px solid hsl(189 88% 37%);
   }
 
   .dark .card-hover:hover {
-    border-color: hsl(217 91% 60% / 0.4);
-    box-shadow: 0 0 20px hsl(217 91% 60% / 0.1);
+    border-color: hsl(189 94% 43% / 0.5);
+    box-shadow:
+      0 0 1px hsl(189 94% 43% / 0.4),
+      0 0 12px hsl(189 94% 43% / 0.08),
+      inset 0 1px 0 hsl(189 94% 43% / 0.05);
+  }
+
+  /* === SCANLINE — subtle CRT texture for dark cards === */
+  .dark .ops-scanline::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      hsl(189 100% 50% / 0.01) 2px,
+      hsl(189 100% 50% / 0.01) 4px
+    );
+    border-radius: inherit;
+  }
+
+  /* === DATA GRID LINE — horizontal dividers === */
+  .data-row {
+    @apply border-b border-border/50 py-2;
+  }
+
+  .dark .data-row {
+    border-color: hsl(218 22% 16% / 0.6);
   }
 }
 
-/* Smooth theme transitions on all themed elements */
+/* === GLOW KEYFRAMES === */
+@keyframes pulse-glow-primary {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 4px hsl(189 100% 50% / 0.6);
+  }
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 8px hsl(189 100% 50% / 0.3);
+  }
+}
+
+@keyframes pulse-glow-success {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 4px hsl(160 64% 50% / 0.6);
+  }
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 8px hsl(160 64% 50% / 0.3);
+  }
+}
+
+@keyframes pulse-glow-warning {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 4px hsl(38 92% 55% / 0.6);
+  }
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 8px hsl(38 92% 55% / 0.3);
+  }
+}
+
+@keyframes pulse-glow-destructive {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 4px hsl(0 84% 60% / 0.6);
+  }
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 8px hsl(0 84% 60% / 0.3);
+  }
+}
+
+/* === SMOOTH THEME TRANSITIONS === */
 *,
 *::before,
 *::after {
   transition-property: background-color, border-color, box-shadow;
-  transition-duration: 200ms;
+  transition-duration: 150ms;
   transition-timing-function: ease;
 }
 
-/* Exclude transitions from animations and interactive elements that need instant feedback */
 button,
 a,
 input,
@@ -234,5 +316,5 @@ textarea,
 select,
 [role="button"] {
   transition-property: background-color, border-color, box-shadow, color, opacity;
-  transition-duration: 150ms;
+  transition-duration: 120ms;
 }
