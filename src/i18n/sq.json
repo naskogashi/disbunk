@@ -235,7 +235,10 @@
     "selectClaim": "Zgjidhni një pretendim",
     "tags": "Etiketat (të ndara me presje)",
     "tagsPlaceholder": "facebook, virale, e manipuluar",
-    "file": "Skedari"
+    "file": "Skedari",
+    "bulkDownload": "Shkarko të Gjitha",
+    "bulkDownloadStarted": "Duke shkarkuar {{count}} skedarë...",
+    "selectClaimForBulk": "Zgjidhni një pretendim për të shkarkuar dëshmitë e tij"
   },
   "teams": {
     "title": "Ekipet",
