@@ -316,13 +316,13 @@ function UploadForm({ claims, userId, onComplete, onError }: UploadFormProps) {
     setSubmitting(true);
     let fileUrl: string | null = null;
 
-    // Upload file to Supabase Storage if provided
+    // Upload file to Supabase Storage (private bucket)
     if (file) {
       const ext = file.name.split(".").pop();
-      const path = `evidence/${claimId}/${crypto.randomUUID()}.${ext}`;
+      const filePath = `${claimId}/${crypto.randomUUID()}.${ext}`;
       const { error: uploadError } = await supabase.storage
         .from("evidence")
-        .upload(path, file, { contentType: file.type });
+        .upload(filePath, file, { contentType: file.type });
 
       if (uploadError) {
         onError(uploadError.message);
@@ -330,10 +330,8 @@ function UploadForm({ claims, userId, onComplete, onError }: UploadFormProps) {
         return;
       }
 
-      const { data: urlData } = supabase.storage
-        .from("evidence")
-        .getPublicUrl(path);
-      fileUrl = urlData.publicUrl;
+      // Store the path, not the URL — we'll create signed URLs on read
+      fileUrl = filePath;
     }
 
     const { error } = await supabase.from("evidence").insert({
