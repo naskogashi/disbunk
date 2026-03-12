@@ -9,7 +9,8 @@
     "analytics": "Analytics",
     "docs": "Documentation",
     "settings": "Settings",
-    "admin": "Admin Panel"
+    "admin": "Admin Panel",
+    "profile": "My Profile"
   },
   "landing": {
     "tagline": "Rapid, credible, coordinated.",
