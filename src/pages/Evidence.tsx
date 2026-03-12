@@ -154,6 +154,18 @@ export default function Evidence() {
           </p>
         </div>
         <div className="flex gap-2">
+          {claimFilter !== "all" && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-1.5"
+              onClick={handleBulkDownload}
+              disabled={downloading}
+            >
+              {downloading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+              {t("evidence.bulkDownload")}
+            </Button>
+          )}
           {canUpload && (
             <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
               <DialogTrigger asChild>
