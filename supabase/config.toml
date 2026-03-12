@@ -1,0 +1,5 @@
+[functions.crawl-sbunker]
+verify_jwt = false
+
+[functions.notify-registration]
+verify_jwt = false
