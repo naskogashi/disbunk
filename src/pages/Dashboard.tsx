@@ -50,7 +50,7 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Claims */}
-        <Card className="lg:col-span-2 border-border">
+        <Card className="lg:col-span-2 border-border card-hover">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base">Recent Claims</CardTitle>
