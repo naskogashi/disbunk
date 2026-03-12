@@ -9,7 +9,15 @@ interface StatCardProps {
   variant?: "default" | "success" | "destructive" | "warning" | "primary";
 }
 
-const variantClasses: Record<string, string> = {
+const variantBorder: Record<string, string> = {
+  default: "border-t-foreground/20",
+  success: "border-t-success",
+  destructive: "border-t-destructive",
+  warning: "border-t-warning",
+  primary: "border-t-primary",
+};
+
+const variantText: Record<string, string> = {
   default: "text-foreground",
   success: "text-success",
   destructive: "text-destructive",
@@ -19,18 +27,18 @@ const variantClasses: Record<string, string> = {
 
 export function StatCard({ title, value, icon: Icon, trend, variant = "default" }: StatCardProps) {
   return (
-    <Card className="border-border">
+    <Card className={`border-border border-t-2 ${variantBorder[variant]} card-hover`}>
       <CardContent className="p-5">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{title}</p>
-            <p className={`text-2xl font-bold ${variantClasses[variant]}`}>{value}</p>
+            <p className={`text-2xl font-bold font-mono ${variantText[variant]}`}>{value}</p>
             {trend && (
               <p className="text-xs text-muted-foreground">{trend}</p>
             )}
           </div>
           <div className="rounded-lg bg-muted p-2">
-            <Icon className={`h-4 w-4 ${variantClasses[variant]}`} />
+            <Icon className={`h-4 w-4 ${variantText[variant]}`} />
           </div>
         </div>
       </CardContent>

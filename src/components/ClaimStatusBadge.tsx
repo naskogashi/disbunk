@@ -5,18 +5,18 @@ interface ClaimStatusBadgeProps {
 }
 
 const statusConfig: Record<ClaimStatus, { label: string; className: string }> = {
-  pending: { label: "Pending", className: "status-badge status-pending" },
-  investigating: { label: "Investigating", className: "status-badge status-investigating" },
-  verified: { label: "Verified", className: "status-badge status-verified" },
-  debunked: { label: "Debunked", className: "status-badge status-debunked" },
-  escalated: { label: "Escalated", className: "status-badge status-escalated" },
+  pending: { label: "PENDING", className: "status-badge status-pending" },
+  investigating: { label: "INVESTIGATING", className: "status-badge status-investigating" },
+  verified: { label: "VERIFIED", className: "status-badge status-verified" },
+  debunked: { label: "DEBUNKED", className: "status-badge status-debunked" },
+  escalated: { label: "ESCALATED", className: "status-badge status-escalated" },
 };
 
 export function ClaimStatusBadge({ status }: ClaimStatusBadgeProps) {
   const config = statusConfig[status];
   return (
     <span className={config.className}>
-      <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse-dot" />
+      <span className="h-1.5 w-1.5 rounded-full bg-current shrink-0" />
       {config.label}
     </span>
   );

@@ -79,12 +79,12 @@ export default function Claims() {
       {/* Claims List */}
       <div className="space-y-3">
         {filtered.map((claim) => (
-          <Card key={claim.id} className="border-border hover:border-primary/30 transition-colors cursor-pointer">
+          <Card key={claim.id} className="border-border card-hover cursor-pointer">
             <CardContent className="p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-2 min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs text-muted-foreground">{claim.id}</span>
+                    <span className="claim-id">{claim.id}</span>
                     <ClaimStatusBadge status={claim.status} />
                     <span className="text-xs text-muted-foreground border border-border rounded px-1.5 py-0.5 uppercase font-mono">
                       {claim.lang}
