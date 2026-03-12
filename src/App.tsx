@@ -10,6 +10,8 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Claims from "./pages/Claims";
+import ClaimDetail from "./pages/ClaimDetail";
+import NewClaim from "./pages/NewClaim";
 import Evidence from "./pages/Evidence";
 import Campaigns from "./pages/Campaigns";
 import SbunkerFeed from "./pages/SbunkerFeed";
@@ -35,6 +37,8 @@ const App = () => (
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/claims" element={<Claims />} />
+              <Route path="/claims/new" element={<NewClaim />} />
+              <Route path="/claims/:id" element={<ClaimDetail />} />
               <Route path="/evidence" element={<Evidence />} />
               <Route path="/campaigns" element={<Campaigns />} />
               <Route path="/sbunker" element={<SbunkerFeed />} />
