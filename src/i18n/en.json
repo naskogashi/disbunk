@@ -270,6 +270,25 @@
     "namePlaceholder": "e.g. Balkans Disinfo Response Unit",
     "descPlaceholder": "Describe the team's focus area..."
   },
+  "profile": {
+    "title": "My Profile",
+    "memberSince": "Member since",
+    "claimsSubmitted": "Claims Submitted",
+    "evidenceAdded": "Evidence Added",
+    "commentsPosted": "Comments Posted",
+    "teamsJoined": "Teams Joined",
+    "impactScore": "Impact Score",
+    "activityHeatmap": "Activity — Last 12 Months",
+    "contributions": "contributions",
+    "less": "Less",
+    "more": "More",
+    "teamLeaderboard": "Team Leaderboard",
+    "showLeaderboard": "Show",
+    "noLeaderboard": "No leaderboard data yet.",
+    "you": "you",
+    "claimsLabel": "claims",
+    "points": "pts"
+  },
   "common": {
     "settings": "Settings",
     "footer": "This web page is produced as part of the Hackathon activity under the CIVICUS Digital Democracy Initiative (DDI), implemented by Metamorphosis Foundation in partnership with Civic Literacy Initiative.",
