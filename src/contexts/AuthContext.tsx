@@ -33,13 +33,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   const fetchUserMeta = useCallback(async (userId: string) => {
+    // Fetch roles and profile in parallel, handling errors gracefully
     const [rolesRes, profileRes] = await Promise.all([
       supabase.from("user_roles").select("role").eq("user_id", userId),
-      supabase.from("profiles").select("status").eq("user_id", userId).single(),
+      supabase.from("profiles").select("status").eq("user_id", userId).maybeSingle(),
     ]);
+
+    if (rolesRes.error) {
+      console.warn("[Auth] Failed to fetch user_roles:", rolesRes.error.message);
+    }
+    if (profileRes.error) {
+      console.warn("[Auth] Failed to fetch profile:", profileRes.error.message);
+    }
 
     const roles = (rolesRes.data?.map((r) => r.role) as AppRole[]) ?? [];
     const profileStatus = (profileRes.data?.status as ProfileStatus) ?? null;
+
+    console.info("[Auth] User meta loaded:", { userId, roles, profileStatus });
 
     return { roles, profileStatus };
   }, []);
