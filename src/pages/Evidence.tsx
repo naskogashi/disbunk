@@ -69,6 +69,43 @@ export default function Evidence() {
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [claimFilter, setClaimFilter] = useState<string>("all");
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+
+  const getSignedUrl = async (path: string): Promise<string | null> => {
+    const { data, error } = await supabase.storage
+      .from("evidence")
+      .createSignedUrl(path, 3600);
+    return error ? null : data.signedUrl;
+  };
+
+  const handleDownload = async (filePath: string) => {
+    const url = await getSignedUrl(filePath);
+    if (url) window.open(url, "_blank");
+  };
+
+  const handleBulkDownload = async () => {
+    if (!claimFilter || claimFilter === "all") {
+      toast({ title: t("evidence.selectClaimForBulk"), variant: "destructive" });
+      return;
+    }
+    setDownloading(true);
+    const filesForClaim = filtered.filter((e) => e.file_url);
+    
+    // Download files individually (zip requires a library not installed)
+    for (const item of filesForClaim) {
+      if (item.file_url) {
+        const url = await getSignedUrl(item.file_url);
+        if (url) {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = item.title;
+          a.click();
+        }
+      }
+    }
+    setDownloading(false);
+    toast({ title: t("evidence.bulkDownloadStarted", { count: filesForClaim.length }) });
+  };
 
   const fetchEvidence = async () => {
     setLoading(true);
@@ -117,6 +154,18 @@ export default function Evidence() {
           </p>
         </div>
         <div className="flex gap-2">
+          {claimFilter !== "all" && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-1.5"
+              onClick={handleBulkDownload}
+              disabled={downloading}
+            >
+              {downloading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+              {t("evidence.bulkDownload")}
+            </Button>
+          )}
           {canUpload && (
             <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
               <DialogTrigger asChild>
@@ -273,14 +322,12 @@ export default function Evidence() {
 
                   {/* Download */}
                   {item.file_url && (
-                    <a
-                      href={item.file_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      onClick={() => handleDownload(item.file_url!)}
                       className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-1"
                     >
                       <Download className="h-3 w-3" /> {t("evidence.download")}
-                    </a>
+                    </button>
                   )}
                 </CardContent>
               </Card>
@@ -316,13 +363,13 @@ function UploadForm({ claims, userId, onComplete, onError }: UploadFormProps) {
     setSubmitting(true);
     let fileUrl: string | null = null;
 
-    // Upload file to Supabase Storage if provided
+    // Upload file to Supabase Storage (private bucket)
     if (file) {
       const ext = file.name.split(".").pop();
-      const path = `evidence/${claimId}/${crypto.randomUUID()}.${ext}`;
+      const filePath = `${claimId}/${crypto.randomUUID()}.${ext}`;
       const { error: uploadError } = await supabase.storage
         .from("evidence")
-        .upload(path, file, { contentType: file.type });
+        .upload(filePath, file, { contentType: file.type });
 
       if (uploadError) {
         onError(uploadError.message);
@@ -330,10 +377,8 @@ function UploadForm({ claims, userId, onComplete, onError }: UploadFormProps) {
         return;
       }
 
-      const { data: urlData } = supabase.storage
-        .from("evidence")
-        .getPublicUrl(path);
-      fileUrl = urlData.publicUrl;
+      // Store the path, not the URL — we'll create signed URLs on read
+      fileUrl = filePath;
     }
 
     const { error } = await supabase.from("evidence").insert({

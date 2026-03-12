@@ -235,7 +235,10 @@
     "selectClaim": "Select a claim",
     "tags": "Tags (comma separated)",
     "tagsPlaceholder": "facebook, viral, manipulated",
-    "file": "File"
+    "file": "File",
+    "bulkDownload": "Download All",
+    "bulkDownloadStarted": "Downloading {{count}} files...",
+    "selectClaimForBulk": "Select a claim to bulk download its evidence"
   },
   "teams": {
     "title": "Teams",
