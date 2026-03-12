@@ -90,8 +90,12 @@
     "viewOnSbunker": "View on Sbunker.org",
     "importAsClaim": "Import as Claim",
     "imported": "Imported",
+    "importSuccess": "Article imported as new claim",
     "refresh": "Refresh Feed",
     "lastCrawled": "Last crawled",
+    "searchPlaceholder": "Search articles by title, excerpt, or author...",
+    "from": "From",
+    "to": "To",
     "noArticles": "No articles fetched yet. Click Refresh or wait for next scheduled crawl.",
     "attribution": "Content sourced from Sbunker.org — © Metamorphosis Foundation. All rights reserved."
   },

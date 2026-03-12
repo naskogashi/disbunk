@@ -90,8 +90,12 @@
     "viewOnSbunker": "Shiko në Sbunker.org",
     "importAsClaim": "Importo si Pretendim",
     "imported": "I Importuar",
+    "importSuccess": "Artikulli u importua si pretendim i ri",
     "refresh": "Rifresko Feed-in",
     "lastCrawled": "Gjurmimi i fundit",
+    "searchPlaceholder": "Kërko artikuj sipas titullit, përmbledhjes ose autorit...",
+    "from": "Nga",
+    "to": "Deri",
     "noArticles": "Asnjë artikull nuk është marrë ende. Klikoni Rifresko ose prisni gjurmimin e ardhshëm.",
     "attribution": "Përmbajtja e marrë nga Sbunker.org — © Fondacioni Metamorfozis. Të gjitha të drejtat e rezervuara."
   },
