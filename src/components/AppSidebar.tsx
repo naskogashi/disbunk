@@ -59,13 +59,13 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b border-sidebar-border px-4 py-3">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <span className="text-sm font-bold text-primary-foreground">D</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
+            <span className="text-sm font-bold font-mono text-primary-foreground">D</span>
           </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="text-sm font-bold text-sidebar-foreground">Disbunk.org</span>
-              <span className="text-[10px] text-muted-foreground tracking-wide uppercase">
+              <span className="text-sm font-bold font-mono text-sidebar-foreground tracking-wide">DISBUNK</span>
+              <span className="text-[9px] text-muted-foreground tracking-[0.2em] uppercase font-mono">
                 {t("landing.tagline")}
               </span>
             </div>
@@ -84,10 +84,10 @@ export function AppSidebar() {
                       to={item.url}
                       end={item.url === "/dashboard"}
                       className="hover:bg-sidebar-accent"
-                      activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                      activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
                     >
                       <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!collapsed && <span className="text-[13px]">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -106,10 +106,10 @@ export function AppSidebar() {
                       <NavLink
                         to={item.url}
                         className="hover:bg-sidebar-accent"
-                        activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                        activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
                       >
                         <item.icon className="h-4 w-4" />
-                        {!collapsed && <span>{item.title}</span>}
+                        {!collapsed && <span className="text-[13px]">{item.title}</span>}
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -122,7 +122,7 @@ export function AppSidebar() {
 
       <SidebarFooter className="border-t border-sidebar-border p-3">
         {!collapsed && (
-          <p className="text-[10px] text-muted-foreground leading-relaxed">
+          <p className="text-[9px] text-muted-foreground leading-relaxed font-mono tracking-wider uppercase">
             © {new Date().getFullYear()} Disbunk.org
           </p>
         )}
