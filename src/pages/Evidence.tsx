@@ -69,6 +69,43 @@ export default function Evidence() {
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [claimFilter, setClaimFilter] = useState<string>("all");
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+
+  const getSignedUrl = async (path: string): Promise<string | null> => {
+    const { data, error } = await supabase.storage
+      .from("evidence")
+      .createSignedUrl(path, 3600);
+    return error ? null : data.signedUrl;
+  };
+
+  const handleDownload = async (filePath: string) => {
+    const url = await getSignedUrl(filePath);
+    if (url) window.open(url, "_blank");
+  };
+
+  const handleBulkDownload = async () => {
+    if (!claimFilter || claimFilter === "all") {
+      toast({ title: t("evidence.selectClaimForBulk"), variant: "destructive" });
+      return;
+    }
+    setDownloading(true);
+    const filesForClaim = filtered.filter((e) => e.file_url);
+    
+    // Download files individually (zip requires a library not installed)
+    for (const item of filesForClaim) {
+      if (item.file_url) {
+        const url = await getSignedUrl(item.file_url);
+        if (url) {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = item.title;
+          a.click();
+        }
+      }
+    }
+    setDownloading(false);
+    toast({ title: t("evidence.bulkDownloadStarted", { count: filesForClaim.length }) });
+  };
 
   const fetchEvidence = async () => {
     setLoading(true);
