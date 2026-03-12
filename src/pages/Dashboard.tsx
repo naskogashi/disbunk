@@ -68,7 +68,7 @@ export default function Dashboard() {
                 className="flex items-center justify-between py-3 px-3 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="font-mono text-xs text-muted-foreground shrink-0">{claim.id}</span>
+                  <span className="claim-id shrink-0">{claim.id}</span>
                   <span className="text-sm text-foreground truncate">{claim.title}</span>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
