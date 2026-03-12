@@ -27,11 +27,13 @@ export default function Login() {
     return <Navigate to="/dashboard" replace />;
   }
 
+  const { signInWithMagicLink } = useAuth();
+
   const handleMagicLink = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
     setSending(true);
-    const { error } = await (await import("@/contexts/AuthContext")).useAuth().signInWithMagicLink(email);
+    const { error } = await signInWithMagicLink(email);
     setSending(false);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
