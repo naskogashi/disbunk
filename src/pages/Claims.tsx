@@ -79,7 +79,7 @@ export default function Claims() {
       {/* Claims List */}
       <div className="space-y-3">
         {filtered.map((claim) => (
-          <Card key={claim.id} className="border-border hover:border-primary/30 transition-colors cursor-pointer">
+          <Card key={claim.id} className="border-border card-hover cursor-pointer">
             <CardContent className="p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-2 min-w-0 flex-1">
