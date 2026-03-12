@@ -320,7 +320,7 @@ function CampaignDetail({ campaignId, onBack }: { campaignId: string; onBack: ()
           .eq("campaign_id", campaignId),
       ]);
       setCampaign(campRes.data as CampaignRow | null);
-      setClaims((claimsRes.data as CampaignClaimRow[]) ?? []);
+      setClaims((claimsRes.data as unknown as CampaignClaimRow[]) ?? []);
       setNotes(campRes.data?.description ?? "");
       setLoading(false);
     };
