@@ -33,14 +33,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   const fetchUserMeta = useCallback(async (userId: string) => {
+    // Try RPC first (security definer, bypasses RLS)
+    const { data: rpcData, error: rpcError } = await supabase.rpc("get_my_profile_and_roles");
+
+    if (!rpcError && rpcData) {
+      const roles = (rpcData.roles as AppRole[]) ?? [];
+      const profileStatus = (rpcData.status as ProfileStatus) ?? null;
+      console.info("[Auth] Via RPC:", { userId, roles, profileStatus });
+      return { roles, profileStatus };
+    }
+
+    // Fallback: direct queries
+    console.warn("[Auth] RPC failed, falling back to direct queries:", rpcError?.message);
     const [rolesRes, profileRes] = await Promise.all([
       supabase.from("user_roles").select("role").eq("user_id", userId),
-      supabase.from("profiles").select("status").eq("user_id", userId).single(),
+      supabase.from("profiles").select("status").eq("user_id", userId).maybeSingle(),
     ]);
 
     const roles = (rolesRes.data?.map((r) => r.role) as AppRole[]) ?? [];
     const profileStatus = (profileRes.data?.status as ProfileStatus) ?? null;
-
+    console.info("[Auth] Via fallback:", { userId, roles, profileStatus });
     return { roles, profileStatus };
   }, []);
 
