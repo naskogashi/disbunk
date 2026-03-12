@@ -9,7 +9,8 @@
     "analytics": "Analitika",
     "docs": "Dokumentacioni",
     "settings": "Cilësimet",
-    "admin": "Paneli i Admin"
+    "admin": "Paneli i Admin",
+    "profile": "Profili Im"
   },
   "landing": {
     "tagline": "I shpejtë, i besueshëm, i koordinuar.",
@@ -268,6 +269,25 @@
     "teamName": "Emri i Ekipit",
     "namePlaceholder": "p.sh. Njësia e Përgjigjes ndaj Dezinformimit Ballkanik",
     "descPlaceholder": "Përshkruani fushën e fokusit të ekipit..."
+  },
+  "profile": {
+    "title": "Profili Im",
+    "memberSince": "Anëtar që nga",
+    "claimsSubmitted": "Pretendime të Paraqitura",
+    "evidenceAdded": "Dëshmi të Shtuara",
+    "commentsPosted": "Komente të Postuara",
+    "teamsJoined": "Ekipe të Bashkuara",
+    "impactScore": "Pikët e Ndikimit",
+    "activityHeatmap": "Aktiviteti — 12 Muajt e Fundit",
+    "contributions": "kontribute",
+    "less": "Më pak",
+    "more": "Më shumë",
+    "teamLeaderboard": "Renditja e Ekipit",
+    "showLeaderboard": "Shfaq",
+    "noLeaderboard": "Asnjë e dhënë renditjeje ende.",
+    "you": "ti",
+    "claimsLabel": "pretendime",
+    "points": "pikë"
   },
   "common": {
     "settings": "Cilësimet",

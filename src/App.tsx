@@ -17,6 +17,7 @@ import Campaigns from "./pages/Campaigns";
 import SbunkerFeed from "./pages/SbunkerFeed";
 import Teams from "./pages/Teams";
 import Analytics from "./pages/Analytics";
+import ProfilePage from "./pages/ProfilePage";
 import Docs from "./pages/Docs";
 import SettingsPage from "./pages/SettingsPage";
 import AdminPanel from "./pages/AdminPanel";
@@ -45,6 +46,7 @@ const App = () => (
               <Route path="/teams" element={<Teams />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/docs" element={<Docs />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route
                 path="/admin"

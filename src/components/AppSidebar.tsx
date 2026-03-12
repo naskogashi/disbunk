@@ -9,6 +9,7 @@ import {
   BookOpen,
   Settings,
   Lock,
+  UserCircle,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -43,6 +44,7 @@ export function AppSidebar() {
     { title: t("nav.sbunker"), url: "/sbunker", icon: Rss },
     { title: t("nav.teams"), url: "/teams", icon: Users },
     { title: t("nav.analytics"), url: "/analytics", icon: BarChart3 },
+    { title: t("nav.profile"), url: "/profile", icon: UserCircle },
     { title: t("nav.docs"), url: "/docs", icon: BookOpen },
     { title: t("nav.settings"), url: "/settings", icon: Settings },
   ];
