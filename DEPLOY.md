@@ -87,20 +87,22 @@ Push to `main` branch — the workflow in `.github/workflows/deploy.yml` handles
 For an existing Supabase database, apply these migrations in order using the
 Supabase SQL Editor or your normal migration deployment process:
 
+0. `supabase/migrations/202610220000_restored_schema_prerequisites.sql` (legacy restored schemas)
 1. `supabase/migrations/202610220001_protect_profile_fields.sql`
 2. `supabase/migrations/202610220002_response_tools.sql`
 3. `supabase/migrations/202610220003_registration_and_teams.sql`
+4. `supabase/migrations/202610220004_restore_evidence_bucket.sql`
+5. `supabase/migrations/202610220005_restored_access_policies.sql`
 
 These add protected profile fields, response templates, investigation tasks,
 notification preferences and events, private evidence storage, evidence hashes,
 triage fields, and the atomic `import_sbunker_article` RPC. Back up the database
 before production changes. Do not rerun `schema.sql` against an existing database.
 
-Deploy the updated `crawl-sbunker` Edge Function to the same Supabase project.
+Deploy the account and email Edge Functions to the same Supabase project.
 For example, after authenticating the Supabase CLI:
 
 ```bash
-supabase functions deploy crawl-sbunker --project-ref YOUR_PROJECT_REF
 supabase functions deploy manage-users --project-ref YOUR_PROJECT_REF
 supabase functions deploy notify-registration --project-ref YOUR_PROJECT_REF
 supabase functions deploy send-auth-email --project-ref YOUR_PROJECT_REF
@@ -119,6 +121,29 @@ source, but are not invoked by the frontend and need not be deployed.
 GitHub's static frontend deployment does not apply Supabase SQL migrations or
 deploy Edge Functions. Complete these backend steps before relying on the new
 modules in production.
+
+### Production activation on 22 October 2026
+
+Applied migrations `202610220000` through `202610220005` through the SQL Editor
+on project `evafhofcfslrkhvfplji`. These are not automatically recorded in CLI
+migration history; reconcile that history before a future `supabase db push`.
+Do not rerun the feature migrations, which create named policies and triggers.
+The prerequisite migration preserves the restored text-valued status columns,
+adds missing helper functions and team/audit fields, and preserves the existing
+JSON return type of the profile RPC.
+
+Deployed `manage-users`, `notify-registration`, and `send-auth-email`. Stored
+SMTP2GO and webhook credentials only in Supabase secrets, set the requested
+sender and production app URL, enabled the signed Send Email hook, and allowed
+`https://disbunk.org/dashboard` as a redirect. Google provider settings were
+not changed. The retired crawler was not redeployed.
+
+Verified the live evidence storage policy and evidence insert including hash
+fields in a transaction that was rolled back. No test evidence remains. All
+three Edge Functions reject unauthenticated/unsigned requests with HTTP 401.
+SMTP2GO accepted one authorized plain test email with one success and zero
+failures; this confirms provider acceptance, not inbox delivery. A real browser
+file upload and a complete invitation-link journey still need user verification.
 
 ### SMTP2GO and registration
 

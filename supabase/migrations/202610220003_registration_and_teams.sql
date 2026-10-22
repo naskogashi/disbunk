@@ -73,7 +73,7 @@ create trigger keep_team_lead before update or delete on public.team_members for
 -- The authentication callback uses one self-scoped query, and can recover an
 -- absent profile after a restore without granting approval or elevated roles.
 create or replace function public.get_my_profile_and_roles()
-returns jsonb language plpgsql security definer set search_path=public as $$
+returns json language plpgsql security definer set search_path=public as $$
 declare profile_id uuid; result jsonb;
 begin
   if auth.uid() is null then raise exception 'Authentication required' using errcode='42501'; end if;
