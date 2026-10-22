@@ -6,7 +6,7 @@ import { Shield, Clock, XCircle, Ban, Mail, ArrowRight } from "lucide-react";
 import type { ProfileStatus } from "@/types/database";
 
 export function PendingApproval({ status }: { status: ProfileStatus | null }) {
-  const { signOut, user } = useAuth();
+  const { signOut, user, refreshProfile } = useAuth();
   const { t } = useTranslation();
   const key = status ?? "pending_approval";
 
@@ -105,6 +105,7 @@ export function PendingApproval({ status }: { status: ProfileStatus | null }) {
             </a>
           )}
 
+          <Button onClick={refreshProfile} className="w-full">{t("accounts.checkApproval")}</Button>
           <Button variant="outline" onClick={signOut} className="w-full">
             {t("auth.signOut")}
           </Button>

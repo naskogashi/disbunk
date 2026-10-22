@@ -82,6 +82,91 @@ Push to `main` branch — the workflow in `.github/workflows/deploy.yml` handles
 
 ## Step 6: Verify
 
+### Response tools database and feed service
+
+For an existing Supabase database, apply these migrations in order using the
+Supabase SQL Editor or your normal migration deployment process:
+
+1. `supabase/migrations/202610220001_protect_profile_fields.sql`
+2. `supabase/migrations/202610220002_response_tools.sql`
+3. `supabase/migrations/202610220003_registration_and_teams.sql`
+
+These add protected profile fields, response templates, investigation tasks,
+notification preferences and events, private evidence storage, evidence hashes,
+triage fields, and the atomic `import_sbunker_article` RPC. Back up the database
+before production changes. Do not rerun `schema.sql` against an existing database.
+
+Deploy the updated `crawl-sbunker` Edge Function to the same Supabase project.
+For example, after authenticating the Supabase CLI:
+
+```bash
+supabase functions deploy crawl-sbunker --project-ref YOUR_PROJECT_REF
+supabase functions deploy manage-users --project-ref YOUR_PROJECT_REF
+supabase functions deploy notify-registration --project-ref YOUR_PROJECT_REF
+supabase functions deploy send-auth-email --project-ref YOUR_PROJECT_REF
+```
+
+The function verifies the caller and approved profile itself. Standard Supabase
+function secrets `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and
+`SUPABASE_SERVICE_ROLE_KEY` must be available on the server. Never expose the
+service role key in any `VITE_` environment variable.
+
+The signed-in dashboard and feed page automatically load articles from
+`https://sbunker.org/category/disinfo/feed/`, with a category-specific WordPress
+API fallback and a 15 minute database cache. Editors can request a refresh.
+The source returned Cloudflare HTTP 403 challenges during verification on
+22 October 2026. If this also happens from the deployed Edge Function, the source
+administrator must allow the feed/API requests; the importer does not bypass
+Cloudflare challenges. Existing cached articles remain visible during outages.
+
+GitHub's static frontend deployment does not apply Supabase SQL migrations or
+deploy Edge Functions. Complete these backend steps before relying on the new
+modules in production.
+
+### SMTP2GO and registration
+
+Project reference: `evafhofcfslrkhvfplji`.
+Sender: `DISBUNK.org <no-reply@disbunk.org>`.
+
+Set `SMTP2GO_API_KEY`, `AUTH_EMAIL_FROM`, and `APP_URL=https://disbunk.org`
+as Supabase Edge Function secrets. Keep the API key in the secret manager; never
+commit it or use a `VITE_` prefix. `AUTH_EMAIL_FROM` must contain the exact sender
+above. Verify `disbunk.org` or the sender address with SMTP2GO first.
+
+For API delivery of all authentication emails, deploy `send-auth-email`, then
+enable it under Supabase Authentication > Hooks > Send Email. The hook URL is
+`https://evafhofcfslrkhvfplji.supabase.co/functions/v1/send-auth-email`.
+Set the dashboard-generated signing secret as `SEND_EMAIL_HOOK_SECRET` on the
+function. JWT verification is disabled for this hook because Standard Webhooks
+signature verification authenticates each request before any email can be sent.
+The hook supports sign-up, invitations, magic links, recovery, reauthentication,
+and Supabase's secure email-change token mapping.
+
+Alternatively, leave the email hook disabled and configure Supabase Auth's
+custom SMTP transport with `mail.smtp2go.com`, port `587` with STARTTLS or the
+provider's documented TLS settings, an SMTP2GO SMTP username and SMTP password,
+sender email `no-reply@disbunk.org`, and sender name `DISBUNK.org`. SMTP credentials
+are different from the HTTP API key. The separate `notify-registration` function
+uses the HTTP API key for approval/rejection notices in either setup.
+
+In Supabase Auth URL configuration, set the Site URL to `https://disbunk.org`
+and allow `https://disbunk.org/dashboard`. Add localhost redirects separately
+for development. Google OAuth remains unchanged.
+
+Admin's **Add or invite user** supports email invitations for new/existing users
+and manual account creation without a shared password. New invited users remain
+pending approval. Team creation and role changes use transactional RPCs; the
+creator is added as the first lead. Team leads can add existing approved users.
+**Settings > SMTP2GO** checks secret presence without revealing credentials.
+An accepted email request is not a delivery receipt; use SMTP2GO's activity log
+for delivery and bounce status.
+
+Templates support reviewed, manual copy and distribution. Automated translation,
+email/SMS delivery, external integrations, web push, and ML clustering are not
+connected. The Settings service catalog distinguishes these from implemented
+features. Image metadata removal supports JPEG, PNG, and WebP input and produces
+a PNG copy; other file formats are not sanitized.
+
 1. Visit `https://disbunk.org` — you should see the landing page
 2. Navigate to `/dashboard` — should load without 404
 3. Check browser console for any Supabase connection errors

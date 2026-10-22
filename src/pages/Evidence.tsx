@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,6 +21,7 @@ import {
   Loader2, Plus, Download, Calendar, User, Link as LinkIcon,
 } from "lucide-react";
 import type { EvidenceType } from "@/types/database";
+import { sha256, redactImage } from "@/lib/response-tools";
 
 interface EvidenceRow {
   id: string;
@@ -33,6 +34,9 @@ interface EvidenceRow {
   created_at: string;
   claims?: { id: string; title: string } | null;
   profiles?: { full_name: string | null } | null;
+  sha256?: string | null;
+  original_sha256?: string | null;
+  metadata_redacted?: boolean;
 }
 
 interface ClaimOption {
@@ -56,10 +60,23 @@ const TYPE_COLORS: Record<EvidenceType, string> = {
   other: "bg-muted text-muted-foreground",
 };
 
+function SignedEvidenceImage({ path, title }: { path: string; title: string }) {
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let active = true;
+    supabase.storage.from("evidence").createSignedUrl(path, 3600).then(({ data }) => {
+      if (active) setUrl(data?.signedUrl ?? null);
+    });
+    return () => { active = false; };
+  }, [path]);
+  return url ? <img src={url} alt={title} className="h-full w-full object-cover" loading="lazy" /> : <File className="h-10 w-10 text-muted-foreground/30" />;
+}
+
 export default function Evidence() {
   const { t } = useTranslation();
   const { user, hasAnyRole } = useAuth();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
   const canUpload = hasAnyRole(["analyst", "editor", "team_lead", "admin"]);
 
   const [evidence, setEvidence] = useState<EvidenceRow[]>([]);
@@ -67,7 +84,7 @@ export default function Evidence() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
-  const [claimFilter, setClaimFilter] = useState<string>("all");
+  const [claimFilter, setClaimFilter] = useState<string>(searchParams.get("claim") || "all");
   const [uploadOpen, setUploadOpen] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
@@ -81,6 +98,17 @@ export default function Evidence() {
   const handleDownload = async (filePath: string) => {
     const url = await getSignedUrl(filePath);
     if (url) window.open(url, "_blank");
+  };
+
+  const verifyIntegrity = async (item: EvidenceRow) => {
+    try {
+      const url = await getSignedUrl(item.file_url!);
+      if (!url) throw new Error(t("tools.downloadFailed"));
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(t("tools.downloadFailed"));
+      const actual = await sha256(await response.blob());
+      toast({ title: actual === item.sha256 ? t("tools.integrityPassed") : t("tools.integrityFailed"), variant: actual === item.sha256 ? "default" : "destructive" });
+    } catch (error) { toast({ title: t("auth.error"), description: error instanceof Error ? error.message : String(error), variant: "destructive" }); }
   };
 
   const handleBulkDownload = async () => {
@@ -111,7 +139,7 @@ export default function Evidence() {
     setLoading(true);
     let query = supabase
       .from("evidence")
-      .select("*, claims(id, title), profiles:uploaded_by(full_name)")
+      .select("*, claims(id, title)")
       .order("created_at", { ascending: false })
       .limit(200);
 
@@ -123,6 +151,7 @@ export default function Evidence() {
       supabase.from("claims").select("id, title").order("created_at", { ascending: false }).limit(100),
     ]);
 
+    if (evidenceRes.error || claimsRes.error) toast({ title: t("auth.error"), description: (evidenceRes.error || claimsRes.error)?.message, variant: "destructive" });
     setEvidence((evidenceRes.data as EvidenceRow[]) ?? []);
     setClaims(claimsRes.data ?? []);
     setLoading(false);
@@ -258,12 +287,7 @@ export default function Evidence() {
                 {/* Thumbnail */}
                 <div className="aspect-video bg-muted/50 flex items-center justify-center overflow-hidden">
                   {isImage(item.file_url) ? (
-                    <img
-                      src={item.file_url!}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      loading="lazy"
-                    />
+                    <SignedEvidenceImage path={item.file_url!} title={item.title} />
                   ) : (
                     <Icon className="h-10 w-10 text-muted-foreground/30" />
                   )}
@@ -321,6 +345,7 @@ export default function Evidence() {
                   </div>
 
                   {/* Download */}
+                  {item.sha256 && <div className="space-y-1 border-t pt-2"><p className="text-xs text-muted-foreground">SHA-256</p><p className="break-all font-mono text-[10px]">{item.sha256}</p>{item.metadata_redacted && <p className="text-xs text-success">{t("tools.metadataRemoved")}</p>}<Button size="sm" variant="outline" onClick={() => verifyIntegrity(item)}>{t("tools.verifyIntegrity")}</Button></div>}
                   {item.file_url && (
                     <button
                       onClick={() => handleDownload(item.file_url!)}
@@ -355,50 +380,39 @@ function UploadForm({ claims, userId, onComplete, onError }: UploadFormProps) {
   const [tags, setTags] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [removeMetadata, setRemoveMetadata] = useState(true);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !claimId || !userId) return;
 
     setSubmitting(true);
-    let fileUrl: string | null = null;
-
-    // Upload file to Supabase Storage (private bucket)
-    if (file) {
-      const ext = file.name.split(".").pop();
-      const filePath = `${claimId}/${crypto.randomUUID()}.${ext}`;
-      const { error: uploadError } = await supabase.storage
-        .from("evidence")
-        .upload(filePath, file, { contentType: file.type });
-
-      if (uploadError) {
-        onError(uploadError.message);
-        setSubmitting(false);
-        return;
+    let uploadedPath: string | null = null;
+    try {
+      if (file && file.size > 50 * 1024 * 1024) throw new Error(t("tools.fileTooLarge"));
+      const originalHash = file ? await sha256(file) : null;
+      const redacted = !!file && removeMetadata && ["image/jpeg", "image/png", "image/webp"].includes(file.type);
+      const uploadFile = file && redacted ? await redactImage(file) : file;
+      if (uploadFile && uploadFile.size > 50 * 1024 * 1024) throw new Error(t("tools.fileTooLarge"));
+      const storedHash = uploadFile ? await sha256(uploadFile) : null;
+      if (uploadFile) {
+        const extension = uploadFile.name.split(".").pop()?.replace(/[^a-zA-Z0-9]/g, "").slice(0,10) || "bin";
+        const path = `${userId}/${claimId}/${crypto.randomUUID()}.${extension}`;
+        const upload = await supabase.storage.from("evidence").upload(path, uploadFile, { contentType: uploadFile.type });
+        if (upload.error) throw upload.error;
+        uploadedPath = path;
       }
-
-      // Store the path, not the URL — we'll create signed URLs on read
-      fileUrl = filePath;
-    }
-
-    const { error } = await supabase.from("evidence").insert({
-      claim_id: claimId,
-      title: title.trim(),
-      type,
-      file_url: fileUrl,
-      uploaded_by: userId,
-      tags: tags
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean),
-    });
-
-    setSubmitting(false);
-    if (error) {
-      onError(error.message);
-    } else {
+      const result = await supabase.from("evidence").insert({
+        claim_id: claimId, title: title.trim(), type, file_url: uploadedPath, uploaded_by: userId,
+        tags: tags.split(",").map(tag => tag.trim()).filter(Boolean),
+        sha256: storedHash, original_sha256: originalHash, metadata_redacted: redacted, file_size: uploadFile?.size ?? null,
+      });
+      if (result.error) throw result.error;
       onComplete();
-    }
+    } catch (error) {
+      if (uploadedPath) await supabase.storage.from("evidence").remove([uploadedPath]);
+      onError(error instanceof Error ? error.message : typeof error === "object" && error && "message" in error ? String(error.message) : String(error));
+    } finally { setSubmitting(false); }
   };
 
   return (
@@ -469,6 +483,7 @@ function UploadForm({ claims, userId, onComplete, onError }: UploadFormProps) {
       </div>
 
       <div className="flex justify-end pt-2">
+        <div className="mr-auto max-w-sm space-y-2 pr-3"><label className="flex items-start gap-2 text-xs"><input type="checkbox" className="mt-0.5" checked={removeMetadata} onChange={event => setRemoveMetadata(event.target.checked)} />{t("tools.removeMetadata")}</label><p className="text-xs text-muted-foreground">{t("tools.hashNote")}</p></div>
         <Button type="submit" disabled={submitting || !title.trim() || !claimId} className="gap-2">
           {submitting ? (
             <Loader2 className="h-4 w-4 animate-spin" />

@@ -17,6 +17,7 @@ import {
   CheckCircle, XCircle, AlertTriangle, Search, FileText, Loader2,
 } from "lucide-react";
 import type { ClaimStatus } from "@/types/database";
+import { ClaimWorkflow } from "@/components/ClaimWorkflow";
 
 interface ClaimDetail {
   id: string;
@@ -30,6 +31,8 @@ interface ClaimDetail {
   created_at: string;
   updated_at: string;
   sbunker_source_url: string | null;
+  severity?: number;
+  reach?: number;
 }
 
 interface Evidence {
@@ -245,9 +248,7 @@ export default function ClaimDetail() {
                   {t("claims.evidence")}
                   <Badge variant="secondary" className="ml-1 text-[10px]">{evidence.length}</Badge>
                 </CardTitle>
-                <Button variant="outline" size="sm" className="text-xs gap-1">
-                  <Shield className="h-3.5 w-3.5" /> {t("claims.addEvidence")}
-                </Button>
+                <Button asChild variant="outline" size="sm" className="text-xs gap-1"><Link to={`/evidence?claim=${claim.id}`}><Shield className="h-3.5 w-3.5" /> {t("claims.addEvidence")}</Link></Button>
               </div>
             </CardHeader>
             <CardContent>
@@ -346,6 +347,7 @@ export default function ClaimDetail() {
 
         {/* Right sidebar */}
         <div className="space-y-6">
+          <ClaimWorkflow key={claim.id} claim={claim} onUpdated={patch => setClaim(previous => previous ? { ...previous, ...patch } : previous)} />
           {/* Status actions */}
           {canEdit && actions.length > 0 && (
             <Card className="border-border">

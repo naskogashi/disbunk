@@ -25,27 +25,19 @@ const variantText: Record<string, string> = {
   primary: "text-primary",
 };
 
-const variantGlow: Record<string, string> = {
-  default: "",
-  success: "dark:shadow-[0_0_12px_hsl(160_64%_40%/0.1)]",
-  destructive: "dark:shadow-[0_0_12px_hsl(0_84%_60%/0.1)]",
-  warning: "dark:shadow-[0_0_12px_hsl(38_92%_50%/0.1)]",
-  primary: "dark:shadow-[0_0_12px_hsl(189_94%_43%/0.1)]",
-};
-
 export function StatCard({ title, value, icon: Icon, trend, variant = "default" }: StatCardProps) {
   return (
-    <Card className={`border-border border-t-2 ${variantBorder[variant]} ${variantGlow[variant]} card-hover`}>
-      <CardContent className="p-5">
+    <Card className={`rounded-2xl border-border border-t-2 ${variantBorder[variant]} card-hover shadow-none`}>
+      <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <p className="text-[10px] font-mono font-medium text-muted-foreground uppercase tracking-widest">{title}</p>
-            <p className={`text-2xl font-bold font-mono tabular-nums ${variantText[variant]}`}>{value}</p>
+            <p className="text-sm font-semibold text-muted-foreground">{title}</p>
+            <p className={`text-4xl font-extrabold tabular-nums ${variantText[variant]}`}>{value}</p>
             {trend && (
-              <p className="text-xs text-muted-foreground font-mono">{trend}</p>
+              <p className="text-xs text-muted-foreground">{trend}</p>
             )}
           </div>
-          <div className="rounded-md bg-accent/50 p-2">
+          <div className="rounded-xl bg-accent/50 p-3">
             <Icon className={`h-4 w-4 ${variantText[variant]}`} />
           </div>
         </div>

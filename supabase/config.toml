@@ -3,3 +3,9 @@ verify_jwt = false
 
 [functions.notify-registration]
 verify_jwt = false
+
+[functions.manage-users]
+verify_jwt = false
+
+[functions.send-auth-email]
+verify_jwt = false

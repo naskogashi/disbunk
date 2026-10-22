@@ -24,6 +24,10 @@ import {
   Search, Ban, Trash2, Clock, FileText, Flag, ScrollText,
 } from "lucide-react";
 import type { Profile, AppRole } from "@/types/database";
+import { ManageUserForm } from "@/components/ManageUserForm";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Link } from "react-router-dom";
+import { invokeFunction } from "@/lib/invoke-function";
 
 /* ─── Types ─── */
 interface PendingUser extends Profile { email?: string }
@@ -65,6 +69,7 @@ export default function AdminPanel() {
   const [featureFlags, setFeatureFlags] = useState<FeatureFlagRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState<string | null>(null);
+  const [manageUserOpen, setManageUserOpen] = useState(false);
   const [userSearch, setUserSearch] = useState("");
   const [stats, setStats] = useState({ users: 0, claims: 0, teams: 0, evidence: 0 });
 
@@ -137,15 +142,15 @@ export default function AdminPanel() {
     if (error) {
       toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
     } else {
+      let deliveryWarning = "";
       try {
-        await supabase.functions.invoke("notify-registration", {
-          body: { userId, approved: approve },
-        });
-      } catch { /* best-effort */ }
+        const notification = await invokeFunction<{ emailAccepted: boolean; warning?: string }>("notify-registration", { userId, approved: approve });
+        if (!notification.emailAccepted) deliveryWarning = notification.warning || t("accounts.emailFailed");
+      } catch (error) { deliveryWarning = error instanceof Error ? error.message : t("accounts.emailFailed"); }
       await logAction(approve ? "user_approved" : "user_rejected", "profile", profileId);
       toast({
         title: approve ? t("admin.userApproved") : t("admin.userRejected"),
-        description: approve ? t("admin.userApprovedDesc") : t("admin.userRejectedDesc"),
+        description: deliveryWarning || (approve ? t("admin.userApprovedDesc") : t("admin.userRejectedDesc")),
       });
       fetchData();
     }
@@ -153,8 +158,7 @@ export default function AdminPanel() {
   };
 
   const handleRoleChange = async (userId: string, newRole: AppRole) => {
-    await supabase.from("user_roles").delete().eq("user_id", userId);
-    const { error } = await supabase.from("user_roles").insert({ user_id: userId, role: newRole });
+    const { error } = await supabase.rpc("set_user_role", { target_user_id: userId, new_role: newRole });
     if (error) {
       toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
     } else {
@@ -219,8 +223,8 @@ export default function AdminPanel() {
       if (error) throw error;
       await logAction("crawl_sbunker", null, null);
       toast({ title: t("admin.crawlComplete") });
-    } catch (err: any) {
-      toast({ title: t("admin.error"), description: err.message, variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: t("admin.error"), description: err instanceof Error ? err.message : String(err), variant: "destructive" });
     }
   };
 
@@ -253,14 +257,14 @@ export default function AdminPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">{t("admin.title")}</h1>
           <p className="text-sm text-muted-foreground mt-1">{t("admin.subtitle")}</p>
         </div>
-        <Button size="sm" variant="outline" className="gap-1.5" onClick={handleCrawlSbunker}>
+        <div className="flex flex-wrap gap-2"><Dialog open={manageUserOpen} onOpenChange={setManageUserOpen}><DialogTrigger asChild><Button>{t("accounts.addUser")}</Button></DialogTrigger><DialogContent className="max-h-[90vh] overflow-y-auto"><DialogHeader><DialogTitle>{t("accounts.addUser")}</DialogTitle></DialogHeader><ManageUserForm onComplete={() => { setManageUserOpen(false); fetchData(); }} /></DialogContent></Dialog><Button asChild variant="outline"><Link to="/teams">{t("accounts.manageTeams")}</Link></Button><Button size="sm" variant="outline" className="gap-1.5" onClick={handleCrawlSbunker}>
           <RefreshCw className="h-3.5 w-3.5" /> {t("admin.crawlSbunker")}
-        </Button>
+        </Button></div>
       </div>
 
       {/* Stats */}

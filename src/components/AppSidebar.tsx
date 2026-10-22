@@ -10,11 +10,14 @@ import {
   Settings,
   Lock,
   UserCircle,
+  Bell,
+  Files,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import { Brand } from "@/components/Brand";
 import {
   Sidebar,
   SidebarContent,
@@ -40,6 +43,8 @@ export function AppSidebar() {
     { title: t("nav.dashboard"), url: "/dashboard", icon: LayoutDashboard },
     { title: t("nav.claims"), url: "/claims", icon: FileText },
     { title: t("nav.evidence"), url: "/evidence", icon: Shield },
+    { title: t("tools.templates"), url: "/templates", icon: Files },
+    { title: t("tools.alerts"), url: "/alerts", icon: Bell },
     { title: t("nav.campaigns"), url: "/campaigns", icon: Target },
     { title: t("nav.sbunker"), url: "/sbunker", icon: Rss },
     { title: t("nav.teams"), url: "/teams", icon: Users },
@@ -57,15 +62,13 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b border-sidebar-border px-4 py-3">
+      <SidebarHeader className="border-b border-sidebar-border px-5 py-6">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-            <span className="text-sm font-bold font-mono text-primary-foreground">D</span>
-          </div>
+          {collapsed && <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-sm font-extrabold text-primary-foreground">d<span className="brand-dot">.</span></span>}
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="text-sm font-bold font-mono text-sidebar-foreground tracking-wide">DISBUNK</span>
-              <span className="text-[9px] text-muted-foreground tracking-[0.2em] uppercase font-mono">
+              <Brand />
+              <span className="mt-2 text-xs text-muted-foreground">
                 {t("landing.tagline")}
               </span>
             </div>
@@ -122,7 +125,7 @@ export function AppSidebar() {
 
       <SidebarFooter className="border-t border-sidebar-border p-3">
         {!collapsed && (
-          <p className="text-[9px] text-muted-foreground leading-relaxed font-mono tracking-wider uppercase">
+          <p className="text-xs text-muted-foreground leading-relaxed">
             © {new Date().getFullYear()} Disbunk.org
           </p>
         )}

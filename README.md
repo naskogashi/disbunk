@@ -23,6 +23,8 @@ An open-source platform for rapid, credible, coordinated response to digital mis
 
 ## Quick Start
 
+Use Node.js 22 or newer. CI and deployment builds use Node.js 24.
+
 ```bash
 git clone https://github.com/your-org/disbunk.git
 cd disbunk

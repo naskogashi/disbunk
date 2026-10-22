@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSbunkerFeed, loadSbunkerFeed } from "@/hooks/useSbunkerFeed";
+import { ModuleError } from "@/components/ModuleError";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabase";
@@ -32,46 +35,28 @@ export default function SbunkerFeed() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { user, hasAnyRole } = useAuth();
-  const canRefresh = hasAnyRole(["admin", "editor"]);
+  const canRefresh = hasAnyRole(["admin", "editor", "team_lead"]);
   const canImport = hasAnyRole(["analyst", "editor", "team_lead", "admin"]);
 
-  const [articles, setArticles] = useState<SbunkerArticle[]>([]);
-  const [loading, setLoading] = useState(true);
+  const feed = useSbunkerFeed();
+  const cache = useQueryClient();
+  const articles = (feed.data?.articles ?? []) as SbunkerArticle[];
+  const loading = feed.isPending;
   const [refreshing, setRefreshing] = useState(false);
   const [importing, setImporting] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
 
-  const fetchArticles = async () => {
-    setLoading(true);
-    let query = supabase
-      .from("sbunker_feed")
-      .select("*")
-      .order("published_at", { ascending: false })
-      .limit(100);
-
-    if (dateFrom) query = query.gte("published_at", dateFrom);
-    if (dateTo) query = query.lte("published_at", `${dateTo}T23:59:59`);
-
-    const { data } = await query;
-    setArticles(data ?? []);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchArticles();
-  }, [dateFrom, dateTo]);
-
   const handleRefresh = async () => {
     setRefreshing(true);
     try {
-      const { error } = await supabase.functions.invoke("crawl-sbunker");
-      if (error) throw error;
+      const result = await loadSbunkerFeed(true);
+      cache.setQueryData(["sbunker-feed", user?.id], result);
+      if (result.stale) throw new Error(t("tools.feedStale"));
       toast({ title: t("admin.crawlComplete") });
-      await fetchArticles();
-    } catch (err: any) {
-      toast({ title: t("admin.error"), description: err.message, variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: t("admin.error"), description: err instanceof Error ? err.message : String(err), variant: "destructive" });
     }
     setRefreshing(false);
   };
@@ -80,43 +65,23 @@ export default function SbunkerFeed() {
     if (!user) return;
     setImporting(article.id);
 
-    const { data, error } = await supabase
-      .from("claims")
-      .insert({
-        title: article.title,
-        description: article.excerpt || null,
-        source_url: article.url,
-        language: article.language === "sq" ? "sq" : "en",
-        status: "pending",
-        created_by: user.id,
-        sbunker_source_url: article.url,
-      })
-      .select("id")
-      .single();
+    const { data, error } = await supabase.rpc("import_sbunker_article", { article_id: article.id });
 
     if (error) {
       toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
     } else if (data) {
-      // Link the article to the new claim
-      await supabase
-        .from("sbunker_feed")
-        .update({ imported_claim_id: data.id })
-        .eq("id", article.id);
-
       toast({ title: t("sbunker.importSuccess") });
-      // Update local state
-      setArticles((prev) =>
-        prev.map((a) => (a.id === article.id ? { ...a, imported_claim_id: data.id } : a))
-      );
+      cache.invalidateQueries({ queryKey: ["sbunker-feed"] });
+      navigate(`/claims/${data}`);
     }
     setImporting(null);
   };
 
   const filtered = articles.filter(
-    (a) =>
+    (a) => (!dateFrom || (a.published_at ?? "") >= dateFrom) && (!dateTo || (a.published_at ?? "") < `${dateTo}T23:59:59.999Z`) && (
       a.title.toLowerCase().includes(search.toLowerCase()) ||
       (a.excerpt?.toLowerCase().includes(search.toLowerCase()) ?? false) ||
-      (a.author?.toLowerCase().includes(search.toLowerCase()) ?? false)
+      (a.author?.toLowerCase().includes(search.toLowerCase()) ?? false))
   );
 
   const lastCrawled = articles.length > 0
@@ -128,7 +93,7 @@ export default function SbunkerFeed() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between animate-fade-in">
+      <div className="flex flex-wrap items-center justify-between gap-4 animate-fade-in">
         <div>
           <h1 className="text-2xl font-bold text-foreground tracking-tight">
             {t("sbunker.title")}
@@ -152,6 +117,9 @@ export default function SbunkerFeed() {
       </div>
 
       {/* Filters */}
+      <a href="https://sbunker.org/category/disinfo/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-primary underline underline-offset-4">Sbunker / Disinfo<ExternalLink className="h-3 w-3" /></a>
+      {feed.error && <ModuleError error={feed.error} retry={() => feed.refetch()} />}
+      {feed.data?.stale && <p role="status" className="rounded-lg border border-warning/30 bg-warning/10 p-4 text-sm text-warning">{t("tools.feedStale")}</p>}
       <div className="flex flex-col sm:flex-row gap-3 animate-fade-in">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -162,7 +130,7 @@ export default function SbunkerFeed() {
             className="pl-9 h-10"
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <div className="relative">
             <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
             <Input

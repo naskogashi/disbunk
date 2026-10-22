@@ -9,6 +9,7 @@ interface AuthState {
   roles: AppRole[];
   profileStatus: ProfileStatus | null;
   loading: boolean;
+  authError: string | null;
 }
 
 interface AuthContextType extends AuthState {
@@ -30,6 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     roles: [],
     profileStatus: null,
     loading: true,
+    authError: null,
   });
 
   const fetchUserMeta = useCallback(async (userId: string) => {
@@ -39,64 +41,71 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!rpcError && rpcData) {
       const roles = (rpcData.roles as AppRole[]) ?? [];
       const profileStatus = (rpcData.status as ProfileStatus) ?? null;
-      console.info("[Auth] Via RPC:", { userId, roles, profileStatus });
       return { roles, profileStatus };
     }
 
     // Fallback: direct queries
-    console.warn("[Auth] RPC failed, falling back to direct queries:", rpcError?.message);
     const [rolesRes, profileRes] = await Promise.all([
       supabase.from("user_roles").select("role").eq("user_id", userId),
       supabase.from("profiles").select("status").eq("user_id", userId).maybeSingle(),
     ]);
 
     const roles = (rolesRes.data?.map((r) => r.role) as AppRole[]) ?? [];
+    if (rolesRes.error || profileRes.error) throw new Error(rolesRes.error?.message || profileRes.error?.message);
     const profileStatus = (profileRes.data?.status as ProfileStatus) ?? null;
-    console.info("[Auth] Via fallback:", { userId, roles, profileStatus });
     return { roles, profileStatus };
   }, []);
 
   const refreshProfile = useCallback(async () => {
     if (!state.user) return;
-    const meta = await fetchUserMeta(state.user.id);
-    setState((prev) => ({ ...prev, ...meta }));
+    const userId = state.user.id;
+    try {
+      const meta = await fetchUserMeta(userId);
+      setState(previous => previous.user?.id === userId ? { ...previous, ...meta, authError: null } : previous);
+    } catch (error) { setState(previous => ({ ...previous, authError: error instanceof Error ? error.message : "Unable to load account" })); }
   }, [state.user, fetchUserMeta]);
 
   useEffect(() => {
-    // Set up auth listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        const user = session?.user ?? null;
-
-        if (user) {
-          // Defer Supabase calls to avoid deadlock
-          setTimeout(async () => {
-            const meta = await fetchUserMeta(user.id);
-            setState({ user, session, ...meta, loading: false });
-          }, 0);
-        } else {
-          setState({ user: null, session: null, roles: [], profileStatus: null, loading: false });
-        }
+    let active = true;
+    let revision = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    const applySession = (session: Session | null) => {
+      const currentRevision = ++revision;
+      clearTimeout(timer);
+      const user = session?.user ?? null;
+      if (!user) {
+        setState({ user: null, session: null, roles: [], profileStatus: null, loading: false, authError: null });
+        return;
       }
+      setState(previous => ({ user, session, roles: previous.user?.id === user.id ? previous.roles : [], profileStatus: previous.user?.id === user.id ? previous.profileStatus : null, loading: true, authError: null }));
+      // The auth callback returns synchronously before any other auth-backed
+      // query starts, avoiding the Supabase auth lock. Ignore stale responses.
+      timer = setTimeout(async () => {
+        try {
+          const meta = await fetchUserMeta(user.id);
+          if (active && revision === currentRevision) setState({ user, session, ...meta, loading: false, authError: null });
+        } catch (error) {
+          if (active && revision === currentRevision) setState({ user, session, roles: [], profileStatus: null, loading: false, authError: error instanceof Error ? error.message : "Unable to load account" });
+        }
+      }, 0);
+    };
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => applySession(session)
     );
 
     // THEN check existing session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      const user = session?.user ?? null;
-      if (user) {
-        const meta = await fetchUserMeta(user.id);
-        setState({ user, session, ...meta, loading: false });
-      } else {
-        setState((prev) => ({ ...prev, loading: false }));
-      }
-    });
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (!active || revision !== 0) return;
+      if (error) setState(previous => ({ ...previous, loading: false, authError: error.message }));
+      else applySession(session);
+    }).catch(error => { if (active && revision === 0) setState(previous => ({ ...previous, loading: false, authError: String(error) })); });
 
-    return () => subscription.unsubscribe();
+    return () => { active = false; revision++; clearTimeout(timer); subscription.unsubscribe(); };
   }, [fetchUserMeta]);
 
   const signInWithMagicLink = async (email: string) => {
     const { error } = await supabase.auth.signInWithOtp({
-      email,
+      email: email.trim().toLowerCase(),
       options: { emailRedirectTo: window.location.origin + "/dashboard" },
     });
     return { error: error as Error | null };
@@ -112,7 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    setState({ user: null, session: null, roles: [], profileStatus: null, loading: false });
+    setState({ user: null, session: null, roles: [], profileStatus: null, loading: false, authError: null });
   };
 
   const hasRole = (role: AppRole) => state.roles.includes(role);

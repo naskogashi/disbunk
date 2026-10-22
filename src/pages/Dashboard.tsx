@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import type { ClaimStatus } from "@/types/database";
+import { useSbunkerFeed } from "@/hooks/useSbunkerFeed";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
@@ -74,7 +76,8 @@ export default function Dashboard() {
 
   const [stats, setStats] = useState({ total: 0, verified: 0, debunked: 0, inProgress: 0 });
   const [recentClaims, setRecentClaims] = useState<ClaimRow[]>([]);
-  const [sbunkerArticles, setSbunkerArticles] = useState<SbunkerArticle[]>([]);
+  const sbunkerFeed = useSbunkerFeed();
+  const sbunkerArticles = sbunkerFeed.data?.articles.slice(0,3) ?? [];
   const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -88,14 +91,12 @@ export default function Dashboard() {
         debunkedRes,
         investigatingRes,
         recentRes,
-        sbunkerRes,
       ] = await Promise.all([
         supabase.from("claims").select("id", { count: "exact", head: true }),
         supabase.from("claims").select("id", { count: "exact", head: true }).eq("status", "verified"),
         supabase.from("claims").select("id", { count: "exact", head: true }).eq("status", "debunked"),
         supabase.from("claims").select("id", { count: "exact", head: true }).eq("status", "investigating"),
         supabase.from("claims").select("id, title, status, created_at").order("created_at", { ascending: false }).limit(5),
-        supabase.from("sbunker_feed").select("id, title, url, published_at").order("published_at", { ascending: false }).limit(3),
       ]);
 
       setStats({
@@ -105,7 +106,6 @@ export default function Dashboard() {
         inProgress: investigatingRes.count ?? 0,
       });
       setRecentClaims(recentRes.data ?? []);
-      setSbunkerArticles(sbunkerRes.data ?? []);
 
       // Build activity from recent claims
       setActivity(
@@ -145,12 +145,13 @@ export default function Dashboard() {
       <OnboardingModal open={showOnboarding} onComplete={handleOnboardingComplete} />
 
       {/* Header */}
-      <div className="flex items-center justify-between animate-fade-in">
+      <div className="flex flex-wrap items-center justify-between gap-4 animate-fade-in">
         <div>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">{t("dashboard.title")}</h1>
+          <p className="eyebrow mb-2">{t("landing.tagline")}</p>
+          <h1 className="text-3xl font-extrabold text-foreground tracking-tight sm:text-4xl">{t("dashboard.title")}</h1>
           <p className="text-sm text-muted-foreground mt-1">{t("dashboard.subtitle")}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Link to="/claims/new">
             <Button size="sm" variant="outline" className="gap-1.5">
               <Plus className="h-3.5 w-3.5" /> {t("dashboard.newClaim")}
@@ -214,7 +215,7 @@ export default function Dashboard() {
                     <span className="text-sm text-foreground truncate">{claim.title}</span>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    <ClaimStatusBadge status={claim.status as any} />
+                    <ClaimStatusBadge status={claim.status as ClaimStatus} />
                     <span className="text-xs text-muted-foreground hidden sm:inline">
                       {formatTimeAgo(claim.created_at)}
                     </span>

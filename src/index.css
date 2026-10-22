@@ -1,320 +1,134 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
-
+@font-face {
+  font-family: 'Sofia Sans';
+  src: url('/fonts/SofiaSans-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  /* ============================================================
-     LIGHT THEME — Clean Intel Brief
-     Inspired by: Bloomberg light panels, Palantir docs
-     ============================================================ */
   :root {
-    /* #F0F2F5 cool silver-grey */
-    --background: 216 14% 95%;
-    /* #0F1114 near-black */
-    --foreground: 216 18% 7%;
-
-    /* #FFFFFF crisp white panels */
+    color-scheme: light;
+    --background: 42 28% 97%;
+    --foreground: 194 28% 16%;
     --card: 0 0% 100%;
-    --card-foreground: 216 18% 7%;
-
-    /* #FFFFFF */
+    --card-foreground: 194 28% 16%;
     --popover: 0 0% 100%;
-    --popover-foreground: 216 18% 7%;
-
-    /* #0891B2 teal-cyan */
-    --primary: 189 88% 37%;
+    --popover-foreground: 194 28% 16%;
+    --primary: 15 58% 40%;
     --primary-foreground: 0 0% 100%;
-
-    /* #E8EAED cool grey */
-    --secondary: 216 10% 92%;
-    --secondary-foreground: 216 18% 7%;
-
-    /* #E8EAED */
-    --muted: 216 10% 92%;
-    /* #6B7280 */
-    --muted-foreground: 220 9% 46%;
-
-    /* #DFE2E6 */
-    --accent: 216 10% 89%;
-    --accent-foreground: 216 18% 7%;
-
-    /* #DC2626 signal red */
-    --destructive: 0 72% 51%;
+    --secondary: 38 23% 92%;
+    --secondary-foreground: 194 28% 20%;
+    --muted: 38 18% 93%;
+    --muted-foreground: 190 9% 40%;
+    --accent: 25 32% 91%;
+    --accent-foreground: 15 58% 34%;
+    --destructive: 2 62% 44%;
     --destructive-foreground: 0 0% 100%;
-
-    /* #059669 ops green */
-    --success: 160 84% 30%;
+    --success: 153 46% 31%;
     --success-foreground: 0 0% 100%;
-
-    /* #D97706 amber alert */
-    --warning: 38 92% 44%;
+    --warning: 36 76% 35%;
     --warning-foreground: 0 0% 100%;
-
-    /* #D1D5DB */
-    --border: 216 12% 84%;
-    --input: 0 0% 100%;
-    --ring: 189 88% 37%;
-
-    --radius: 0.375rem;
-
-    /* Dark sidebar always */
-    --sidebar-background: 220 20% 8%;
-    --sidebar-foreground: 189 30% 80%;
-    --sidebar-primary: 189 100% 50%;
-    --sidebar-primary-foreground: 220 20% 8%;
-    --sidebar-accent: 220 18% 14%;
-    --sidebar-accent-foreground: 189 30% 90%;
-    --sidebar-border: 220 16% 16%;
-    --sidebar-ring: 189 100% 50%;
-
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
-    /* Glow tokens */
-    --glow-primary: 189 100% 50%;
-    --glow-success: 160 84% 40%;
-    --glow-warning: 38 92% 50%;
-    --glow-destructive: 0 72% 55%;
+    --gold: 43 83% 65%;
+    --partner-surface: 0 0% 100%;
+    --border: 35 15% 85%;
+    --input: 35 15% 85%;
+    --ring: 15 58% 40%;
+    --radius: 0.65rem;
+    --sidebar-background: 194 28% 16%;
+    --sidebar-foreground: 40 18% 83%;
+    --sidebar-primary: 20 82% 73%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 194 22% 23%;
+    --sidebar-accent-foreground: 40 25% 96%;
+    --sidebar-border: 194 18% 28%;
+    --sidebar-ring: 20 82% 73%;
+    --font-sans: 'Sofia Sans', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Code', monospace;
   }
-
-  /* ============================================================
-     DARK THEME — Command Center / Ops Console
-     Inspired by: Bloomberg Terminal, Palantir, NASA MCC
-     ============================================================ */
   .dark {
-    /* #0A0C10 deep void */
-    --background: 220 22% 4%;
-    /* #E2E8F0 */
-    --foreground: 214 32% 91%;
-
-    /* #0F1218 panel */
-    --card: 220 22% 7%;
-    --card-foreground: 214 32% 91%;
-
-    /* #141820 */
-    --popover: 220 22% 10%;
-    --popover-foreground: 214 32% 91%;
-
-    /* #06B6D4 electric cyan */
-    --primary: 189 94% 43%;
-    --primary-foreground: 220 22% 4%;
-
-    /* #161B24 */
-    --secondary: 218 22% 11%;
-    --secondary-foreground: 214 32% 91%;
-
-    /* #161B24 */
-    --muted: 218 22% 11%;
-    /* #64748B slate */
-    --muted-foreground: 215 16% 47%;
-
-    /* #1C2230 */
-    --accent: 218 22% 15%;
-    --accent-foreground: 214 32% 91%;
-
-    /* #EF4444 */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    /* #10B981 */
-    --success: 160 64% 40%;
-    --success-foreground: 0 0% 100%;
-
-    /* #F59E0B */
-    --warning: 38 92% 50%;
-    --warning-foreground: 220 22% 4%;
-
-    /* #1E2432 */
-    --border: 218 22% 16%;
-    /* #161B24 */
-    --input: 218 22% 11%;
-    --ring: 189 94% 43%;
-
-    /* Sidebar */
-    --sidebar-background: 220 22% 4%;
-    --sidebar-foreground: 215 16% 57%;
-    --sidebar-primary: 189 100% 50%;
-    --sidebar-primary-foreground: 220 22% 4%;
-    --sidebar-accent: 218 22% 11%;
-    --sidebar-accent-foreground: 214 32% 91%;
-    --sidebar-border: 218 22% 16%;
-    --sidebar-ring: 189 100% 50%;
-
-    /* Glow tokens */
-    --glow-primary: 189 100% 50%;
-    --glow-success: 160 64% 50%;
-    --glow-warning: 38 92% 55%;
-    --glow-destructive: 0 84% 60%;
+    color-scheme: dark;
+    --background: 213 32% 5%;
+    --foreground: 210 24% 94%;
+    --card: 215 28% 8%;
+    --card-foreground: 218 36% 95%;
+    --popover: 215 28% 10%;
+    --popover-foreground: 218 36% 95%;
+    --primary: 211 84% 74%;
+    --primary-foreground: 213 32% 5%;
+    --secondary: 215 27% 12%;
+    --secondary-foreground: 218 36% 95%;
+    --muted: 215 22% 12%;
+    --muted-foreground: 215 14% 67%;
+    --accent: 215 28% 16%;
+    --accent-foreground: 220 90% 82%;
+    --destructive: 2 78% 75%;
+    --destructive-foreground: 222 50% 15%;
+    --success: 153 43% 66%;
+    --warning: 39 77% 68%;
+    --border: 215 25% 20%;
+    --input: 215 25% 20%;
+    --ring: 220 90% 77%;
+    --sidebar-background: 214 31% 7%;
+    --sidebar-foreground: 218 23% 78%;
+    --sidebar-primary: 220 90% 77%;
+    --sidebar-primary-foreground: 222 50% 15%;
+    --sidebar-accent: 215 28% 14%;
+    --sidebar-accent-foreground: 220 90% 82%;
+    --sidebar-border: 215 25% 20%;
+    --sidebar-ring: 220 90% 77%;
   }
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+  body { @apply bg-background text-foreground font-sans antialiased; }
+  h1, h2, h3, h4, h5, h6 { @apply font-bold tracking-tight; text-wrap: balance; }
+  p { text-wrap: pretty; }
+  :focus-visible { outline: 3px solid hsl(var(--ring)); outline-offset: 4px; }
+  ::selection { background: hsl(var(--gold) / .55); color: hsl(222 55% 20%); }
 }
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground font-sans antialiased;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight;
-  }
-}
-
 @layer components {
-  /* === CLAIM ID — monospace data label === */
-  .claim-id {
-    @apply font-mono text-xs tracking-wider text-primary;
+  .page-wrap { @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12; }
+  .brand { @apply inline-flex items-baseline text-2xl font-extrabold tracking-[-0.04em] text-foreground; }
+  .brand-dot { color: hsl(var(--gold)); }
+  .hero-title { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; letter-spacing: -.055em; }
+  .hero-title em { color: hsl(var(--primary)); }
+  .dark .hero-title { font-family: var(--font-sans); font-weight: 800; letter-spacing: -.055em; }
+  .dark .hero-title em { font-style: normal; font-weight: 300; }
+  .signal-board { background: hsl(194 28% 16%); color: hsl(42 28% 97%); }
+  .signal-label { color: hsl(194 12% 70%); }
+  .signal-rule { border-color: hsl(194 18% 32%); }
+  .signal-accent { color: hsl(20 82% 73%); }
+  .dark .signal-board { background: hsl(215 28% 8%); border: 1px solid hsl(var(--border)); }
+  .dark .signal-accent { color: hsl(var(--primary)); }
+  .dark .signal-rule { border-color: hsl(var(--border)); }
+  .dark .landing-hero {
+    background-image: radial-gradient(ellipse at 80% 20%, hsl(212 60% 20% / .15), transparent 55%), linear-gradient(hsl(215 25% 20% / .18) 1px, transparent 1px);
+    background-size: auto, 100% 60px;
   }
-
-  /* === STATUS BADGES — glowing indicators === */
-  .status-badge {
-    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium font-mono uppercase tracking-wider;
+  .workspace [data-sidebar="sidebar"] .brand { color: hsl(var(--sidebar-accent-foreground)); }
+  .eyebrow { @apply text-xs font-bold uppercase tracking-[0.16em] text-primary; }
+  .claim-id { @apply font-mono text-xs tracking-wide text-primary; }
+  .status-badge { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold; }
+  .status-pending { @apply bg-warning/10 text-warning; }
+  .status-investigating { @apply bg-primary/10 text-primary; }
+  .status-verified { @apply bg-success/10 text-success; }
+  .status-debunked, .status-escalated { @apply bg-destructive/10 text-destructive; }
+  .card-hover { @apply transition-shadow duration-200; }
+  .card-hover:hover { box-shadow: 0 12px 30px -20px hsl(var(--primary) / .35); }
+  .data-row { @apply border-b border-border py-3; }
+  .hero-paper { box-shadow: 0 24px 64px -30px hsl(var(--primary) / .3); }
+  .evidence-grid {
+    background-image: linear-gradient(hsl(var(--primary) / .055) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / .055) 1px, transparent 1px);
+    background-size: 26px 26px;
   }
-
-  .status-pending {
-    @apply bg-warning/10 text-warning;
-  }
-  .status-investigating {
-    @apply bg-primary/10 text-primary;
-  }
-  .status-verified {
-    @apply bg-success/10 text-success;
-  }
-  .status-debunked {
-    @apply bg-destructive/10 text-destructive;
-  }
-  .status-escalated {
-    @apply bg-destructive/10 text-destructive;
-  }
-
-  /* Light: static dots */
-  :root .status-badge span[class*="rounded-full"] {
-    animation: none !important;
-  }
-
-  /* Dark: pulsing glow dots */
-  .dark .status-pending span[class*="rounded-full"] {
-    animation: pulse-glow-warning 2s ease-in-out infinite;
-  }
-  .dark .status-investigating span[class*="rounded-full"] {
-    animation: pulse-glow-primary 2s ease-in-out infinite;
-  }
-  .dark .status-verified span[class*="rounded-full"] {
-    animation: pulse-glow-success 2s ease-in-out infinite;
-  }
-  .dark .status-debunked span[class*="rounded-full"],
-  .dark .status-escalated span[class*="rounded-full"] {
-    animation: pulse-glow-destructive 2s ease-in-out infinite;
-  }
-
-  /* === CARD HOVER — ops panel lift === */
-  .card-hover {
-    @apply transition-all duration-200 ease-out;
-  }
-
-  :root .card-hover:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    border-left: 2px solid hsl(189 88% 37%);
-  }
-
-  .dark .card-hover:hover {
-    border-color: hsl(189 94% 43% / 0.5);
-    box-shadow:
-      0 0 1px hsl(189 94% 43% / 0.4),
-      0 0 12px hsl(189 94% 43% / 0.08),
-      inset 0 1px 0 hsl(189 94% 43% / 0.05);
-  }
-
-  /* === SCANLINE — subtle CRT texture for dark cards === */
-  .dark .ops-scanline::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      hsl(189 100% 50% / 0.01) 2px,
-      hsl(189 100% 50% / 0.01) 4px
-    );
-    border-radius: inherit;
-  }
-
-  /* === DATA GRID LINE — horizontal dividers === */
-  .data-row {
-    @apply border-b border-border/50 py-2;
-  }
-
-  .dark .data-row {
-    border-color: hsl(218 22% 16% / 0.6);
-  }
+  .workspace main > div { @apply mx-auto max-w-7xl; }
+  .workspace [data-sidebar="menu-button"] { @apply h-11 rounded-xl font-semibold; }
+  .workspace [data-sidebar="group"] { @apply px-3; }
+  .workspace [data-sidebar="menu"] { @apply gap-1; }
 }
-
-/* === GLOW KEYFRAMES === */
-@keyframes pulse-glow-primary {
-  0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 4px hsl(189 100% 50% / 0.6);
-  }
-  50% {
-    opacity: 0.5;
-    box-shadow: 0 0 8px hsl(189 100% 50% / 0.3);
-  }
-}
-
-@keyframes pulse-glow-success {
-  0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 4px hsl(160 64% 50% / 0.6);
-  }
-  50% {
-    opacity: 0.5;
-    box-shadow: 0 0 8px hsl(160 64% 50% / 0.3);
-  }
-}
-
-@keyframes pulse-glow-warning {
-  0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 4px hsl(38 92% 55% / 0.6);
-  }
-  50% {
-    opacity: 0.5;
-    box-shadow: 0 0 8px hsl(38 92% 55% / 0.3);
-  }
-}
-
-@keyframes pulse-glow-destructive {
-  0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 4px hsl(0 84% 60% / 0.6);
-  }
-  50% {
-    opacity: 0.5;
-    box-shadow: 0 0 8px hsl(0 84% 60% / 0.3);
-  }
-}
-
-/* === SMOOTH THEME TRANSITIONS === */
-*,
-*::before,
-*::after {
-  transition-property: background-color, border-color, box-shadow;
-  transition-duration: 150ms;
-  transition-timing-function: ease;
-}
-
-button,
-a,
-input,
-textarea,
-select,
-[role="button"] {
-  transition-property: background-color, border-color, box-shadow, color, opacity;
-  transition-duration: 120ms;
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }

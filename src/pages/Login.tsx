@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -8,17 +8,16 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Mail, Github, Loader2, CheckCircle, ArrowLeft, KeyRound } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { PublicHeader } from "@/components/PublicHeader";
+import { ProjectFooter } from "@/components/ProjectFooter";
 
 export default function Login() {
   const { user, loading, signInWithMagicLink, signInWithOAuth } = useAuth();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
-
-  const currentLang = i18n.language?.startsWith("sq") ? "sq" : "en";
-  const toggleLang = () => i18n.changeLanguage(currentLang === "en" ? "sq" : "en");
 
   if (loading) {
     return (
@@ -59,31 +58,21 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header className="border-b border-border px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <Shield className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <div>
-            <span className="font-bold text-foreground">Disbunk.org</span>
-            <span className="hidden sm:inline text-xs text-muted-foreground ml-2 tracking-wide">
-              {t("landing.tagline")}
-            </span>
-          </div>
-        </Link>
-        <Button variant="ghost" size="sm" className="text-xs font-mono text-muted-foreground" onClick={toggleLang}>
-          {currentLang === "en" ? "EN → SQ" : "SQ → EN"}
-        </Button>
-      </header>
+      <PublicHeader />
 
       {/* Main */}
-      <main className="flex-1 flex items-center justify-center px-6 py-16">
-        <div className="w-full max-w-md animate-fade-in">
+      <main id="content" className="page-wrap grid flex-1 items-center gap-12 py-12 lg:grid-cols-2 lg:gap-24 lg:py-20">
+        <div className="hidden lg:block">
+          <p className="eyebrow">{t("redesign.loginNote")}</p>
+          <h1 className="mt-5 max-w-lg text-6xl font-extrabold leading-[1.02] tracking-[-0.04em]">{t("redesign.loginTitle")}</h1>
+          <p className="mt-6 max-w-md text-xl leading-relaxed text-muted-foreground">{t("redesign.loginDesc")}</p>
+          <div className="mt-10 flex items-center gap-3 border-t border-border pt-6 text-sm font-semibold"><Shield className="h-5 w-5 text-primary" />{t("redesign.evidenceFirst")}<span className="mx-2 brand-dot">●</span>{t("redesign.openSource")}</div>
+        </div>
+        <div className="mx-auto w-full max-w-md animate-fade-in">
           {sent ? (
             <MagicLinkSent email={email} onBack={() => setSent(false)} t={t} />
           ) : (
-            <Card className="border-border">
+            <Card className="hero-paper rounded-2xl border-border p-2 sm:p-4">
               <CardHeader className="text-center pb-2">
                 <div className="flex justify-center mb-4">
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
@@ -170,12 +159,7 @@ export default function Login() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border px-6 py-6">
-        <p className="text-[11px] text-muted-foreground leading-relaxed max-w-4xl mx-auto text-center">
-          {t("common.footer")}
-        </p>
-      </footer>
+      <ProjectFooter />
     </div>
   );
 }

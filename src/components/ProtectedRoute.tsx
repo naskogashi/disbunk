@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import type { AppRole } from "@/types/database";
 import { PendingApproval } from "@/pages/PendingApproval";
 import { Loader2 } from "lucide-react";
+import { ModuleError } from "@/components/ModuleError";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -11,7 +12,7 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, requiredRoles, requireApproval = true }: ProtectedRouteProps) {
-  const { user, loading, isApproved, hasAnyRole, profileStatus } = useAuth();
+  const { user, loading, isApproved, hasAnyRole, profileStatus, authError, refreshProfile } = useAuth();
 
   if (loading) {
     return (
@@ -24,6 +25,7 @@ export function ProtectedRoute({ children, requiredRoles, requireApproval = true
   if (!user) {
     return <Navigate to="/login" replace />;
   }
+  if (authError) return <div className="mx-auto max-w-xl p-8"><ModuleError error={new Error(authError)} retry={refreshProfile} /></div>;
 
   if (requireApproval && !isApproved) {
     return <PendingApproval status={profileStatus} />;

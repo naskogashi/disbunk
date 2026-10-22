@@ -17,6 +17,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { ManageUserForm } from "@/components/ManageUserForm";
 import {
   Plus, Users, Loader2, ArrowLeft, ChevronRight, Shield,
   FileText, UserPlus, LogOut, Mail, Crown,
@@ -71,7 +72,7 @@ export default function Teams() {
     });
 
     setTeams(
-      (teamsRes.data ?? []).map((t: any) => ({
+      (teamsRes.data ?? []).map((t: TeamRow) => ({
         ...t,
         member_count: memberCounts[t.id] ?? 0,
         claim_count: claimCounts[t.id] ?? 0,
@@ -198,6 +199,9 @@ function TeamDetail({ teamId, onBack }: { teamId: string; onBack: () => void }) 
   const [joining, setJoining] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [candidates, setCandidates] = useState<{ user_id: string; full_name: string | null }[]>([]);
+  const [candidateId, setCandidateId] = useState("");
+  const [adding, setAdding] = useState(false);
 
   const isAdmin = hasAnyRole(["admin"]);
   const canManage = isLead || isAdmin;
@@ -206,18 +210,20 @@ function TeamDetail({ teamId, onBack }: { teamId: string; onBack: () => void }) 
     setLoading(true);
     const [teamRes, membersRes] = await Promise.all([
       supabase.from("teams").select("*").eq("id", teamId).single(),
-      supabase
-        .from("team_members")
-        .select("*, profiles:user_id(full_name)")
-        .eq("team_id", teamId)
-        .order("joined_at", { ascending: true }),
+      supabase.rpc("get_team_roster", { target_team_id: teamId }),
     ]);
 
     setTeam(teamRes.data as TeamRow | null);
-    const m = (membersRes.data as unknown as MemberRow[]) ?? [];
+    if (teamRes.error || membersRes.error) toast({ title: t("admin.error"), description: (teamRes.error || membersRes.error)?.message, variant: "destructive" });
+    const m: MemberRow[] = (membersRes.data ?? []).map((row: MemberRow & { full_name?: string | null }) => ({ ...row, profiles: { full_name: row.full_name ?? null } }));
     setMembers(m);
     setIsMember(m.some((r) => r.user_id === user?.id));
     setIsLead(m.some((r) => r.user_id === user?.id && r.role === "lead"));
+    if (isAdmin || m.some(row => row.user_id === user?.id && row.role === "lead")) {
+      const result = await supabase.rpc("list_team_candidates", { target_team_id: teamId });
+      if (result.error) toast({ title: t("admin.error"), description: result.error.message, variant: "destructive" });
+      else setCandidates(result.data ?? []);
+    }
     setLoading(false);
   };
 
@@ -310,7 +316,7 @@ function TeamDetail({ teamId, onBack }: { teamId: string; onBack: () => void }) 
       </button>
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Users className="h-5 w-5 text-primary" />
@@ -321,12 +327,12 @@ function TeamDetail({ teamId, onBack }: { teamId: string; onBack: () => void }) 
           )}
         </div>
         <div className="flex gap-2">
-          {!isMember ? (
+          {!isMember ? isAdmin ? (
             <Button size="sm" className="gap-1.5" onClick={handleJoin} disabled={joining}>
               {joining ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <UserPlus className="h-3.5 w-3.5" />}
               {t("teams.join")}
             </Button>
-          ) : (
+          ) : <p className="max-w-xs text-sm text-muted-foreground">{t("accounts.requestInvite")}</p> : (
             <Button size="sm" variant="outline" className="gap-1.5 text-destructive" onClick={handleLeave}>
               <LogOut className="h-3.5 w-3.5" /> {t("teams.leave")}
             </Button>
@@ -343,25 +349,7 @@ function TeamDetail({ teamId, onBack }: { teamId: string; onBack: () => void }) 
                   <DialogTitle>{t("teams.inviteTitle")}</DialogTitle>
                   <DialogDescription>{t("teams.inviteDesc")}</DialogDescription>
                 </DialogHeader>
-                <div className="space-y-3">
-                  <Input
-                    type="email"
-                    value={inviteEmail}
-                    onChange={(e) => setInviteEmail(e.target.value)}
-                    placeholder={t("teams.invitePlaceholder")}
-                  />
-                  <Button
-                    className="w-full gap-1.5"
-                    disabled={!inviteEmail.trim()}
-                    onClick={() => {
-                      toast({ title: t("teams.inviteSent") });
-                      setInviteEmail("");
-                      setInviteOpen(false);
-                    }}
-                  >
-                    <Mail className="h-4 w-4" /> {t("teams.sendInvite")}
-                  </Button>
-                </div>
+                <ManageUserForm teamId={teamId} onComplete={() => { setInviteOpen(false); fetchDetail(); }} />
               </DialogContent>
             </Dialog>
           )}
@@ -401,6 +389,7 @@ function TeamDetail({ teamId, onBack }: { teamId: string; onBack: () => void }) 
       </div>
 
       {/* Members list */}
+      {canManage && <Card><CardContent className="space-y-3 p-5"><Label htmlFor="existing-member">{t("accounts.addExisting")}</Label><div className="flex flex-wrap gap-2"><select id="existing-member" className="h-10 min-w-0 flex-1 rounded-lg border bg-card px-3" value={candidateId} onChange={event => setCandidateId(event.target.value)}><option value="">{t("accounts.selectUser")}</option>{candidates.map(candidate => <option key={candidate.user_id} value={candidate.user_id}>{candidate.full_name || candidate.user_id.slice(0,8)}</option>)}</select><Button disabled={!candidateId || adding} onClick={async () => { setAdding(true); const result = await supabase.from("team_members").insert({ team_id: teamId, user_id: candidateId, role: "member" }); setAdding(false); if (result.error) toast({ title: t("admin.error"), description: result.error.message, variant: "destructive" }); else { setCandidateId(""); fetchDetail(); } }}>{t("tools.add")}</Button></div></CardContent></Card>}
       <div className="space-y-3">
         <h2 className="text-base font-semibold text-foreground">{t("teams.membersList")}</h2>
         {members.map((member) => (
@@ -482,29 +471,12 @@ function CreateTeamForm({
     if (!name.trim() || !userId) return;
 
     setSubmitting(true);
-    const { data, error } = await supabase
-      .from("teams")
-      .insert({
-        name: name.trim(),
-        description: description.trim() || null,
-        created_by: userId,
-      })
-      .select("id")
-      .single();
+    const { error } = await supabase.rpc("create_team_with_lead", { team_name: name.trim(), team_description: description.trim() || null });
 
     if (error) {
       onError(error.message);
       setSubmitting(false);
       return;
-    }
-
-    // Auto-join creator as lead
-    if (data) {
-      await supabase.from("team_members").insert({
-        team_id: data.id,
-        user_id: userId,
-        role: "lead",
-      });
     }
 
     setSubmitting(false);

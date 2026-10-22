@@ -22,4 +22,10 @@ i18n
     },
   });
 
+const updateDocumentLanguage = (language: string) => {
+  if (typeof document !== "undefined") document.documentElement.lang = language.startsWith("sq") ? "sq" : "en";
+};
+updateDocumentLanguage(i18n.language ?? "en");
+i18n.on("languageChanged", updateDocumentLanguage);
+
 export default i18n;

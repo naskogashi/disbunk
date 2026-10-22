@@ -81,7 +81,7 @@ export default function Campaigns() {
     });
 
     setCampaigns(
-      (campaignsRes.data ?? []).map((c: any) => ({ ...c, claim_count: countMap[c.id] ?? 0 }))
+      (campaignsRes.data ?? []).map((c: CampaignRow) => ({ ...c, claim_count: countMap[c.id] ?? 0 }))
     );
     setTeams(teamsRes.data ?? []);
     setLoading(false);
@@ -108,7 +108,7 @@ export default function Campaigns() {
     if (orphans.length >= 2) {
       const words = (s: string) => new Set(s.toLowerCase().split(/\s+/).filter((w: string) => w.length > 4));
       const first = words(orphans[0].title);
-      const similar = orphans.filter((c: any, i: number) => {
+      const similar = orphans.filter((c: { id: string; title: string }, i: number) => {
         if (i === 0) return true;
         const cw = words(c.title);
         let overlap = 0;
@@ -117,7 +117,7 @@ export default function Campaigns() {
       });
 
       if (similar.length >= 2) {
-        setSimilarBanner({ count: similar.length, claimIds: similar.map((c: any) => c.id) });
+        setSimilarBanner({ count: similar.length, claimIds: similar.map((c: { id: string }) => c.id) });
       }
     }
   };

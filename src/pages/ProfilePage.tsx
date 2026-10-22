@@ -214,7 +214,7 @@ export default function ProfilePage() {
 
       // Build leaderboard
       const leaderClaims = await Promise.all(
-        (allProfilesRes.data ?? []).map(async (p: any) => {
+        (allProfilesRes.data ?? []).map(async (p: { user_id: string; full_name: string | null; impact_score: number }) => {
           const { count } = await supabase
             .from("claims")
             .select("id", { count: "exact", head: true })

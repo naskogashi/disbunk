@@ -1,4 +1,4 @@
-import { Sun, Moon, Bell, LogOut, Activity } from "lucide-react";
+import { Sun, Moon, LogOut, ArrowUpRight, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useTheme } from "@/hooks/useTheme";
@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function AppHeader() {
   const { theme, toggleTheme } = useTheme();
@@ -33,26 +33,24 @@ export function AppHeader() {
     .join("");
 
   return (
-    <header className="sticky top-0 z-30 flex h-12 items-center gap-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
+    <header className="sticky top-0 z-30 flex h-20 items-center gap-3 border-b border-border bg-card/95 px-5 backdrop-blur sm:px-8">
       <SidebarTrigger className="-ml-1" />
 
-      {/* Ops status indicator */}
-      <div className="hidden sm:flex items-center gap-2 text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
-        <Activity className="h-3 w-3 text-success animate-data-pulse" />
-        <span>System Online</span>
+      <div className="hidden sm:block">
+        <p className="text-sm font-bold">{t("redesign.workspace")}</p>
+        <p className="text-xs text-muted-foreground">{t("redesign.workspaceDesc")}</p>
       </div>
 
       <div className="flex-1" />
 
       <div className="flex items-center gap-1">
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary">
-          <Bell className="h-4 w-4" />
-        </Button>
+        <Button asChild variant="ghost" size="icon"><Link to="/alerts" aria-label={t("tools.alerts")}><Bell className="h-4 w-4" /></Link></Button>
+        <Button asChild size="sm" className="mr-2 hidden rounded-full px-4 md:inline-flex"><Link to="/claims/new">{t("dashboard.newClaim")}<ArrowUpRight className="ml-2 h-4 w-4" /></Link></Button>
 
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 px-2 text-[10px] font-mono text-muted-foreground hover:text-primary uppercase tracking-wider"
+          className="h-10 px-3 text-xs font-bold text-muted-foreground hover:text-primary"
           onClick={toggleLang}
           title="Language"
         >
@@ -64,7 +62,7 @@ export function AppHeader() {
           size="icon"
           className="h-8 w-8"
           onClick={toggleTheme}
-          title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          aria-label={t(theme === "dark" ? "redesign.lightMode" : "redesign.darkMode")}
         >
           {theme === "dark" ? (
             <Sun className="h-4 w-4 text-primary" />
@@ -75,7 +73,7 @@ export function AppHeader() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full" aria-label={t("redesign.account")}>
               <Avatar className="h-7 w-7">
                 <AvatarImage src={user?.user_metadata?.avatar_url} />
                 <AvatarFallback className="text-[10px] font-mono bg-primary text-primary-foreground">{initials}</AvatarFallback>
