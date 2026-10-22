@@ -2,6 +2,7 @@ export const SITE_URL = "https://disbunk.org";
 export const HOME_TITLE = "Disbunk.org — Evidence first. A coordinated response.";
 export const HOME_DESCRIPTION = "Verify claims, preserve evidence, and coordinate a credible response to misinformation. Disbunk connects journalists, researchers, and civil society.";
 const pageKeys: Record<string, string> = {
+  "/forgot-password": "accountTools.forgotPassword", "/reset-password": "accountTools.resetPassword",
   "/login": "landing.signIn", "/dashboard": "nav.dashboard", "/claims": "nav.claims",
   "/claims/new": "claims.newClaim", "/evidence": "nav.evidence", "/campaigns": "nav.campaigns",
   "/teams": "nav.teams", "/analytics": "nav.analytics", "/docs": "nav.docs",

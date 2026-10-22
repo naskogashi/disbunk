@@ -1,3 +1,5 @@
+import { PrivateAvatar } from "@/components/ProfilePictures";
+import { useProfilePicture } from "@/hooks/useProfilePicture";
 import { Sun, Moon, LogOut, ArrowUpRight, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -17,6 +19,7 @@ import { Link, useNavigate } from "react-router-dom";
 export function AppHeader() {
   const { theme, toggleTheme } = useTheme();
   const { user, signOut } = useAuth();
+  const picture=useProfilePicture(user?.id);
   const { i18n, t } = useTranslation();
   const navigate = useNavigate();
 
@@ -74,10 +77,7 @@ export function AppHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full" aria-label={t("redesign.account")}>
-              <Avatar className="h-7 w-7">
-                <AvatarImage src={user?.user_metadata?.avatar_url} />
-                <AvatarFallback className="text-[10px] font-mono bg-primary text-primary-foreground">{initials}</AvatarFallback>
-              </Avatar>
+              <PrivateAvatar path={picture.data?.avatar_path} fallbackUrl={picture.data?.avatar_url||user?.user_metadata?.avatar_url} name={user?.user_metadata?.full_name||user?.email||"User"} className="h-7 w-7"/>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">

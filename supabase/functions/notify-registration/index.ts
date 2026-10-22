@@ -1,3 +1,5 @@
+import { brandedEmail } from "../_shared/email.ts";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
@@ -39,7 +41,7 @@ Deno.serve(async (req: Request) => {
     if (typeof email !== "string") return json({ success: true, emailAccepted: false, warning: "No email address is available for this account." });
     const sent = await fetch("https://api.smtp2go.com/v3/email/send", {
       method: "POST", headers: { "Content-Type": "application/json", "X-Smtp2go-Api-Key": apiKey },
-      body: JSON.stringify({ sender: Deno.env.get("AUTH_EMAIL_FROM") || "DISBUNK.org <no-reply@disbunk.org>", to: [email], subject: approved ? "Your DISBUNK.org account is approved" : "Your DISBUNK.org registration", text_body: `${message}\n\nhttps://disbunk.org/login\n\nDISBUNK.org` }), signal: AbortSignal.timeout(15000),
+      body: JSON.stringify({ sender: Deno.env.get("AUTH_EMAIL_FROM") || "DISBUNK.org <no-reply@disbunk.org>", to: [email], subject: approved ? "Your DISBUNK.org account is approved" : "Your DISBUNK.org registration", ...brandedEmail({ title: approved ? "Your workspace is ready." : "An update on your registration", message, name: profiles[0]?.full_name || undefined, actionLabel: "Open your workspace", actionUrl: approved ? "https://disbunk.org/login" : undefined }) }), signal: AbortSignal.timeout(15000),
     });
     const result = await sent.json().catch(() => null);
     if (!sent.ok || result?.data?.succeeded !== 1 || result?.data?.failed) return json({ success: true, emailAccepted: false, warning: "Account decision saved, but SMTP2GO did not accept the email. Check the verified sender and provider activity log." });

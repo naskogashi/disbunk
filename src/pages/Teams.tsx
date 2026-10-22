@@ -1,3 +1,4 @@
+import { PictureEditor, PrivateAvatar } from "@/components/ProfilePictures";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabase";
@@ -30,6 +31,7 @@ interface TeamRow {
   description: string | null;
   created_by: string | null;
   created_at: string;
+  avatar_path?: string | null;
   member_count?: number;
   claim_count?: number;
 }
@@ -153,9 +155,7 @@ export default function Teams() {
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
-                      <Users className="h-4 w-4 text-primary" />
-                    </div>
+                    <PrivateAvatar path={team.avatar_path} name={team.name} className="h-10 w-10"/>
                     <div>
                       <h3 className="text-sm font-semibold text-foreground">{team.name}</h3>
                       <p className="text-[11px] text-muted-foreground font-mono">
@@ -319,7 +319,7 @@ function TeamDetail({ teamId, onBack }: { teamId: string; onBack: () => void }) 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Users className="h-5 w-5 text-primary" />
+            <PrivateAvatar path={team.avatar_path} name={team.name} className="h-12 w-12"/>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">{team.name}</h1>
           </div>
           {team.description && (
@@ -356,6 +356,7 @@ function TeamDetail({ teamId, onBack }: { teamId: string; onBack: () => void }) 
         </div>
       </div>
 
+      {canManage&&<Card><CardContent className="space-y-3 p-5"><h2 className="font-semibold">{t("accountTools.teamPicture")}</h2><PictureEditor kind="team" entityId={teamId} path={team.avatar_path} name={team.name} onChanged={avatar_path=>setTeam(previous=>previous?{...previous,avatar_path}:previous)}/></CardContent></Card>}
       {/* Stats row */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         <Card className="border-border">

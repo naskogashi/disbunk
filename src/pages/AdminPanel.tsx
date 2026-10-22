@@ -1,23 +1,16 @@
+import { AdminAccountList, type ManagedAccount } from "@/components/AdminAccountList";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
-import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import {
   CheckCircle, XCircle, Users, Shield, BarChart3, Loader2,
@@ -27,19 +20,11 @@ import type { Profile, AppRole } from "@/types/database";
 import { ManageUserForm } from "@/components/ManageUserForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Link } from "react-router-dom";
-import { invokeFunction } from "@/lib/invoke-function";
 
 /* ─── Types ─── */
 interface PendingUser extends Profile { email?: string }
 
-interface ManagedUser {
-  id: string;
-  user_id: string;
-  full_name: string | null;
-  status: string;
-  roles: AppRole[];
-  created_at: string;
-}
+type ManagedUser = ManagedAccount;
 
 interface AuditLogRow {
   id: string;
@@ -68,17 +53,14 @@ export default function AdminPanel() {
   const [auditLogs, setAuditLogs] = useState<AuditLogRow[]>([]);
   const [featureFlags, setFeatureFlags] = useState<FeatureFlagRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [acting, setActing] = useState<string | null>(null);
   const [manageUserOpen, setManageUserOpen] = useState(false);
-  const [userSearch, setUserSearch] = useState("");
   const [stats, setStats] = useState({ users: 0, claims: 0, teams: 0, evidence: 0 });
 
   const fetchData = async () => {
-    setLoading(true);
     const [pendingRes, usersRes, rolesRes, claimsCount, teamsCount, evidenceCount, logsRes, flagsRes] =
       await Promise.all([
-        supabase.from("profiles").select("*").eq("status", "pending_approval"),
-        supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+        supabase.from("profiles").select("*").eq("status", "pending_approval").is("deleted_at", null),
+        supabase.from("profiles").select("*").is("deleted_at", null).order("created_at", { ascending: false }),
         supabase.from("user_roles").select("*"),
         supabase.from("claims").select("id", { count: "exact", head: true }),
         supabase.from("teams").select("id", { count: "exact", head: true }),
@@ -87,6 +69,8 @@ export default function AdminPanel() {
         supabase.from("feature_flags").select("*").order("key"),
       ]);
 
+    const failed = [pendingRes,usersRes,rolesRes,claimsCount,teamsCount,evidenceCount,logsRes,flagsRes].find(result=>result.error);
+    if(failed?.error)toast({title:t("admin.error"),description:failed.error.message,variant:"destructive"});
     setPendingUsers(pendingRes.data ?? []);
 
     const rolesByUser = (rolesRes.data ?? []).reduce<Record<string, AppRole[]>>((acc, r) => {
@@ -99,6 +83,8 @@ export default function AdminPanel() {
         id: p.id,
         user_id: p.user_id,
         full_name: p.full_name,
+        avatar_path: p.avatar_path,
+        avatar_url: p.avatar_url,
         status: p.status,
         roles: rolesByUser[p.user_id] ?? [],
         created_at: p.created_at,
@@ -112,7 +98,6 @@ export default function AdminPanel() {
       evidence: evidenceCount.count ?? 0,
     });
 
-    setAuditLogs(auditLogs.length === 0 ? (logsRes.data ?? []) : auditLogs);
     setAuditLogs(logsRes.data ?? []);
     setFeatureFlags(flagsRes.data ?? []);
     setLoading(false);
@@ -132,75 +117,6 @@ export default function AdminPanel() {
     });
   };
 
-  const handleApproval = async (profileId: string, userId: string, approve: boolean) => {
-    setActing(profileId);
-    const { error } = await supabase
-      .from("profiles")
-      .update({ status: approve ? "approved" : "rejected" })
-      .eq("id", profileId);
-
-    if (error) {
-      toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
-    } else {
-      let deliveryWarning = "";
-      try {
-        const notification = await invokeFunction<{ emailAccepted: boolean; warning?: string }>("notify-registration", { userId, approved: approve });
-        if (!notification.emailAccepted) deliveryWarning = notification.warning || t("accounts.emailFailed");
-      } catch (error) { deliveryWarning = error instanceof Error ? error.message : t("accounts.emailFailed"); }
-      await logAction(approve ? "user_approved" : "user_rejected", "profile", profileId);
-      toast({
-        title: approve ? t("admin.userApproved") : t("admin.userRejected"),
-        description: deliveryWarning || (approve ? t("admin.userApprovedDesc") : t("admin.userRejectedDesc")),
-      });
-      fetchData();
-    }
-    setActing(null);
-  };
-
-  const handleRoleChange = async (userId: string, newRole: AppRole) => {
-    const { error } = await supabase.rpc("set_user_role", { target_user_id: userId, new_role: newRole });
-    if (error) {
-      toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
-    } else {
-      await logAction("role_changed", "user", userId, { new_role: newRole });
-      toast({ title: t("admin.roleUpdated") });
-      fetchData();
-    }
-  };
-
-  const handleSuspend = async (profileId: string, userId: string) => {
-    const { error } = await supabase.from("profiles").update({ status: "suspended" }).eq("id", profileId);
-    if (error) {
-      toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
-    } else {
-      await logAction("user_suspended", "profile", profileId);
-      toast({ title: t("admin.userSuspended") });
-      fetchData();
-    }
-  };
-
-  const handleUnsuspend = async (profileId: string) => {
-    const { error } = await supabase.from("profiles").update({ status: "approved" }).eq("id", profileId);
-    if (error) {
-      toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
-    } else {
-      await logAction("user_unsuspended", "profile", profileId);
-      toast({ title: t("admin.userUnsuspended") });
-      fetchData();
-    }
-  };
-
-  const handleDeleteUser = async (profileId: string, userId: string) => {
-    const { error } = await supabase.from("profiles").delete().eq("id", profileId);
-    if (error) {
-      toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
-    } else {
-      await logAction("user_deleted", "profile", profileId, { user_id: userId });
-      toast({ title: t("admin.userDeleted") });
-      fetchData();
-    }
-  };
-
   const handleToggleFlag = async (key: string, currentValue: unknown) => {
     const newValue = !currentValue;
     const { error } = await supabase
@@ -213,25 +129,6 @@ export default function AdminPanel() {
       await logAction("feature_flag_toggled", "feature_flag", null, { key, value: newValue });
       toast({ title: t("admin.flagUpdated") });
       fetchData();
-    }
-  };
-
-  const initials = (name: string | null) =>
-    (name || "U").split(" ").map((s) => s[0]?.toUpperCase()).join("").slice(0, 2);
-
-  const filteredUsers = allUsers.filter(
-    (u) =>
-      (u.full_name ?? "").toLowerCase().includes(userSearch.toLowerCase()) ||
-      u.user_id.toLowerCase().includes(userSearch.toLowerCase())
-  );
-
-  const statusColor = (s: string) => {
-    switch (s) {
-      case "approved": return "bg-success/15 text-success";
-      case "pending_approval": return "bg-warning/15 text-warning";
-      case "rejected": return "bg-destructive/15 text-destructive";
-      case "suspended": return "bg-destructive/15 text-destructive";
-      default: return "bg-muted text-muted-foreground";
     }
   };
 
@@ -292,168 +189,8 @@ export default function AdminPanel() {
           <TabsTrigger value="audit">{t("admin.auditLog")}</TabsTrigger>
         </TabsList>
 
-        {/* ─── Pending Approvals ─── */}
-        <TabsContent value="pending" className="space-y-3 mt-4">
-          {pendingUsers.length === 0 ? (
-            <Card className="border-border border-dashed">
-              <CardContent className="p-12 text-center">
-                <CheckCircle className="h-10 w-10 text-success mx-auto mb-3" />
-                <p className="text-muted-foreground text-sm">{t("admin.noPending")}</p>
-              </CardContent>
-            </Card>
-          ) : (
-            pendingUsers.map((u) => (
-              <Card key={u.id} className="border-border">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-9 w-9">
-                      <AvatarFallback className="bg-muted text-foreground text-xs">
-                        {initials(u.full_name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium text-foreground">{u.full_name || t("admin.unnamed")}</p>
-                      <p className="text-xs text-muted-foreground font-mono">{u.user_id.slice(0, 8)}</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm" variant="outline"
-                      className="gap-1 text-destructive hover:text-destructive"
-                      onClick={() => handleApproval(u.id, u.user_id, false)}
-                      disabled={acting === u.id}
-                    >
-                      <XCircle className="h-3.5 w-3.5" /> {t("admin.reject")}
-                    </Button>
-                    <Button
-                      size="sm" className="gap-1"
-                      onClick={() => handleApproval(u.id, u.user_id, true)}
-                      disabled={acting === u.id}
-                    >
-                      {acting === u.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle className="h-3.5 w-3.5" />}
-                      {t("admin.approve")}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          )}
-        </TabsContent>
-
-        {/* ─── All Users Table ─── */}
-        <TabsContent value="users" className="mt-4 space-y-4">
-          <div className="relative max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder={t("admin.searchUsers")}
-              value={userSearch}
-              onChange={(e) => setUserSearch(e.target.value)}
-              className="pl-9 h-9"
-            />
-          </div>
-          <Card className="border-border overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t("admin.user")}</TableHead>
-                  <TableHead>{t("admin.status")}</TableHead>
-                  <TableHead>{t("admin.role")}</TableHead>
-                  <TableHead>{t("admin.joined")}</TableHead>
-                  <TableHead className="text-right">{t("admin.actions")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredUsers.map((u) => (
-                  <TableRow key={u.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Avatar className="h-7 w-7">
-                          <AvatarFallback className="bg-muted text-foreground text-[10px]">
-                            {initials(u.full_name)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-medium text-foreground">{u.full_name || t("admin.unnamed")}</p>
-                          <p className="text-[10px] text-muted-foreground font-mono">{u.user_id.slice(0, 12)}</p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={`${statusColor(u.status)} text-[10px] font-mono`}>
-                        {u.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Select
-                        value={u.roles[0] || "analyst"}
-                        onValueChange={(val) => handleRoleChange(u.user_id, val as AppRole)}
-                      >
-                        <SelectTrigger className="w-28 h-7 text-[11px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="visitor">Visitor</SelectItem>
-                          <SelectItem value="analyst">Analyst</SelectItem>
-                          <SelectItem value="editor">Editor</SelectItem>
-                          <SelectItem value="team_lead">Team Lead</SelectItem>
-                          <SelectItem value="admin">Admin</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-xs text-muted-foreground font-mono">
-                        {new Date(u.created_at).toLocaleDateString()}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        {u.status === "suspended" ? (
-                          <Button
-                            variant="ghost" size="sm"
-                            className="h-7 text-xs text-success gap-1"
-                            onClick={() => handleUnsuspend(u.id)}
-                          >
-                            <CheckCircle className="h-3 w-3" /> {t("admin.unsuspend")}
-                          </Button>
-                        ) : u.status === "approved" ? (
-                          <Button
-                            variant="ghost" size="sm"
-                            className="h-7 text-xs text-warning gap-1"
-                            onClick={() => handleSuspend(u.id, u.user_id)}
-                          >
-                            <Ban className="h-3 w-3" /> {t("admin.suspend")}
-                          </Button>
-                        ) : null}
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="ghost" size="sm" className="h-7 text-xs text-destructive gap-1">
-                              <Trash2 className="h-3 w-3" /> {t("common.delete")}
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>{t("admin.deleteConfirm")}</AlertDialogTitle>
-                              <AlertDialogDescription>{t("admin.deleteConfirmDesc")}</AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
-                              <AlertDialogAction
-                                className="bg-destructive text-destructive-foreground"
-                                onClick={() => handleDeleteUser(u.id, u.user_id)}
-                              >
-                                {t("common.delete")}
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
-        </TabsContent>
+        <TabsContent value="pending" className="mt-4"><AdminAccountList users={allUsers.filter(row=>row.status==="pending_approval")} scope="pending" onChanged={fetchData}/></TabsContent>
+        <TabsContent value="users" className="mt-4"><AdminAccountList users={allUsers} scope="all" onChanged={fetchData}/></TabsContent>
 
         {/* ─── Feature Flags ─── */}
         <TabsContent value="flags" className="mt-4 space-y-3">

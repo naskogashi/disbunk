@@ -1,3 +1,4 @@
+import { ProfilePictureEditor } from "@/components/ProfilePictures";
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabase";
@@ -251,12 +252,8 @@ export default function ProfilePage() {
       {/* Profile Header */}
       <Card className="border-border">
         <CardContent className="p-6">
-          <div className="flex items-center gap-4">
-            <Avatar className="h-16 w-16">
-              <AvatarFallback className="bg-primary/10 text-primary text-xl font-bold">
-                {initials(profile?.full_name ?? null)}
-              </AvatarFallback>
-            </Avatar>
+          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            {user&&<ProfilePictureEditor userId={user.id} name={profile?.full_name||"User"}/>}
             <div className="space-y-1">
               <h1 className="text-2xl font-bold text-foreground tracking-tight">
                 {profile?.full_name ?? t("admin.unnamed")}

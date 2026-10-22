@@ -1,5 +1,6 @@
+import { supabase } from "@/lib/supabase";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [password, setPassword] = useState("");
+  const [method, setMethod] = useState<"magic"|"password">("magic");
 
   if (loading) {
     return (
@@ -40,12 +43,13 @@ export default function Login() {
     e.preventDefault();
     if (!email.trim()) return;
     setSending(true);
-    const { error } = await signInWithMagicLink(email);
+    const { error } = method === "magic" ? await signInWithMagicLink(email) : await supabase.auth.signInWithPassword({email:email.trim(),password});
     setSending(false);
     if (error) {
       toast({ title: t("auth.error"), description: error.message, variant: "destructive" });
     } else {
-      setSent(true);
+      if(method === "magic") setSent(true);
+      setPassword("");
     }
   };
 
@@ -124,7 +128,8 @@ export default function Login() {
                   </div>
                 </div>
 
-                {/* Magic link */}
+                <div className="grid grid-cols-2 gap-2" aria-label={t("accountTools.signInMethod")}><Button type="button" variant={method==="magic"?"default":"outline"} onClick={()=>setMethod("magic")}>{t("accountTools.magicLink")}</Button><Button type="button" variant={method==="password"?"default":"outline"} onClick={()=>setMethod("password")}>{t("accountTools.password")}</Button></div>
+                {/* Email sign-in */}
                 <form onSubmit={handleMagicLink} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-sm font-medium">
@@ -140,16 +145,18 @@ export default function Login() {
                       className="h-11"
                     />
                   </div>
+                  {method==="password"&&<div className="space-y-2"><Label htmlFor="login-password">{t("accountTools.password")}</Label><Input id="login-password" type="password" autoComplete="current-password" value={password} required onChange={event=>setPassword(event.target.value)}/></div>}
                   <Button type="submit" className="w-full h-11 gap-2 font-medium" disabled={sending}>
                     {sending ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <Mail className="h-4 w-4" />
                     )}
-                    {t("auth.sendMagicLink")}
+                    {t(method==="magic"?"auth.sendMagicLink":"landing.signIn")}
                   </Button>
                 </form>
 
+                <Link to="/forgot-password" className="block text-center text-sm text-primary underline">{t("accountTools.forgotPassword")}</Link>
                 <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
                   {t("auth.signUpNote")}
                 </p>

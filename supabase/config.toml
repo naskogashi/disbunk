@@ -9,3 +9,6 @@ verify_jwt = false
 
 [functions.send-auth-email]
 verify_jwt = false
+
+[functions.account-actions]
+verify_jwt = false

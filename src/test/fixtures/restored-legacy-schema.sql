@@ -1,10 +1,11 @@
 
+    create role anon;
     create role authenticated;
     create role service_role bypassrls;
     create schema auth; create schema storage;
     create function auth.uid() returns uuid language sql as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
     create function auth.role() returns text language sql as $$ select case when current_user = 'authenticated' then 'authenticated' else 'service_role' end $$;
-    create table auth.users(id uuid primary key, email text, raw_user_meta_data jsonb default '{}');
+    create table auth.users(id uuid primary key, email text, raw_user_meta_data jsonb default '{}', deleted_at timestamptz);
     create type public.app_role as enum ('visitor','analyst','editor','team_lead','admin');
     create table public.profiles(id uuid primary key default gen_random_uuid(), user_id uuid references auth.users, status text not null default 'pending_approval', impact_score numeric not null default 0, full_name text, avatar_url text, role text default 'analyst');
     create table public.user_roles(user_id uuid references auth.users, role public.app_role, unique(user_id,role));
@@ -21,11 +22,11 @@
     create policy "System can insert notifications" on notifications for insert to authenticated with check(true);
     create table public.audit_logs(id uuid primary key default gen_random_uuid(), admin_id uuid not null references auth.users, action text, target_type text, target_id uuid);
     create table public.sbunker_feed(id uuid primary key default gen_random_uuid(), title text, excerpt text, url text unique, language text, imported_claim_id uuid references claims);
-    create table storage.buckets(id text primary key, name text, public boolean);
+    create table storage.buckets(id text primary key, name text, public boolean, file_size_limit bigint, allowed_mime_types text[]);
     create table storage.objects(id uuid default gen_random_uuid(), bucket_id text, name text);
     alter table storage.objects enable row level security;
     create function storage.foldername(path text) returns text[] language sql as $$ select string_to_array(path,'/') $$;
-    insert into storage.buckets values('evidence','evidence',true);
+    insert into storage.buckets(id,name,public) values('evidence','evidence',true);
     insert into auth.users(id) values('00000000-0000-4000-8000-000000000001'),('00000000-0000-4000-8000-000000000002'),('00000000-0000-4000-8000-000000000003');
     insert into public.profiles(user_id,status) values('00000000-0000-4000-8000-000000000001','approved'),('00000000-0000-4000-8000-000000000002','approved'),('00000000-0000-4000-8000-000000000003','pending_approval');
     insert into public.user_roles values('00000000-0000-4000-8000-000000000001','analyst'),('00000000-0000-4000-8000-000000000002','editor'),('00000000-0000-4000-8000-000000000003','analyst');

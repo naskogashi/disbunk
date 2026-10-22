@@ -235,3 +235,29 @@ not fingerprinted; use revalidation or short cache lifetimes for those files.
 These cache headers require hosting configuration and are not set by Vite's
 static output. Search ranking and real-user performance require production
 monitoring; local build checks cannot guarantee them.
+
+## Account tools and pictures (October 2026)
+
+Production migrations 006 and 007 are applied. The account-actions function and
+updated notify-registration and send-auth-email functions are deployed. The
+Supabase dashboard deployment inlines _shared/email.ts into each email entrypoint;
+CLI deployment can use the shared source directly. Keep JWT gateway verification
+off for these functions: account endpoints authenticate and authorize internally,
+and the auth hook verifies its webhook signature.
+
+Allow https://disbunk.org/reset-password in Authentication URL Configuration.
+Recovery emails carry a token hash to that page, which verifies it before offering
+a new password. Publish public/email-logo.png with the frontend for email branding.
+
+Bulk actions support up to 50 selections, confirmations, and partial-failure
+reporting. Deleting irreversibly removes sign-in access, anonymizes the profile,
+and preserves investigation records. Self actions, the last approved administrator,
+and deleting the last approved team lead are protected. Internal lifecycle RPCs
+are service-only, including explicit revocation of Supabase browser-role defaults.
+
+The private pictures bucket accepts JPEG, PNG and WebP up to 5 MB. The client
+crops and compresses pictures; profile owners and team leads/admins manage their
+own paths. Approved users view pictures through expiring signed URLs.
+
+Regression tests and local builds cover these flows; production checks verify
+permissions and deployment without modifying existing account passwords/statuses.

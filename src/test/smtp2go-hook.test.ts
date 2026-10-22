@@ -5,7 +5,8 @@ import ts from "typescript";
 import { Webhook } from "standardwebhooks";
 import { describe, expect, it, vi } from "vitest";
 
-const code = ts.transpileModule(readFileSync("supabase/functions/send-auth-email/index.ts", "utf8").replace(/^import .*standardwebhooks.*;\r?\n/m,""), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
+const emailCode=readFileSync("supabase/functions/_shared/email.ts","utf8").replace(/export function/g,"function");
+const code = ts.transpileModule(emailCode + "\n" + readFileSync("supabase/functions/send-auth-email/index.ts", "utf8").replace(/^import .*;\r?\n/gm,""), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
 const secret = Buffer.from("test-secret-for-webhook-verification").toString("base64");
 function harness(accepted = true) {
   let handler: (request: Request) => Promise<Response>;
@@ -24,6 +25,8 @@ describe("SMTP2GO authentication email hook", () => {
     const payload = JSON.parse(app.fetchMock.mock.calls[0][1].body);
     expect(payload.sender).toBe("DISBUNK.org <no-reply@disbunk.org>");
     expect(payload.to).toEqual(["old@example.org"]);
+    expect(payload.html_body).toContain("https://disbunk.org/email-logo.png");
+    expect(payload.html_body).toContain("#a14b2b");
     expect(payload.text_body).not.toContain("evil.example");
     expect(payload.text_body).toContain("type=invite");
     expect(payload.text_body).toContain("disbunk.org");
@@ -35,4 +38,11 @@ describe("SMTP2GO authentication email hook", () => {
     expect(payloads[0].to).toEqual(["old@example.org"]); expect(payloads[0].text_body).toContain("token=old-email-hash");
     expect(payloads[1].to).toEqual(["new@example.org"]); expect(payloads[1].text_body).toContain("token=new-email-hash");
   });
+});
+
+it("sends recovery links to the self-service password page with a one-time token hash", async()=>{
+  const app=harness();expect((await app.invoke("recovery")).status).toBe(200);
+  const payload=JSON.parse(app.fetchMock.mock.calls[0][1].body);
+  expect(payload.text_body).toContain("https://disbunk.org/reset-password?token_hash=new-email-hash&type=recovery");
+  expect(payload.html_body).toContain("Reset your password");
 });

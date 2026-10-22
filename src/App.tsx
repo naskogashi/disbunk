@@ -9,6 +9,8 @@ import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
 import { RouteMetadata } from "@/components/RouteMetadata";
 const AppLayout = lazy(() => import("./components/AppLayout").then(module => ({ default: module.AppLayout })));
 const Landing = lazy(() => import("./pages/Landing"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Claims = lazy(() => import("./pages/Claims"));
@@ -40,6 +42,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/claims" element={<Claims />} />

@@ -11,6 +11,8 @@ export interface Profile {
   user_id: string;
   full_name: string | null;
   avatar_url: string | null;
+  avatar_path?: string | null;
+  deleted_at?: string | null;
   status: ProfileStatus;
   language_pref: 'en' | 'sq';
   impact_score: number;
@@ -25,6 +27,7 @@ export interface UserRole {
 }
 
 export interface Team {
+  avatar_path?: string | null;
   id: string;
   name: string;
   description: string | null;
