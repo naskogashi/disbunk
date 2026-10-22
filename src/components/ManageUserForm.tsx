@@ -15,6 +15,8 @@ export function ManageUserForm({ teamId, onComplete }: { teamId?: string; onComp
   const admin = hasRole("admin");
   const { toast } = useToast();
   const [mode, setMode] = useState("invite");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [role, setRole] = useState("analyst");
@@ -30,16 +32,17 @@ export function ManageUserForm({ teamId, onComplete }: { teamId?: string; onComp
   return <form className="space-y-4" onSubmit={async event => {
     event.preventDefault(); setBusy(true); setError("");
     try {
-      const result = await invokeFunction<{ emailAccepted: boolean; warning?: string }>("manage-users", { action: mode, email, fullName: name, role, approved, teamId: selectedTeam || undefined });
+      if (mode === "create" && password !== confirmPassword) throw new Error(t("accountTools.passwordMismatch"));
+      const result = await invokeFunction<{ emailAccepted: boolean; warning?: string }>("manage-users", { action: mode, email, fullName: name, role, approved, ...(mode === "create" ? { password } : {}), teamId: selectedTeam || undefined });
       toast({ title: t(result.emailAccepted ? "accounts.inviteAccepted" : "accounts.created"), description: result.warning || t(result.emailAccepted ? "accounts.deliveryNote" : "accounts.noEmailSent") });
       onComplete();
     } catch (failure) { setError(failure instanceof Error ? failure.message : String(failure)); }
     finally { setBusy(false); }
   }}>
-    {admin && !teamId && <div className="space-y-2"><Label htmlFor="user-mode">{t("accounts.action")}</Label><select id="user-mode" className="h-11 w-full rounded-lg border bg-card px-3" value={mode} onChange={event => setMode(event.target.value)}><option value="invite">{t("accounts.invite")}</option><option value="create">{t("accounts.manualCreate")}</option></select></div>}
+    {admin && !teamId && <div className="space-y-2"><Label htmlFor="user-mode">{t("accounts.action")}</Label><select id="user-mode" className="h-11 w-full rounded-lg border bg-card px-3" value={mode} onChange={event => { setMode(event.target.value); setPassword(""); setConfirmPassword(""); }}><option value="invite">{t("accounts.invite")}</option><option value="create">{t("accounts.manualCreate")}</option></select></div>}
     <div className="space-y-2"><Label htmlFor="managed-email">{t("auth.email")}</Label><Input id="managed-email" type="email" required maxLength={254} value={email} onChange={event => setEmail(event.target.value)} /></div>
     <div className="space-y-2"><Label htmlFor="managed-name">{t("tools.fullName")}</Label><Input id="managed-name" maxLength={150} value={name} onChange={event => setName(event.target.value)} /></div>
-    {admin && mode === "create" && <><div className="space-y-2"><Label htmlFor="managed-role">{t("admin.role")}</Label><select id="managed-role" className="h-11 w-full rounded-lg border bg-card px-3" value={role} onChange={event => setRole(event.target.value)}>{["visitor","analyst","editor","team_lead","admin"].map(value => <option key={value} value={value}>{value}</option>)}</select></div><label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={approved} onChange={event => setApproved(event.target.checked)} />{t("accounts.approveNow")}</label></>}
+    {admin && mode === "create" && <><div className="space-y-2"><Label htmlFor="managed-password">{t("accountTools.newPassword")}</Label><Input id="managed-password" type="password" autoComplete="new-password" minLength={12} maxLength={128} required value={password} onChange={event => setPassword(event.target.value)}/><Label htmlFor="managed-password-confirm">{t("accountTools.confirmPassword")}</Label><Input id="managed-password-confirm" type="password" autoComplete="new-password" required value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)}/></div><div className="space-y-2"><Label htmlFor="managed-role">{t("admin.role")}</Label><select id="managed-role" className="h-11 w-full rounded-lg border bg-card px-3" value={role} onChange={event => setRole(event.target.value)}>{["visitor","analyst","editor","team_lead","admin"].map(value => <option key={value} value={value}>{value}</option>)}</select></div><label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={approved} onChange={event => setApproved(event.target.checked)} />{t("accounts.approveNow")}</label></>}
     {admin && !teamId && <div className="space-y-2"><Label htmlFor="managed-team">{t("accounts.teamOptional")}</Label><select id="managed-team" className="h-11 w-full rounded-lg border bg-card px-3" value={selectedTeam} onChange={event => setSelectedTeam(event.target.value)}><option value="">{t("tools.unassigned")}</option>{teams.data?.map(team => <option key={team.id} value={team.id}>{team.name}</option>)}</select></div>}
     <p className="text-xs leading-relaxed text-muted-foreground">{t(mode === "invite" ? "accounts.inviteNote" : "accounts.noEmailSent")}</p>
     {error && <p role="alert" className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">{error}</p>}

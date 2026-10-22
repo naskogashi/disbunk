@@ -261,3 +261,19 @@ own paths. Approved users view pictures through expiring signed URLs.
 
 Regression tests and local builds cover these flows; production checks verify
 permissions and deployment without modifying existing account passwords/statuses.
+
+## C5, team management and translation
+
+Migration 008 is applied to production. It adds C5 claim assessments, audited team
+name/description editing for admins and team leads, and an admin-only integration
+policy. Updated manage-users and account-actions support manual password login
+with administrative email confirmation; self-registration stays verified by email.
+Existing affected users can be repaired individually through Admin > Set password.
+
+The translate-content endpoint authenticates approved admins internally. Configure
+GOOGLE_TRANSLATION_API_KEY in Supabase secrets and enable Google Cloud Translation
+API with billing, API restrictions and quotas. Never expose the key as a VITE_
+variable. No text is sent until the admin selects the sharing checkbox and clicks
+Translate. Originals remain unchanged. DeepL is an alternative, not implemented.
+
+See REQUIREMENTS-REVIEW.md for the document comparison and remaining priorities.

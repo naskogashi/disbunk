@@ -30,7 +30,7 @@ Deno.serve(async (req:Request) => {
       if(userId===actor.id) return {userId,success:false,error:"Your own account cannot be managed from this action"};
       const prepared=await call("/rest/v1/rpc/prepare_account_action",{method:"POST",body:JSON.stringify({actor_id:actor.id,target_id:userId,operation:action,pending_only:body.scope==="pending"})});
       if(!prepared.ok) {const error=await prepared.json().catch(()=>null); return {userId,success:false,error:error?.message || "Account action was refused"};}
-      const authResult=await call(`/auth/v1/admin/users/${userId}`,{method:action==="delete"?"DELETE":"PUT",body:JSON.stringify(action==="password"?{password:body.password}:action==="delete"?{should_soft_delete:true}:{ban_duration:action==="suspend" || action==="reject"?"876000h":"none"})});
+      const authResult=await call(`/auth/v1/admin/users/${userId}`,{method:action==="delete"?"DELETE":"PUT",body:JSON.stringify(action==="password"?{password:body.password,email_confirm:true}:action==="delete"?{should_soft_delete:true}:{ban_duration:action==="suspend" || action==="reject"?"876000h":"none"})});
       if(!authResult.ok) return {userId,success:false,error:action==="password"?"Password update failed. Check the password policy and try again.":"The profile decision was saved, but authentication could not be updated. Review this account before retrying."};
       let warning:string|undefined;
       if(action==="delete") {

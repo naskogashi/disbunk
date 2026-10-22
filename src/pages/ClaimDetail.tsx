@@ -1,3 +1,5 @@
+import { DraftTranslation } from "@/components/DraftTranslation";
+import { C5Assessment } from "@/components/C5Assessment";
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -347,6 +349,8 @@ export default function ClaimDetail() {
 
         {/* Right sidebar */}
         <div className="space-y-6">
+          <DraftTranslation key={claim.title + (claim.description ?? "")} text={[claim.title, claim.description].filter(Boolean).join("\n\n")}/>
+          <C5Assessment claimId={claim.id}/>
           <ClaimWorkflow key={claim.id} claim={claim} onUpdated={patch => setClaim(previous => previous ? { ...previous, ...patch } : previous)} />
           {/* Status actions */}
           {canEdit && actions.length > 0 && (

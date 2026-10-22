@@ -31,7 +31,7 @@
     "confirmPassword": "Konfirmo fjalëkalimin",
     "passwordFailed": "Përditësimi i fjalëkalimit dështoi",
     "passwordSaved": "Fjalëkalimi u përditësua.",
-    "adminPasswordNote": "Caktoni një fjalëkalim të ri për këtë llogari. Përdorni të paktën 12 karaktere dhe ndajeni në mënyrë të sigurt. Fjalëkalimi nuk dërgohet me email dhe nuk shënohet në regjistrin e auditimit.",
+    "adminPasswordNote": "Vendosni fjalëkalim të ri. Ky veprim konfirmon edhe email-in administrativisht për llogaritë e krijuara manualisht. Verifikoni adresën me personin paraprakisht. Fjalëkalimi nuk dërgohet me email; miratimi dhe pezullimi mbeten të ndarë.",
     "passwordLength": "Përdorni 12–128 karaktere.",
     "passwordMismatch": "Fjalëkalimet nuk përputhen.",
     "savePassword": "Ruaj fjalëkalimin",
@@ -53,7 +53,7 @@
     "pictureLoadFailed": "Cilësimet e fotografisë nuk mund të ngarkoheshin. Rifreskoni dhe provoni përsëri.",
     "pictureNote": "JPEG, PNG ose WebP · deri në 5 MB. Fotografitë priten në katror dhe të dhënat shtesë hiqen. Fotografitë shfaqen brenda hapësirës së përdoruesve të miratuar.",
     "teamPicture": "Fotografia e ekipit"
-},
+  },
   "seo": {
     "loadFailed": "Kjo faqe nuk mund të ngarkohej",
     "retryMessage": "Rifreskoni faqen për të provuar përsëri. Nëse po redaktonit, kontrolloni ndryshimet e fundit të ruajtura përpara se të vazhdoni.",
@@ -63,7 +63,7 @@
     "loginDescription": "Hyni në Disbunk për të bashkëpunuar në hetime dhe reagime të bazuara në prova ndaj dezinformimit.",
     "workspaceDescription": "Hapësira Disbunk për pretendime, prova, hetime dhe reagime të koordinuara ndaj dezinformimit.",
     "notFound": "Faqja nuk u gjet"
-},
+  },
   "redesign": {
     "skip": "Kalo te përmbajtja",
     "navigation": "Navigimi kryesor",
@@ -370,7 +370,8 @@
     "backToList": "Kthehu te ekipet",
     "teamName": "Emri i Ekipit",
     "namePlaceholder": "p.sh. Njësia e Përgjigjes ndaj Dezinformimit Ballkanik",
-    "descPlaceholder": "Përshkruani fushën e fokusit të ekipit..."
+    "descPlaceholder": "Përshkruani fushën e fokusit të ekipit...",
+    "editDetails": "Ndrysho të dhënat e ekipit"
   },
   "profile": {
     "title": "Profili Im",
@@ -483,7 +484,7 @@
     "save": "Ruaj ndryshimet",
     "savePreferences": "Ruaj preferencat",
     "services": "Shërbimet dhe integrimet",
-    "servicesNote": "Statusi i implementimit në këtë aplikacion, jo kontroll i drejtpërdrejtë i shërbimeve. Shërbimet e jashtme kërkojnë kredenciale në server dhe integrim. Mos vendosni çelësa privatë API në cilësimet e shfletuesit.",
+    "servicesNote": "Plani i integrimeve për administratorët. Supabase dhe SMTP2GO janë vendosur; përkthimi me Google kërkon konfigurimin në server. DocumentCloud dhe njoftimet në biseda janë kandidatë të palidhur. Kredencialet mbeten në server.",
     "implemented": "I implementuar",
     "requiresIntegration": "I palidhur",
     "retired": "I mbyllur",
@@ -491,7 +492,7 @@
     "externalResource": "Burim i jashtëm",
     "disinfoResource": "Artikuj mbi dezinformimin nga Sbunker. Hapet në faqen e tyre.",
     "feedService": "Importi i artikujve përmes funksionit të publikuar. Importi varet nga funksioni dhe burimi i artikujve.",
-    "translationService": "Përkthimet e ndërfaqes janë të përfshira. Përkthimi automatik i përmbajtjes kërkon integrim API dhe shqyrtim.",
+    "translationService": "Shërbimi i Google dhe parapamja për administratorët janë implementuar; kërkohen çelësi në server, aktivizimi i API-së, faturimi dhe kuotat. Origjinalet nuk ndryshojnë. DeepL mbetet alternativë e palidhur.",
     "deliveryService": "Emaili dhe SMS automatike kërkojnë integrim në server, kredenciale, gjurmim dhe pëlqimin e marrësve.",
     "teamService": "Njoftimet në platformat e ekipit kërkojnë webhook ose bot të miratuar.",
     "collectionService": "Alternativë aktive për mbledhjen e përmbajtjes me OAuth.",
@@ -514,11 +515,11 @@
     "docsReview": "Përdorni listën për dokumentimin e hulumtimit. Redaktorët shqyrtojnë provat dhe përditësojnë statusin; përfundimi i listës nuk autorizon publikimin.",
     "docsTemplates": "Ruani draftin e shabllonit në anglisht ose shqip. Redaktori e miraton. Zgjidhni pretendimin, plotësoni fushat, shqyrtoni dhe kopjoni rezultatin për shpërndarje manuale.",
     "docsAlerts": "Kutia juaj merr njoftime për caktimet, statuset dhe provat. Cilësimet përcaktojnë ngjarjet që merrni brenda aplikacionit.",
-    "researchNote": "Sugjerimet e fushatave aktualisht përdorin përputhjen e fjalëve. Embeddings, grupimi HDBSCAN dhe verifikimi automatik nuk janë implementuar.",
+    "researchNote": "Sugjerimet e fushatave krahasojnë fjalë të përbashkëta. Mund të humbin parafrazimet dhe narrativat në gjuhë të tjera; nuk provojnë koordinim ose vërtetësi. Përputhja semantike dhe grupimi automatik janë punë e ardhshme. Analistët shqyrtojnë çdo sugjerim.",
     "feedStale": "Burimi nuk mund të përditësohej. Po shfaqen artikujt e ruajtur më parë.",
     "menu": "Menuja",
     "setupRequired": "Kërkohet konfigurim në server",
-    "authEmailService": "API për emailin e autentikimit dhe njoftimet e miratimit janë implementuar. Shtoni sekretet në server, aktivizoni Send Email Hook në Supabase dhe verifikoni domenin e dërguesit."
+    "authEmailService": "Shërbimi për email-et e autentikimit dhe miratimit është vendosur. Diagnostikimi i administratorit kontrollon konfigurimin e kredencialeve, jo dorëzimin ose gjendjen e ofruesit."
   },
   "identity": {
     "kicker": "Hapësirë e pavarur për informacion të verifikuar",
@@ -552,7 +553,7 @@
     "inviteAccepted": "Kërkesa për emailin e ftesës u pranua",
     "deliveryNote": "Shërbimi pranoi kërkesën. Ky nuk është konfirmim dorëzimi; kontrolloni regjistrin e ofruesit nëse emaili nuk mbërrin.",
     "created": "Llogaria u krijua",
-    "noEmailSent": "Krijon llogarinë pa dërguar email dhe pa fjalëkalim të përbashkët. Përdoruesi mund të kërkojë lidhje hyrjeje ose të përdorë llogarinë OAuth përkatëse.",
+    "noEmailSent": "Llogaritë e krijuara nga administratori përdorin fjalëkalimin e vendosur këtu. Krijimi konfirmon email-in administrativisht; verifikoni adresën me personin paraprakisht. Nuk dërgohet email. Miratimi është i veçantë. Ndajeni fjalëkalimin në mënyrë të sigurt dhe kërkoni ndryshimin te Cilësimet.",
     "addExisting": "Shto një përdorues ekzistues në këtë ekip",
     "selectUser": "Zgjidh përdoruesin",
     "emailFailed": "Vendimi u ruajt, por emaili nuk u pranua.",
@@ -562,5 +563,39 @@
     "apiConfigured": "Kredencialet API të SMTP2GO janë të pranishme. Kjo nuk verifikon domenin, dorëzimin ose cilësimet e veçanta SMTP të Supabase.",
     "apiMissing": "SMTP2GO_API_KEY ose AUTH_EMAIL_FROM mungon te sekretet e funksionit.",
     "requestInvite": "Kërko ftesë nga drejtuesi për t'u bashkuar."
+  },
+  "c5": {
+    "title": "Vlerësimi C5",
+    "note": "Dokumentoni provat dhe pasiguritë për pesë faktorët C5. Klasifikimi është vlerësim njerëzor, i ndarë nga vërtetësia e pretendimit.",
+    "classification": "Vlerësimi i informacionit",
+    "unknown": "E papërcaktuar / qëllimi i panjohur",
+    "misinformation": "Keqinformim — pa qëllim të qëllimshëm të dëshmuar",
+    "disinformation": "Dezinformim — qëllimi mbështetet me prova",
+    "context": "1. Konteksti",
+    "contextHint": "Rrethanat shoqërore, politike, të sigurisë, ekonomike dhe kulturore; audiencat e prekura.",
+    "causes": "2. Shkaqet",
+    "causesHint": "Burimet dhe motivet e mundshme. Ndani faktet e dokumentuara nga hipotezat.",
+    "content": "3. Përmbajtja",
+    "contentHint": "Narrativa e saktë, elementet e manipuluara dhe audienca e synuar.",
+    "consequences": "4. Pasojat",
+    "consequencesHint": "Efektet e vëzhguara ose të mundshme te njerëzit dhe institucionet. Shënoni vlerësimet qartë.",
+    "amplification": "5. Cikli i përforcimit",
+    "amplificationHint": "Kanalet, kronologjia, postimet e përsëritura dhe reagimet. Ngjashmëria nuk provon koordinim.",
+    "intentEvidence": "Provat e qëllimit / pasiguritë",
+    "intentEvidenceHint": "Shpjegoni çfarë mbështet mashtrimin e qëllimshëm ose pse qëllimi mbetet i panjohur.",
+    "sources": "Burimet dhe shënimet e verifikimit",
+    "sourcesHint": "Citoni titujt e provave, lidhjet origjinale, datat, kundërthëniet dhe punën e mbetur.",
+    "conflict": "Një redaktor tjetër ndryshoi vlerësimin. Ringarkoni faqen para ruajtjes.",
+    "intentRequired": "Dokumentoni provat e qëllimit para se të zgjidhni dezinformim."
+  },
+  "translation": {
+    "title": "Përkthe një draft",
+    "note": "Parapamje për administratorët me Google Cloud Translation. Origjinali nuk ndryshon. Kërkohet konfigurimi i çelësit në server. Përkthimi nuk është verifikim faktesh.",
+    "original": "Teksti për përkthim",
+    "target": "Gjuha e synuar",
+    "consent": "Dërgo tekstin e mësipërm në Google për përkthim. E kam kontrolluar për informacione konfidenciale.",
+    "translate": "Përkthe me Google",
+    "review": "Përkthim automatik — kërkohet shqyrtim redaktorial; zgjidhni tekstin për kopjim",
+    "limit": "Përktheni një fragment deri në 5000 karaktere."
   }
 }

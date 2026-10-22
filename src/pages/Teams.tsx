@@ -1,3 +1,4 @@
+import { TeamDetailsEditor } from "@/components/TeamDetailsEditor";
 import { PictureEditor, PrivateAvatar } from "@/components/ProfilePictures";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -356,6 +357,7 @@ function TeamDetail({ teamId, onBack }: { teamId: string; onBack: () => void }) 
         </div>
       </div>
 
+      {canManage && <TeamDetailsEditor team={team} onSaved={patch => setTeam(previous => previous ? { ...previous, ...patch } : previous)}/>}
       {canManage&&<Card><CardContent className="space-y-3 p-5"><h2 className="font-semibold">{t("accountTools.teamPicture")}</h2><PictureEditor kind="team" entityId={teamId} path={team.avatar_path} name={team.name} onChanged={avatar_path=>setTeam(previous=>previous?{...previous,avatar_path}:previous)}/></CardContent></Card>}
       {/* Stats row */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">

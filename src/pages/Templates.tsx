@@ -1,3 +1,4 @@
+import { DraftTranslation } from "@/components/DraftTranslation";
 import { useState } from "react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -75,6 +76,7 @@ export default function Templates() {
         <pre className="min-h-48 whitespace-pre-wrap break-words rounded-xl border bg-secondary/50 p-5 font-sans text-sm leading-relaxed">{preview.text}</pre>
         {preview.missing.length > 0 && <p role="status" className="text-sm text-warning">{t("tools.missingFields")}: {preview.missing.join(", ")}</p>}
         <div className="flex flex-wrap gap-2"><Button disabled={selected.status !== "approved" || preview.missing.length > 0} onClick={copy}><Copy className="mr-2 h-4 w-4" />{t("tools.copyResponse")}</Button>{(selected.created_by === user?.id || canApprove) && <Button variant="outline" onClick={() => { setDraft({ title: selected.title, body: selected.body, language: selected.language, channel: selected.channel }); setEditingId(selected.id); setEditing(true); }}>{t("tools.edit")}</Button>}{canApprove && selected.status === "draft" && <Button variant="outline" disabled={mutation.isPending} onClick={() => mutation.mutate(selected.id)}><FileCheck className="mr-2 h-4 w-4" />{t("tools.approve")}</Button>}</div>
+        <DraftTranslation key={preview.text} text={preview.text}/>
         <p className="text-xs leading-relaxed text-muted-foreground">{t("tools.manualDistribution")}</p>
       </> : <p className="text-sm text-muted-foreground">{t("tools.selectTemplate")}</p>}</CardContent></Card>}
     </div>}

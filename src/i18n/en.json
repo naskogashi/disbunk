@@ -31,7 +31,7 @@
     "confirmPassword": "Confirm password",
     "passwordFailed": "Password update failed",
     "passwordSaved": "Password updated.",
-    "adminPasswordNote": "Set a new sign-in password for this account. Use at least 12 characters and share it securely. The password is not sent by email or recorded in the audit log.",
+    "adminPasswordNote": "Set a new password for this account. This also confirms its email administratively, fixing manually created accounts awaiting email confirmation. Verify the address with the person first. The password is not emailed; approval and suspension remain separate.",
     "passwordLength": "Use 12–128 characters.",
     "passwordMismatch": "Passwords do not match.",
     "savePassword": "Save password",
@@ -53,7 +53,7 @@
     "pictureLoadFailed": "Unable to load the picture settings. Refresh and try again.",
     "pictureNote": "JPEG, PNG, or WebP · up to 5 MB. Images are cropped to a square and metadata is removed. Pictures are visible inside the approved workspace.",
     "teamPicture": "Team picture"
-},
+  },
   "seo": {
     "loadFailed": "This page could not load",
     "retryMessage": "Refresh the page to try again. If you were editing, check your last saved changes before continuing.",
@@ -63,7 +63,7 @@
     "loginDescription": "Sign in to Disbunk to collaborate on investigations and evidence-based responses to misinformation.",
     "workspaceDescription": "The Disbunk workspace for claims, evidence, investigations, and coordinated responses to misinformation.",
     "notFound": "Page not found"
-},
+  },
   "redesign": {
     "skip": "Skip to content",
     "navigation": "Main navigation",
@@ -370,7 +370,8 @@
     "backToList": "Back to teams",
     "teamName": "Team Name",
     "namePlaceholder": "e.g. Balkans Disinfo Response Unit",
-    "descPlaceholder": "Describe the team's focus area..."
+    "descPlaceholder": "Describe the team's focus area...",
+    "editDetails": "Edit team details"
   },
   "profile": {
     "title": "My Profile",
@@ -483,7 +484,7 @@
     "save": "Save changes",
     "savePreferences": "Save preferences",
     "services": "Services and integrations",
-    "servicesNote": "Implementation status in this application, not a live provider health check. External services require server credentials and integration work. Never paste private API keys into browser settings.",
+    "servicesNote": "Admin integration roadmap. Supabase and SMTP2GO are deployed; the Google translation adapter requires server configuration. DocumentCloud and chat alerts are candidates, not connected integrations. Credentials stay on the server.",
     "implemented": "Implemented",
     "requiresIntegration": "Not connected",
     "retired": "Discontinued",
@@ -491,11 +492,11 @@
     "externalResource": "External resource",
     "disinfoResource": "External disinformation coverage from Sbunker. Opens on their website.",
     "feedService": "Article import through the deployed crawler. A successful import still depends on the live function and source feed.",
-    "translationService": "UI translations are built in. Automated translation of content needs a separate API integration and review.",
+    "translationService": "Google translation adapter and admin draft preview are implemented; a server API key, enabled Cloud Translation API, billing and quotas are required before use. Originals stay unchanged and output requires review. DeepL remains an alternative, not a connected provider.",
     "deliveryService": "Automated email and SMS require server-side adapters, credentials, delivery tracking, and recipient consent.",
-    "teamService": "Outbound team alerts require an approved webhook or bot integration.",
+    "teamService": "Priority candidate: choose one channel for minimal team alerts with a link back to Disbunk. Avoid sending private evidence or personal data in chat notifications.",
     "collectionService": "Active content collection alternative with OAuth support.",
-    "documentsService": "Document research and sourcing API; no account is connected here.",
+    "documentsService": "Candidate for searchable documents and OCR. Start with linking existing documents; uploading private evidence requires explicit sharing controls and a connected account.",
     "externalService": "GitHub sign-in does not imply repository access. Publishing integrations need separate permissions.",
     "retiredService": "Pocket shut down on 8 July 2025 and is not an integration target.",
     "projectPartners": "Project partners",
@@ -514,11 +515,11 @@
     "docsReview": "Use the checklist to document your investigation. Editors review the evidence and update the claim status; checklist completion alone does not authorize publication.",
     "docsTemplates": "Save a draft template in English or Albanian. An editor approves it. Choose a claim to fill placeholders, review the result, and copy it for manual distribution.",
     "docsAlerts": "Your inbox receives assignment, status, and evidence events. Settings lets you choose which in-app events you receive.",
-    "researchNote": "Campaign suggestions currently use word overlap. Embeddings, HDBSCAN clustering, and automated fact-checking are not implemented.",
+    "researchNote": "Campaign suggestions compare shared words. They can miss paraphrases and cross-language narratives, and do not prove coordination or determine truth. Semantic matching and automatic grouping are future work; analysts review every suggestion.",
     "feedStale": "The source could not be refreshed. Showing previously fetched articles.",
     "menu": "Menu",
     "setupRequired": "Server setup required",
-    "authEmailService": "Authentication email API hook and approval notifications are implemented. Add server secrets, activate the Supabase Send Email Hook, and verify the sender domain before using SMTP2GO."
+    "authEmailService": "Deployed email adapter for authentication and approval notifications. Check server credential configuration with the admin email diagnostic below; this card does not verify delivery or provider health."
   },
   "identity": {
     "kicker": "An independent workspace for verified information",
@@ -552,7 +553,7 @@
     "inviteAccepted": "Invitation email request accepted",
     "deliveryNote": "The mail service accepted the request. This is not a delivery receipt; check the provider activity log if it does not arrive.",
     "created": "Account created",
-    "noEmailSent": "Creates an account without sending email or setting a shared password. The user can request a sign-in link or use a matching OAuth account.",
+    "noEmailSent": "Admin-created accounts use the password you set here. Creating the account confirms the email administratively; verify the address with the person first. No email is sent. Approval is separate. Share the password securely and ask the user to change it in Settings.",
     "addExisting": "Add an existing user to this team",
     "selectUser": "Select a user",
     "emailFailed": "The decision was saved, but the email was not accepted.",
@@ -562,5 +563,39 @@
     "apiConfigured": "SMTP2GO API credentials are present. This does not verify domain ownership, delivery, or the separate Supabase SMTP settings.",
     "apiMissing": "SMTP2GO_API_KEY or AUTH_EMAIL_FROM is missing from the Edge Function secrets.",
     "requestInvite": "Ask a team lead for an invitation to join."
+  },
+  "c5": {
+    "title": "C5 assessment",
+    "note": "Record evidence and uncertainty across the five C5 factors. Classification is a human assessment, separate from whether a claim is true or false.",
+    "classification": "Information assessment",
+    "unknown": "Undetermined / intent unknown",
+    "misinformation": "Misinformation — no demonstrated deliberate intent",
+    "disinformation": "Disinformation — deliberate intent supported by evidence",
+    "context": "1. Context",
+    "contextHint": "Social, political, security, economic and cultural setting; affected audiences.",
+    "causes": "2. Causes",
+    "causesHint": "Originators and possible motives. Distinguish documented facts from hypotheses.",
+    "content": "3. Content",
+    "contentHint": "The exact narrative, manipulated elements and intended audience.",
+    "consequences": "4. Consequences",
+    "consequencesHint": "Observed or potential effects on people and institutions. Label estimates clearly.",
+    "amplification": "5. Cycle of amplification",
+    "amplificationHint": "Channels, timeline, repeated posts and audience engagement. Similarity alone does not prove coordination.",
+    "intentEvidence": "Evidence of intent / uncertainty",
+    "intentEvidenceHint": "Explain what supports deliberate deception, or why intent remains unknown.",
+    "sources": "Sources and verification notes",
+    "sourcesHint": "Cite evidence titles, original URLs, dates, contradictions and remaining verification work.",
+    "conflict": "Another editor changed this assessment. Reload before saving to avoid overwriting their work.",
+    "intentRequired": "Document the evidence of deliberate intent before selecting disinformation."
+  },
+  "translation": {
+    "title": "Translate a draft",
+    "note": "Admin preview using Google Cloud Translation. The original stays unchanged. The server API key must be configured before use. Translation is not a fact-check.",
+    "original": "Text to translate",
+    "target": "Target language",
+    "consent": "Send the text shown above to Google for translation. I have checked it for confidential information.",
+    "translate": "Translate with Google",
+    "review": "Machine translation — editorial review required; select text to copy",
+    "limit": "Translate a passage of up to 5000 characters."
   }
 }

@@ -12,3 +12,6 @@ verify_jwt = false
 
 [functions.account-actions]
 verify_jwt = false
+
+[functions.translate-content]
+verify_jwt = true

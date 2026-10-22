@@ -20,6 +20,8 @@
     create policy "Read own notifications" on notifications for select to authenticated using (user_id=auth.uid());
     create policy "Update own notifications" on notifications for update to authenticated using (user_id=auth.uid());
     create policy "System can insert notifications" on notifications for insert to authenticated with check(true);
+    create table public.integration_connections(id uuid primary key default gen_random_uuid());
+    alter table public.integration_connections enable row level security;
     create table public.audit_logs(id uuid primary key default gen_random_uuid(), admin_id uuid not null references auth.users, action text, target_type text, target_id uuid);
     create table public.sbunker_feed(id uuid primary key default gen_random_uuid(), title text, excerpt text, url text unique, language text, imported_claim_id uuid references claims);
     create table storage.buckets(id text primary key, name text, public boolean, file_size_limit bigint, allowed_mime_types text[]);

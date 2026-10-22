@@ -24,13 +24,17 @@ function harness(admin = true, mailAccepted = true) {
 describe("Administrative account creation and invitations", () => {
   it("requires authentication", async () => { const app=harness(); expect((await app.invoke({ action:"create" },false)).status).toBe(401); expect(app.fetchMock).not.toHaveBeenCalled(); });
   it("does not permit analysts to create accounts or elevate roles", async () => { const app=harness(false); expect((await app.invoke({ action:"create", email:"user@example.org", role:"admin", approved:true })).status).toBe(403); expect(app.fetchMock.mock.calls.some(([url]) => url.endsWith("/auth/v1/admin/users"))).toBe(false); });
-  it("creates a manual account without marking email verified or sending mail", async () => {
-    const app=harness(); const response=await app.invoke({ action:"create", email:"user@example.org", fullName:"User", role:"analyst", approved:true });
+  it("creates a manual account with a confirmed email and password without sending mail", async () => {
+    const app=harness(); const response=await app.invoke({ action:"create", email:"user@example.org", fullName:"User", role:"analyst", approved:true, password:"temporary-test-password" });
     expect(response.status).toBe(200); expect((await response.json()).emailAccepted).toBe(false);
     const call=app.fetchMock.mock.calls.find(([url]) => url.endsWith("/auth/v1/admin/users"));
     const options=(call as unknown as [string,RequestInit])[1];
-    expect(JSON.parse(options.body as string)).toMatchObject({ email_confirm:false });
+    expect(JSON.parse(options.body as string)).toMatchObject({ email_confirm:true, password:"temporary-test-password" });
     expect(app.fetchMock.mock.calls.some(([url]) => url.includes("/auth/v1/otp"))).toBe(false);
+  });
+  it("rejects manual creation without a usable password", async () => {
+    const app=harness(); expect((await app.invoke({ action:"create", email:"user@example.org" })).status).toBe(400);
+    expect(app.fetchMock.mock.calls.some(([url]) => url.endsWith("/auth/v1/admin/users"))).toBe(false);
   });
   it("does not claim that an invitation was sent when the mail request fails", async () => {
     const app=harness(true,false); const response=await app.invoke({ action:"invite", email:"user@example.org" });

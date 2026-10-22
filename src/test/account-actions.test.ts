@@ -41,6 +41,7 @@ it("sends passwords only to the auth API and never to audit metadata",async()=>{
  const app=harness();const secret="temporary-test-password";expect((await app.invoke({action:"password",userIds:[target],password:secret})).status).toBe(200);
  const withSecret=app.fetchMock.mock.calls.filter(([,options])=>String(options?.body).includes(secret));
  expect(withSecret).toHaveLength(1);expect(withSecret[0][0]).toBe(`https://test.supabase.co/auth/v1/admin/users/${target}`);
+ expect(JSON.parse(withSecret[0][1].body as string)).toMatchObject({email_confirm:true});
  const audit=app.fetchMock.mock.calls.find(([url])=>url.endsWith("/audit_logs"));expect(String(audit?.[1]?.body)).not.toContain(secret);
 });
 it("uses pending-only guards and sends registration notices after updating auth",async()=>{

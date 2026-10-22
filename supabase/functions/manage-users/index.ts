@@ -29,6 +29,7 @@ Deno.serve(async (req: Request) => {
     const admin = roles.some((row: { role: string }) => row.role === "admin");
     if (profiles[0]?.status !== "approved") return json({ error: "Approval required." },403);
     const body = await req.json();
+    if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "Invalid request." },400);
     if (body.action === "email-status") {
       if (!admin) return json({ error: "Admin access required." },403);
       const api = !!Deno.env.get("SMTP2GO_API_KEY"); const sender = !!Deno.env.get("AUTH_EMAIL_FROM");
@@ -56,7 +57,8 @@ Deno.serve(async (req: Request) => {
     let userId = await lookup.json();
     if (body.action === "create") {
       if (userId) return json({ error: "An account already exists for this address. Add it to a team or send an invitation instead." },409);
-      const created = await call("/auth/v1/admin/users", { method: "POST", body: JSON.stringify({ email, email_confirm: false, user_metadata: { full_name: name } }) });
+      if (typeof body.password !== "string" || body.password.length < 12 || body.password.length > 128) return json({ error: "Use a password of 12 to 128 characters for manual accounts." },400);
+      const created = await call("/auth/v1/admin/users", { method: "POST", body: JSON.stringify({ email, email_confirm: true, password: body.password, user_metadata: { full_name: name } }) });
       const result = await created.json();
       if (!created.ok) return json({ error: result.msg || result.message || "Account creation failed." },400);
       userId = result.id ?? result.user?.id;
