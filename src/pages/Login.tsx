@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+import { additionalSignInProviders, type SignInProvider } from "@/lib/oauth-providers";
 import { supabase } from "@/lib/supabase";
 import { useState } from "react";
 import { Navigate, Link } from "react-router-dom";
@@ -7,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, Mail, Github, Loader2, CheckCircle, ArrowLeft, KeyRound } from "lucide-react";
+import { Shield, Mail, Github, Facebook, Loader2, CheckCircle, ArrowLeft, KeyRound } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { PublicHeader } from "@/components/PublicHeader";
 import { ProjectFooter } from "@/components/ProjectFooter";
@@ -21,6 +23,8 @@ export default function Login() {
   const [sent, setSent] = useState(false);
   const [password, setPassword] = useState("");
   const [method, setMethod] = useState<"magic"|"password">("magic");
+
+  const providers = useQuery({ queryKey: ["additional-sign-in-providers"], queryFn: additionalSignInProviders, staleTime: 60_000, retry: false, enabled: !loading && !user });
 
   if (loading) {
     return (
@@ -53,7 +57,7 @@ export default function Login() {
     }
   };
 
-  const handleOAuth = async (provider: "google" | "github") => {
+  const handleOAuth = async (provider: SignInProvider) => {
     const { error } = await signInWithOAuth(provider);
     if (error) {
       toast({ title: t("auth.error"), description: error.message, variant: "destructive" });
@@ -114,6 +118,8 @@ export default function Login() {
                     <Github className="h-4 w-4" />
                     GitHub
                   </Button>
+                  {providers.data?.facebook && <Button variant="outline" className="gap-2 h-11" onClick={() => handleOAuth("facebook")}><Facebook className="h-4 w-4" aria-hidden="true"/>Facebook</Button>}
+                  {providers.data?.x && <Button variant="outline" className="gap-2 h-11" onClick={() => handleOAuth("x")}><svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3L12 14.6 5.5 22H2.3l8.2-9.5L.8 2h6.5l4.4 6.7L18.9 2ZM17.8 20h1.7L6.3 4H4.5l13.3 16Z"/></svg>X</Button>}
                 </div>
 
                 {/* Divider */}

@@ -277,3 +277,19 @@ variable. No text is sent until the admin selects the sharing checkbox and click
 Translate. Originals remain unchanged. DeepL is an alternative, not implemented.
 
 See REQUIREMENTS-REVIEW.md for the document comparison and remaining priorities.
+
+## Facebook and X sign-in
+
+The frontend supports Facebook and X OAuth 2.0 (`facebook` and `x`, not the
+legacy `twitter` provider). Additional buttons appear only when the public
+Supabase Auth settings report the corresponding provider as enabled.
+
+Both providers were disabled when checked on 23 October 2026. Facebook's
+credential fields were empty. Activation requires provider app credentials in
+Supabase Authentication > Sign In / Providers. Use this callback in both apps:
+https://evafhofcfslrkhvfplji.supabase.co/auth/v1/callback
+
+Facebook needs its app ID/secret and email permission. X needs OAuth 2.0 client
+ID/secret and the production website URL https://disbunk.org. Keep email required;
+new social users still follow the existing Disbunk approval workflow. Never put
+provider secrets in frontend variables. End-to-end sign-in awaits provider setup.

@@ -1,3 +1,4 @@
+import type { SignInProvider } from "@/lib/oauth-providers";
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import type { User, Session } from "@supabase/supabase-js";
@@ -14,7 +15,7 @@ interface AuthState {
 
 interface AuthContextType extends AuthState {
   signInWithMagicLink: (email: string) => Promise<{ error: Error | null }>;
-  signInWithOAuth: (provider: "google" | "github") => Promise<{ error: Error | null }>;
+  signInWithOAuth: (provider: SignInProvider) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   hasRole: (role: AppRole) => boolean;
   hasAnyRole: (roles: AppRole[]) => boolean;
@@ -111,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error as Error | null };
   };
 
-  const signInWithOAuth = async (provider: "google" | "github") => {
+  const signInWithOAuth = async (provider: SignInProvider) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: { redirectTo: window.location.origin + "/dashboard" },
