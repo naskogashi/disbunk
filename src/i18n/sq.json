@@ -1,4 +1,14 @@
 {
+  "seo": {
+    "loadFailed": "Kjo faqe nuk mund të ngarkohej",
+    "retryMessage": "Rifreskoni faqen për të provuar përsëri. Nëse po redaktonit, kontrolloni ndryshimet e fundit të ruajtura përpara se të vazhdoni.",
+    "reload": "Rifresko faqen",
+    "homeTitle": "Disbunk.org — Provat të parat. Reagim i koordinuar.",
+    "homeDescription": "Verifikoni pretendimet, ruani provat dhe koordinoni një reagim të besueshëm ndaj dezinformimit me gazetarë, studiues dhe shoqërinë civile.",
+    "loginDescription": "Hyni në Disbunk për të bashkëpunuar në hetime dhe reagime të bazuara në prova ndaj dezinformimit.",
+    "workspaceDescription": "Hapësira Disbunk për pretendime, prova, hetime dhe reagime të koordinuara ndaj dezinformimit.",
+    "notFound": "Faqja nuk u gjet"
+},
   "redesign": {
     "skip": "Kalo te përmbajtja",
     "navigation": "Navigimi kryesor",

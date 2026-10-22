@@ -394,7 +394,7 @@ function UploadForm({ claims, userId, onComplete, onError }: UploadFormProps) {
       const redacted = !!file && removeMetadata && ["image/jpeg", "image/png", "image/webp"].includes(file.type);
       const uploadFile = file && redacted ? await redactImage(file) : file;
       if (uploadFile && uploadFile.size > 50 * 1024 * 1024) throw new Error(t("tools.fileTooLarge"));
-      const storedHash = uploadFile ? await sha256(uploadFile) : null;
+      const storedHash = uploadFile === file ? originalHash : uploadFile ? await sha256(uploadFile) : null;
       if (uploadFile) {
         const extension = uploadFile.name.split(".").pop()?.replace(/[^a-zA-Z0-9]/g, "").slice(0,10) || "bin";
         const path = `${userId}/${claimId}/${crypto.randomUUID()}.${extension}`;

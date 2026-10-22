@@ -212,3 +212,26 @@ a PNG copy; other file formats are not sanitized.
 │   └── index-*.css
 └── favicon.ico
 ```
+
+## SEO and static-page delivery
+
+`npm run build` now prerenders the public homepage and emits static metadata
+shells for known application routes. The homepage HTML includes its content,
+partner links, canonical URL, social preview, and WebSite structured data before
+JavaScript runs. The sitemap lists only the public homepage; login and signed-in
+routes use `noindex`. Titles and descriptions update when navigating or changing
+between English and Albanian. Private claim contents are never prerendered.
+
+Deploy the entire `dist/` directory, including its nested route directories,
+`sitemap.xml`, `robots.txt`, and optimized partner images. The existing SCP
+workflow already copies this tree. Keep the server's SPA fallback for dynamic
+claim URLs. `404.html` is available for server-side 404 configuration, but the
+application fallback alone cannot set HTTP status codes.
+
+Serve hashed `/assets/` files with long-lived immutable caching and enable
+Brotli or gzip in the hosting configuration. Keep HTML on revalidation caching
+so new deployments load their current asset names. Font and partner URLs are
+not fingerprinted; use revalidation or short cache lifetimes for those files.
+These cache headers require hosting configuration and are not set by Vite's
+static output. Search ranking and real-user performance require production
+monitoring; local build checks cannot guarantee them.

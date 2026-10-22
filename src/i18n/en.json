@@ -1,4 +1,14 @@
 {
+  "seo": {
+    "loadFailed": "This page could not load",
+    "retryMessage": "Refresh the page to try again. If you were editing, check your last saved changes before continuing.",
+    "reload": "Refresh page",
+    "homeTitle": "Disbunk.org — Evidence first. A coordinated response.",
+    "homeDescription": "Verify claims, preserve evidence, and coordinate a credible response to misinformation. Disbunk connects journalists, researchers, and civil society.",
+    "loginDescription": "Sign in to Disbunk to collaborate on investigations and evidence-based responses to misinformation.",
+    "workspaceDescription": "The Disbunk workspace for claims, evidence, investigations, and coordinated responses to misinformation.",
+    "notFound": "Page not found"
+},
   "redesign": {
     "skip": "Skip to content",
     "navigation": "Main navigation",

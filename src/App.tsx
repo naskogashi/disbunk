@@ -1,12 +1,13 @@
 import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { AppLayout } from "@/components/AppLayout";
+import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
+import { RouteMetadata } from "@/components/RouteMetadata";
+const AppLayout = lazy(() => import("./components/AppLayout").then(module => ({ default: module.AppLayout })));
 const Landing = lazy(() => import("./pages/Landing"));
 const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -31,9 +32,10 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <Sonner />
       <BrowserRouter>
+        <RouteMetadata />
         <AuthProvider>
+          <RouteErrorBoundary>
           <Suspense fallback={<div className="p-8 text-sm" role="status">Loading Disbunk…</div>}>
           <Routes>
             <Route path="/" element={<Landing />} />
@@ -65,6 +67,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           </Suspense>
+          </RouteErrorBoundary>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
