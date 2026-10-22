@@ -423,6 +423,8 @@
     "requiresIntegration": "Not connected",
     "retired": "Discontinued",
     "coreService": "Authentication, database, realtime, and evidence storage.",
+    "externalResource": "External resource",
+    "disinfoResource": "External disinformation coverage from Sbunker. Opens on their website.",
     "feedService": "Article import through the deployed crawler. A successful import still depends on the live function and source feed.",
     "translationService": "UI translations are built in. Automated translation of content needs a separate API integration and review.",
     "deliveryService": "Automated email and SMS require server-side adapters, credentials, delivery tracking, and recipient consent.",

@@ -3,7 +3,7 @@ import {
   FileText,
   Shield,
   Target,
-  Rss,
+  ExternalLink,
   Users,
   BarChart3,
   BookOpen,
@@ -46,7 +46,6 @@ export function AppSidebar() {
     { title: t("tools.templates"), url: "/templates", icon: Files },
     { title: t("tools.alerts"), url: "/alerts", icon: Bell },
     { title: t("nav.campaigns"), url: "/campaigns", icon: Target },
-    { title: t("nav.sbunker"), url: "/sbunker", icon: Rss },
     { title: t("nav.teams"), url: "/teams", icon: Users },
     { title: t("nav.analytics"), url: "/analytics", icon: BarChart3 },
     { title: t("nav.profile"), url: "/profile", icon: UserCircle },
@@ -124,6 +123,11 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border p-3">
+        <SidebarMenu><SidebarMenuItem><SidebarMenuButton asChild tooltip="Sbunker · Disinfo">
+          <a href="https://sbunker.org/category/disinfo/" target="_blank" rel="noopener noreferrer" aria-label="Sbunker Disinfo (opens in a new tab)">
+            <ExternalLink className="h-4 w-4" />{!collapsed && <span>Sbunker · Disinfo</span>}
+          </a>
+        </SidebarMenuButton></SidebarMenuItem></SidebarMenu>
         {!collapsed && (
           <p className="text-xs text-muted-foreground leading-relaxed">
             © {new Date().getFullYear()} Disbunk.org

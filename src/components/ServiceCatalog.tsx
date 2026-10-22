@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 
 const services = [
   { name: "Supabase", category: "coreService", state: "implemented", url: "https://supabase.com/docs" },
-  { name: "Sbunker", category: "feedService", state: "implemented", url: "https://sbunker.org/" },
+  { name: "Sbunker", category: "disinfoResource", state: "externalResource", url: "https://sbunker.org/category/disinfo/" },
   { name: "SMTP2GO", category: "authEmailService", state: "setupRequired", url: "https://developers.smtp2go.com/docs/send-an-email" },
   { name: "Google Cloud Translation / DeepL", category: "translationService", state: "requiresIntegration", url: "https://docs.cloud.google.com/translate/docs/languages" },
   { name: "SendGrid / Twilio", category: "deliveryService", state: "requiresIntegration", url: "https://www.twilio.com/docs/sendgrid/for-developers/sending-email/api-getting-started" },

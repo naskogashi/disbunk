@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,7 +15,6 @@ const ClaimDetail = lazy(() => import("./pages/ClaimDetail"));
 const NewClaim = lazy(() => import("./pages/NewClaim"));
 const Evidence = lazy(() => import("./pages/Evidence"));
 const Campaigns = lazy(() => import("./pages/Campaigns"));
-const SbunkerFeed = lazy(() => import("./pages/SbunkerFeed"));
 const Teams = lazy(() => import("./pages/Teams"));
 const Analytics = lazy(() => import("./pages/Analytics"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
@@ -46,7 +45,7 @@ const App = () => (
               <Route path="/claims/:id" element={<ClaimDetail />} />
               <Route path="/evidence" element={<Evidence />} />
               <Route path="/campaigns" element={<Campaigns />} />
-              <Route path="/sbunker" element={<SbunkerFeed />} />
+              <Route path="/sbunker" element={<Navigate to="/dashboard" replace />} />
               <Route path="/teams" element={<Teams />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/docs" element={<Docs />} />

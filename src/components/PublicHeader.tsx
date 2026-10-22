@@ -17,7 +17,7 @@ export function PublicHeader() {
         <nav aria-label={t("redesign.navigation")} className="ml-auto hidden items-center gap-7 text-sm font-semibold lg:flex">
           <a href="/#how-it-works" className="hover:text-primary">{t("landing.learnHow")}</a>
           <Link to="/claims" className="hover:text-primary">{t("nav.claims")}</Link>
-          <Link to="/sbunker" className="hover:text-primary">{t("nav.sbunker")}</Link>
+          <a href="https://sbunker.org/category/disinfo/" target="_blank" rel="noopener noreferrer" className="hover:text-primary">Sbunker · Disinfo ↗</a>
         </nav>
         <div className="ml-auto flex items-center gap-1 lg:ml-5">
           <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggleTheme} aria-label={t(theme === "dark" ? "redesign.lightMode" : "redesign.darkMode")}>
@@ -27,7 +27,7 @@ export function PublicHeader() {
           <Button asChild size="sm" className="rounded-lg px-3 sm:px-5"><Link to="/login" aria-label={t("landing.signIn")}><span className="hidden min-[420px]:inline">{t("landing.signIn")}</span><ArrowUpRight className="h-4 w-4" /></Link></Button>
         </div>
       </div>
-      <details className="page-wrap border-t border-border py-2 lg:hidden"><summary className="w-fit cursor-pointer py-1 text-xs font-semibold text-muted-foreground">{t("tools.menu")}</summary><nav className="flex flex-wrap gap-x-6 gap-y-2 py-3 text-sm"><a href="/#how-it-works">{t("landing.learnHow")}</a><Link to="/claims">{t("nav.claims")}</Link><Link to="/sbunker">{t("nav.sbunker")}</Link></nav></details>
+      <details className="page-wrap border-t border-border py-2 lg:hidden"><summary className="w-fit cursor-pointer py-1 text-xs font-semibold text-muted-foreground">{t("tools.menu")}</summary><nav className="flex flex-wrap gap-x-6 gap-y-2 py-3 text-sm"><a href="/#how-it-works">{t("landing.learnHow")}</a><Link to="/claims">{t("nav.claims")}</Link><a href="https://sbunker.org/category/disinfo/" target="_blank" rel="noopener noreferrer">Sbunker · Disinfo ↗</a></nav></details>
     </header>
   );
 }

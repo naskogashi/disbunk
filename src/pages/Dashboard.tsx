@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import type { ClaimStatus } from "@/types/database";
-import { useSbunkerFeed } from "@/hooks/useSbunkerFeed";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
@@ -13,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   FileText, CheckCircle, XCircle, Clock, ArrowRight, Plus, Shield,
-  Activity, Users, ExternalLink,
+  Activity, Users,
 } from "lucide-react";
 
 // Count-up animation hook
@@ -54,13 +53,6 @@ interface ClaimRow {
   created_at: string;
 }
 
-interface SbunkerArticle {
-  id: string;
-  title: string;
-  url: string;
-  published_at: string | null;
-}
-
 interface ActivityItem {
   id: string;
   type: string;
@@ -76,8 +68,6 @@ export default function Dashboard() {
 
   const [stats, setStats] = useState({ total: 0, verified: 0, debunked: 0, inProgress: 0 });
   const [recentClaims, setRecentClaims] = useState<ClaimRow[]>([]);
-  const sbunkerFeed = useSbunkerFeed();
-  const sbunkerArticles = sbunkerFeed.data?.articles.slice(0,3) ?? [];
   const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -257,43 +247,6 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          {/* Sbunker Widget */}
-          <Card className="border-border">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base font-semibold">{t("dashboard.sbunkerFeed")}</CardTitle>
-                <Link to="/sbunker">
-                  <Button variant="ghost" size="sm" className="text-xs gap-1 text-muted-foreground">
-                    {t("dashboard.more")} <ArrowRight className="h-3 w-3" />
-                  </Button>
-                </Link>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {loading ? (
-                [...Array(3)].map((_, i) => <Skeleton key={i} className="h-12 rounded-lg" />)
-              ) : sbunkerArticles.length === 0 ? (
-                <p className="text-xs text-muted-foreground text-center py-4">{t("sbunker.noArticles")}</p>
-              ) : (
-                sbunkerArticles.map((article) => (
-                  <div key={article.id} className="space-y-1 pb-3 border-b border-border last:border-0 last:pb-0">
-                    <a
-                      href={article.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-medium text-foreground hover:text-primary transition-colors leading-snug block"
-                    >
-                      {article.title}
-                      <ExternalLink className="h-3 w-3 inline ml-1 opacity-40" />
-                    </a>
-                    <p className="text-[11px] text-muted-foreground font-mono">
-                      {article.published_at ? new Date(article.published_at).toLocaleDateString() : "—"}
-                    </p>
-                  </div>
-                ))
-              )}
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>

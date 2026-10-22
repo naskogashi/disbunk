@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import {
-  CheckCircle, XCircle, Users, Shield, BarChart3, Loader2, RefreshCw,
+  CheckCircle, XCircle, Users, Shield, BarChart3, Loader2,
   Search, Ban, Trash2, Clock, FileText, Flag, ScrollText,
 } from "lucide-react";
 import type { Profile, AppRole } from "@/types/database";
@@ -216,18 +216,6 @@ export default function AdminPanel() {
     }
   };
 
-  const handleCrawlSbunker = async () => {
-    toast({ title: t("admin.crawling") });
-    try {
-      const { error } = await supabase.functions.invoke("crawl-sbunker");
-      if (error) throw error;
-      await logAction("crawl_sbunker", null, null);
-      toast({ title: t("admin.crawlComplete") });
-    } catch (err: unknown) {
-      toast({ title: t("admin.error"), description: err instanceof Error ? err.message : String(err), variant: "destructive" });
-    }
-  };
-
   const initials = (name: string | null) =>
     (name || "U").split(" ").map((s) => s[0]?.toUpperCase()).join("").slice(0, 2);
 
@@ -262,9 +250,7 @@ export default function AdminPanel() {
           <h1 className="text-2xl font-bold text-foreground">{t("admin.title")}</h1>
           <p className="text-sm text-muted-foreground mt-1">{t("admin.subtitle")}</p>
         </div>
-        <div className="flex flex-wrap gap-2"><Dialog open={manageUserOpen} onOpenChange={setManageUserOpen}><DialogTrigger asChild><Button>{t("accounts.addUser")}</Button></DialogTrigger><DialogContent className="max-h-[90vh] overflow-y-auto"><DialogHeader><DialogTitle>{t("accounts.addUser")}</DialogTitle></DialogHeader><ManageUserForm onComplete={() => { setManageUserOpen(false); fetchData(); }} /></DialogContent></Dialog><Button asChild variant="outline"><Link to="/teams">{t("accounts.manageTeams")}</Link></Button><Button size="sm" variant="outline" className="gap-1.5" onClick={handleCrawlSbunker}>
-          <RefreshCw className="h-3.5 w-3.5" /> {t("admin.crawlSbunker")}
-        </Button></div>
+        <div className="flex flex-wrap gap-2"><Dialog open={manageUserOpen} onOpenChange={setManageUserOpen}><DialogTrigger asChild><Button>{t("accounts.addUser")}</Button></DialogTrigger><DialogContent className="max-h-[90vh] overflow-y-auto"><DialogHeader><DialogTitle>{t("accounts.addUser")}</DialogTitle></DialogHeader><ManageUserForm onComplete={() => { setManageUserOpen(false); fetchData(); }} /></DialogContent></Dialog><Button asChild variant="outline"><Link to="/teams">{t("accounts.manageTeams")}</Link></Button></div>
       </div>
 
       {/* Stats */}

@@ -111,13 +111,10 @@ function secrets `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and
 `SUPABASE_SERVICE_ROLE_KEY` must be available on the server. Never expose the
 service role key in any `VITE_` environment variable.
 
-The signed-in dashboard and feed page automatically load articles from
-`https://sbunker.org/category/disinfo/feed/`, with a category-specific WordPress
-API fallback and a 15 minute database cache. Editors can request a refresh.
-The source returned Cloudflare HTTP 403 challenges during verification on
-22 October 2026. If this also happens from the deployed Edge Function, the source
-administrator must allow the feed/API requests; the importer does not bypass
-Cloudflare challenges. Existing cached articles remain visible during outages.
+The application links directly to `https://sbunker.org/category/disinfo/`.
+The RSS panel, automatic fetching, and administrator refresh control have been
+removed. The legacy crawler and import RPC remain available in the backend
+source, but are not invoked by the frontend and need not be deployed.
 
 GitHub's static frontend deployment does not apply Supabase SQL migrations or
 deploy Edge Functions. Complete these backend steps before relying on the new

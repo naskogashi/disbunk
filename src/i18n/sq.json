@@ -423,6 +423,8 @@
     "requiresIntegration": "I palidhur",
     "retired": "I mbyllur",
     "coreService": "Autentikimi, baza e të dhënave, përditësimet dhe ruajtja e provave.",
+    "externalResource": "Burim i jashtëm",
+    "disinfoResource": "Artikuj mbi dezinformimin nga Sbunker. Hapet në faqen e tyre.",
     "feedService": "Importi i artikujve përmes funksionit të publikuar. Importi varet nga funksioni dhe burimi i artikujve.",
     "translationService": "Përkthimet e ndërfaqes janë të përfshira. Përkthimi automatik i përmbajtjes kërkon integrim API dhe shqyrtim.",
     "deliveryService": "Emaili dhe SMS automatike kërkojnë integrim në server, kredenciale, gjurmim dhe pëlqimin e marrësve.",
