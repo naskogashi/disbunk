@@ -2,10 +2,12 @@ import i18n from "@/i18n";
 export function uiLocale() { return i18n.language?.startsWith("en") ? "en-GB" : "sq-AL"; }
 export function displayDate(value: string | Date) {
   const date = new Date(value);
-  return Number.isFinite(date.getTime()) ? date.toLocaleDateString(uiLocale(), { year: "numeric", month: "short", day: "numeric" }) : "—";
+  if(!Number.isFinite(date.getTime())) return "—";
+  return uiLocale()==="sq-AL" ? `${String(date.getDate()).padStart(2,"0")}.${String(date.getMonth()+1).padStart(2,"0")}.${date.getFullYear()}` : date.toLocaleDateString(uiLocale(),{year:"numeric",month:"short",day:"numeric"});
 }
 export function displayDateTime(value: string | Date) {
   const date = new Date(value);
+  if(uiLocale()==="sq-AL") return Number.isFinite(date.getTime()) ? `${displayDate(date)}, ${date.toLocaleTimeString("sq-AL",{hour:"2-digit",minute:"2-digit"})}` : "—";
   return Number.isFinite(date.getTime()) ? date.toLocaleString(uiLocale(), { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "—";
 }
 export function relativeTime(value: string, now = Date.now()) {

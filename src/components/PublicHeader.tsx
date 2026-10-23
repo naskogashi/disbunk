@@ -34,16 +34,16 @@ export function PublicHeader() {
   const themeButton=<Button variant="ghost" size="icon" data-public-theme data-light-label={t('redesign.lightMode')} data-dark-label={t('redesign.darkMode')} className="size-11 shrink-0 rounded-xl" onClick={toggleTheme} aria-label={t(theme==='dark'?'redesign.lightMode':'redesign.darkMode')}><Sun className="hidden size-[18px] dark:block"/><Moon className="size-[18px] dark:hidden"/></Button>;
   return <header className="sticky top-0 z-40 border-b border-border bg-background/95">
     <a href="#content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-card focus:p-4">{t('redesign.skip')}</a>
-    <div className="page-wrap flex h-20 items-center justify-between gap-3">
+    <div className="page-wrap grid h-20 grid-cols-[1fr_auto] items-center gap-3 min-[1152px]:grid-cols-[1fr_auto_1fr]">
       <Link to={home} aria-label="Disbunk.org" className="shrink-0 rounded-md"><span className="hidden min-[360px]:inline-flex"><Brand className="!text-lg sm:!text-2xl"/></span><img src="/favicon.svg" alt="" className="size-8 min-[360px]:hidden"/></Link>
-      <nav aria-label={t('redesign.navigation')} data-section-navigation className="hidden items-center gap-1 rounded-full border border-border bg-secondary/40 p-1 lg:flex">
-        {links.map(({id,key})=><a key={id} href={href(id)} aria-current={active===id?'location':undefined} className="inline-flex min-h-10 items-center rounded-full px-3 text-sm font-semibold text-muted-foreground transition-colors hover:bg-card hover:text-primary aria-[current=location]:bg-card aria-[current=location]:text-primary aria-[current=location]:shadow-sm">{t(`publicNav.${key}`)}</a>)}
-        <a href={publicRoutes.about[language]} className="inline-flex min-h-10 items-center rounded-full px-3 text-sm font-semibold text-muted-foreground hover:bg-card hover:text-primary">{language==='en'?'About':'Rreth nesh'}</a>
+      <nav aria-label={t('redesign.navigation')} data-section-navigation className="hidden w-[440px] grid-cols-4 items-center gap-1 rounded-full border border-border bg-secondary/40 p-1 min-[1152px]:grid">
+        {links.map(({id,key})=><a key={id} href={href(id)} aria-current={active===id?'location':undefined} className="inline-flex min-h-10 items-center justify-center whitespace-nowrap rounded-full px-2 text-sm font-semibold text-muted-foreground transition-colors hover:bg-card hover:text-primary aria-[current=location]:bg-card aria-[current=location]:text-primary aria-[current=location]:shadow-sm">{t(`publicNav.${key}`)}</a>)}
+        <a href={publicRoutes.about[language]} className="inline-flex min-h-10 items-center justify-center whitespace-nowrap rounded-full px-2 text-sm font-semibold text-muted-foreground hover:bg-card hover:text-primary">{language==='en'?'About':'Rreth nesh'}</a>
       </nav>
-      <div className="flex shrink-0 items-center gap-2">
-        <div className="hidden items-center gap-1 lg:flex">{themeButton}<PublicLanguageLinks/></div>
-        <Button asChild className="h-11 rounded-xl px-3 text-sm sm:px-4"><Link to="/login">{t('landing.signIn')}<ArrowUpRight className="ml-2 hidden size-4 min-[420px]:block"/></Link></Button>
-        <details data-public-menu className="group/public-menu lg:hidden" onKeyDown={event=>{if(event.key==='Escape')event.currentTarget.open=false;}}>
+      <div className="flex shrink-0 items-center justify-self-end gap-2">
+        <div className="hidden items-center gap-1 min-[1152px]:flex">{themeButton}<PublicLanguageLinks/></div>
+        <Button asChild className="h-11 w-24 justify-center rounded-xl px-3 text-sm"><Link to="/login">{t('landing.signIn')}<ArrowUpRight className="ml-2 hidden size-4 min-[420px]:block"/></Link></Button>
+        <details data-public-menu className="group/public-menu min-[1152px]:hidden" onKeyDown={event=>{if(event.key==='Escape')event.currentTarget.open=false;}}>
           <summary aria-label={t('publicNav.open')} data-open-label={t('publicNav.open')} data-close-label={t('common.close')} className="relative z-50 flex size-11 cursor-pointer list-none items-center justify-center rounded-xl border border-border bg-background [&::-webkit-details-marker]:hidden"><Menu className="size-5 group-open/public-menu:hidden"/><X className="hidden size-5 group-open/public-menu:block"/></summary>
           <div data-menu-backdrop onClick={event=>event.currentTarget.closest('details')?.removeAttribute('open')} className="fixed inset-0 z-40 bg-black/40" aria-hidden="true"/>
           <div className="fixed inset-y-0 right-0 z-40 flex w-[calc(100vw-2rem)] max-w-sm flex-col border-l border-border bg-background shadow-xl">

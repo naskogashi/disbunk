@@ -31,7 +31,7 @@ export function pageMetadata(pathname: string, translate: (key: string) => strin
 export function structuredData(pathname: string, title: string, description: string) {
   const route=publicRoute(pathname);
   if(!route) return undefined;
-  const org={"@type":"Organization","@id":`${SITE_URL}/#org`,name:"Disbunk",alternateName:"Disbunk.org",url:`${SITE_URL}/`,logo:`${SITE_URL}/favicon.svg`,description:publicCopy[route.language].about.sections[0].body.split(". ")[0]+".",parentOrganization:{"@type":"Organization",name:"Sbunker",url:"https://sbunker.org/"},sameAs:["https://github.com/naskogashi/disbunk"]};
+  const org={"@type":"Organization","@id":`${SITE_URL}/#org`,name:"Disbunk",alternateName:"Disbunk.org",url:`${SITE_URL}/`,logo:`${SITE_URL}/favicon.svg`,description:publicCopy[route.language].about.sections[0].body.split(". ")[0]+".",parentOrganization:{"@type":"Organization",name:"Sbunker",url:"https://sbunker.org/"}};
   const website={"@type":"WebSite","@id":`${SITE_URL}/#website`,name:"Disbunk",url:`${SITE_URL}/`,inLanguage:["sq","en"],publisher:{"@id":org["@id"]}};
   const page={"@type":route.id==="about" ? "AboutPage" : route.id==="contact" ? "ContactPage" : route.id==="faq" ? "FAQPage" : "WebPage","@id":SITE_URL+route.path,url:SITE_URL+route.path,name:title,description,inLanguage:route.language,dateModified:CONTENT_UPDATED,isPartOf:{"@id":website["@id"]},...(route.id==="faq" ? {mainEntity:publicCopy[route.language].faq.sections.map(section=>({"@type":"Question",name:section.title,acceptedAnswer:{"@type":"Answer",text:section.body}}))} : {})};
   const graph:object[]=[org,website,page];

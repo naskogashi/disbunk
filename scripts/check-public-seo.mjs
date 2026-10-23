@@ -17,6 +17,14 @@ for(const entry of entries) {
   assert.equal(doc.querySelectorAll('script[type="module"]').length,0,url);
   assert.ok(doc.querySelector('script[src="/public-site.js"][defer]'),url);
   assert.ok(doc.querySelector('main').textContent.length>400,url);
+  assert.equal(doc.querySelectorAll('a[href*="github.com/naskogashi/disbunk"]').length,0,url);
+  if(language==='sq')for(const time of doc.querySelectorAll('time[datetime="2026-10-23"]'))assert.equal(time.textContent,'23.10.2026');
+  if(path==='/kontakt'||path==='/en/contact'){
+    assert.ok(doc.querySelector('form[data-contact-form]'));
+    assert.ok(doc.querySelector('input[type="file"][multiple]'));
+    assert.ok(doc.querySelector('script[src="/contact-form.js"]'));
+    assert.ok(!doc.body.textContent.includes('info@disbunk.org'));
+  }
   assert.equal(doc.querySelectorAll('link[hreflang]').length,3,url);
   assert.equal(entry.querySelector('lastmod').textContent,'2026-10-23');
   for(const alternate of entry.getElementsByTagName('xhtml:link')) {

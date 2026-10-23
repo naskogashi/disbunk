@@ -24,3 +24,10 @@ export function publicRoute(pathname: string) {
   return undefined;
 }
 export const languageOf = (path: string): PublicLanguage => path === '/en' || path.startsWith('/en/') ? 'en' : 'sq';
+
+export function publicDate(value: string, language: PublicLanguage) {
+  const date=new Date(`${value}T12:00:00Z`);
+  if(!Number.isFinite(date.getTime())) return "—";
+  if(language==='sq') return `${String(date.getUTCDate()).padStart(2,'0')}.${String(date.getUTCMonth()+1).padStart(2,'0')}.${date.getUTCFullYear()}`;
+  return new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(date);
+}

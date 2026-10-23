@@ -20,7 +20,7 @@
       }
     });
   }
-  window.matchMedia('(min-width: 1024px)').addEventListener('change',event=>{if(event.matches)closeMenus();});
+  window.matchMedia('(min-width: 1152px)').addEventListener('change',event=>{if(event.matches)closeMenus();});
   const updateThemeLabels=()=>document.querySelectorAll('[data-public-theme]').forEach(button=>button.setAttribute('aria-label',document.documentElement.classList.contains('dark')?button.dataset.lightLabel:button.dataset.darkLabel));
   updateThemeLabels();
   document.querySelectorAll('[data-public-theme]').forEach(button=>button.addEventListener('click',()=>{

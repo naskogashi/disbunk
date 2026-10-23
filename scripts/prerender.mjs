@@ -26,6 +26,7 @@ try {
     if(meta.publicPage){
       doc.querySelectorAll('script[type="module"],link[rel="modulepreload"]').forEach(element=>element.remove());
       const enhancement=doc.createElement('script');enhancement.src='/public-site.js';enhancement.defer=true;doc.body.append(enhancement);
+      if(path==='/kontakt'||path==='/en/contact'){const script=doc.createElement('script');script.src='/contact-form.js';script.defer=true;doc.body.append(script);}
     }
     const schema=structuredData(path,meta.title,meta.description);
     if(schema){const script=doc.createElement('script');script.id='site-structured-data';script.type='application/ld+json';script.textContent=JSON.stringify(schema).replaceAll('<','\\u003c');doc.head.append(script);}
