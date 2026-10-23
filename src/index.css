@@ -107,7 +107,25 @@
     background-image: radial-gradient(ellipse at 80% 20%, hsl(212 60% 20% / .15), transparent 55%), linear-gradient(hsl(215 25% 20% / .18) 1px, transparent 1px);
     background-size: auto, 100% 60px;
   }
-  .workspace [data-sidebar="sidebar"] .brand { color: hsl(var(--sidebar-accent-foreground)); }
+  .workspace-nav {
+    --sidebar-background: var(--card);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-border: var(--border);
+    --sidebar-accent: var(--secondary);
+    --sidebar-accent-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-ring: var(--ring);
+  }
+  .workspace-nav .brand { color: hsl(var(--foreground)); }
+  .workspace-nav [data-sidebar="menu-button"].workspace-nav-item {
+    @apply min-h-11 rounded-xl border border-transparent px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground;
+  }
+  .workspace-nav [data-sidebar="menu-button"].workspace-nav-item[data-active="true"] {
+    @apply border-primary/15 bg-primary/10 font-semibold text-primary;
+  }
+  .workspace-nav [data-sidebar="menu-button"].workspace-create {
+    @apply h-11 justify-center rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground;
+  }
   .eyebrow { @apply text-xs font-bold uppercase tracking-[0.16em] text-primary; }
   .claim-id { @apply font-mono text-xs tracking-wide text-primary; }
   .status-badge { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold; }
@@ -124,7 +142,6 @@
     background-size: 26px 26px;
   }
   .workspace main > div { @apply mx-auto max-w-7xl; }
-  .workspace [data-sidebar="menu-button"] { @apply h-11 rounded-xl font-semibold; }
   .workspace [data-sidebar="group"] { @apply px-3; }
   .workspace [data-sidebar="menu"] { @apply gap-1; }
 }

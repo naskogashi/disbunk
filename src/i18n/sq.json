@@ -692,5 +692,19 @@
     "rejected": "Sugjerimi u hodh poshtë",
     "reviewError": "Shqyrtimi dështoi. Rifresko sugjerimet; pretendimet mund të kenë ndryshuar.",
     "caution": "Eksperimentale: ngjashmëria dhe shkalla e përkatësisë nuk vërtetojnë saktësinë, qëllimin apo koordinimin. Një grup kërkon të paktën pesë pretendime. Administratori duhet t’i shqyrtojë të gjitha para krijimit të fushatës."
+  },
+  "navigation": {
+    "overview": "Përmbledhje",
+    "investigations": "Hulumtimet",
+    "organization": "Organizimi",
+    "workspace": "Hapësira e punës",
+    "resources": "Ndihma dhe administrimi",
+    "main": "Navigimi i hapësirës së punës",
+    "menu": "Menyja e navigimit",
+    "openMenu": "Hap navigimin",
+    "closeMenu": "Mbyll navigimin",
+    "toggleMenu": "Zgjero ose ngushto navigimin",
+    "currentLocation": "Vendndodhja aktuale",
+    "tasksCompleted": "{{done}} nga {{total}} detyra të përfunduara"
   }
 }

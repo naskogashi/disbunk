@@ -3,6 +3,7 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
+import { localizedTaskTitle, standardPlaybookTitles } from "@/lib/playbook-tasks";
 import { priorityScore, type ClaimSummary } from "@/lib/response-tools";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,7 +44,7 @@ export function ClaimWorkflow({ claim, onUpdated }: { claim: ClaimSummary & { as
       if (result.error) throw result.error;
       onUpdated(patch);
     } else {
-      const names = action.type === "playbook" ? [t("tools.stepSource"), t("tools.stepEvidence"), t("tools.stepReview"), t("tools.stepResponse")] : [title.trim()];
+      const names = action.type === "playbook" ? standardPlaybookTitles() : [title.trim()];
       const result = await supabase.from("claim_tasks").insert(names.map(name => ({ claim_id: claim.id, title: name, assigned_to: assignee || null })));
       if (result.error) throw result.error;
       setTitle("");
@@ -55,7 +56,13 @@ export function ClaimWorkflow({ claim, onUpdated }: { claim: ClaimSummary & { as
     {query.isPending ? <p role="status">{t("tools.loading")}</p> : query.error ? <ModuleError error={query.error} retry={() => query.refetch()} /> : <>
       {canManage && <div className="space-y-3"><div className="grid grid-cols-2 gap-3">{[{ key: "severity", value: severity, set: setSeverity }, { key: "reach", value: reach, set: setReach }].map(field => <div key={field.key}><Label htmlFor={`triage-${field.key}`}>{t(`tools.${field.key}`)}</Label><select id={`triage-${field.key}`} className="mt-1 h-10 w-full rounded-lg border bg-card px-3" value={field.value} onChange={event => field.set(Number(event.target.value))}>{[1,2,3,4,5].map(n => <option key={n} value={n}>{n}</option>)}</select></div>)}</div><div><Label htmlFor="claim-assignee">{t("claims.assignedTo")}</Label><select id="claim-assignee" className="mt-1 h-10 w-full rounded-lg border bg-card px-3" value={assignee} onChange={event => setAssignee(event.target.value)}><option value="">{t("tools.unassigned")}</option>{query.data?.profiles.map(profile => <option key={profile.user_id} value={profile.user_id}>{profile.full_name || profile.user_id.slice(0,8)}</option>)}</select></div><Button variant="outline" size="sm" disabled={mutation.isPending} onClick={() => mutation.mutate({ type: "triage" })}>{t("tools.saveTriage")}</Button></div>}
       <p className="text-xs text-muted-foreground">{t("tools.checklistNote")}</p>
-      {query.data?.tasks.map(task => <label key={task.id} className="flex items-start gap-3 rounded-lg border p-3 text-sm"><input type="checkbox" className="mt-1" checked={task.completed} disabled={mutation.isPending || (!canManage && task.assigned_to !== user?.id)} onChange={() => mutation.mutate({ type: "task", task })} /><span className={task.completed ? "text-muted-foreground line-through" : ""}>{task.title}</span></label>)}
+      {!!query.data?.tasks.length && <section aria-label={t("tools.playbook")} className="space-y-2">
+        <p className="text-xs font-medium text-muted-foreground">{t("navigation.tasksCompleted", { done:query.data.tasks.filter(task=>task.completed).length, total:query.data.tasks.length })}</p>
+        <div className="divide-y overflow-hidden rounded-xl border">{query.data.tasks.map(task => <label key={task.id} className="flex min-h-14 items-start gap-3 p-3.5 text-sm transition-colors hover:bg-secondary/50 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-inset has-[:focus-visible]:ring-ring">
+          <input type="checkbox" className="mt-0.5 size-[18px] shrink-0 accent-primary" checked={task.completed} disabled={mutation.isPending || (!canManage && task.assigned_to !== user?.id)} onChange={() => mutation.mutate({ type: "task", task })}/>
+          <span className={task.completed ? "text-muted-foreground line-through" : "leading-relaxed"}>{localizedTaskTitle(task.title,t)}</span>
+        </label>)}</div>
+      </section>}
       {canManage && <div className="space-y-3">{query.data?.tasks.length === 0 && <Button variant="outline" className="w-full" disabled={mutation.isPending} onClick={() => mutation.mutate({ type: "playbook" })}>{t("tools.applyPlaybook")}</Button>}<form className="flex gap-2" onSubmit={event => { event.preventDefault(); mutation.mutate({ type: "add" }); }}><Input aria-label={t("tools.taskTitle")} maxLength={300} value={title} onChange={event => setTitle(event.target.value)} placeholder={t("tools.taskTitle")} /><Button type="submit" disabled={!title.trim() || mutation.isPending}>{t("tools.add")}</Button></form></div>}
     </>}
   </CardContent></Card>;

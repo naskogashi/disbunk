@@ -692,5 +692,19 @@
     "rejected": "Suggestion dismissed",
     "reviewError": "Review failed. Refresh the suggestions; claims may have changed.",
     "caution": "Experimental: similarity and membership strength do not establish truth, intent or coordination. Groups need at least five claims. An admin must review all claims before creating a campaign."
+  },
+  "navigation": {
+    "overview": "Overview",
+    "investigations": "Investigations",
+    "organization": "Organization",
+    "workspace": "Workspace",
+    "resources": "Help and administration",
+    "main": "Workspace navigation",
+    "menu": "Navigation menu",
+    "openMenu": "Open navigation",
+    "closeMenu": "Close navigation",
+    "toggleMenu": "Expand or collapse navigation",
+    "currentLocation": "Current location",
+    "tasksCompleted": "{{done}} of {{total}} tasks completed"
   }
 }
