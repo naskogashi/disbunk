@@ -26,7 +26,7 @@ export default function Landing() {
     <main id="content">
       <section className="landing-hero border-b border-border">
         <div className="page-wrap grid gap-10 py-12 lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-20 lg:py-20">
-          <div><p className="eyebrow flex items-center gap-3"><span className="h-px w-8 bg-primary" />{t("identity.kicker")}</p>
+          <div><p className="eyebrow">{t("identity.kicker")}</p>
             <h1 className="hero-title mt-7 text-[clamp(2.8rem,6.8vw,6.2rem)] leading-[1.02] [overflow-wrap:anywhere]">{t("identity.heroFirst")}<br /><em>{t("identity.heroSecond")}</em></h1>
             <p className="mt-7 max-w-lg text-lg leading-relaxed text-muted-foreground">{t("identity.description")}</p>
             <div className="mt-8 flex flex-wrap items-center gap-4"><Button asChild size="lg" className="h-12 rounded-lg px-6 font-bold"><Link to="/claims/new">{t("landing.submitClaim")}<ArrowUpRight className="ml-3 h-4 w-4" /></Link></Button><a href="#how-it-works" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold underline decoration-border underline-offset-8 hover:decoration-primary">{t("redesign.seeHow")}<ArrowRight className="h-4 w-4" /></a></div>
