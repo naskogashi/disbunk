@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { pageMetadata, SITE_SCHEMA } from "@/lib/page-metadata";
+import { pageMetadata, structuredData } from "@/lib/page-metadata";
 
 function setMeta(selector: string, attribute: string, key: string, content: string) {
   let element = document.head.querySelector<HTMLMetaElement>(selector);
@@ -23,10 +23,17 @@ export function RouteMetadata() {
     let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement("link"); canonical.rel = "canonical"; document.head.append(canonical); }
     canonical.href = meta.canonical;
+    document.documentElement.lang=meta.publicPage ? meta.language : i18n.language.startsWith("en") ? "en" : "sq";
+    document.head.querySelectorAll('link[rel="alternate"][hreflang]').forEach(element=>element.remove());
+    for(const [language,href] of Object.entries(meta.alternates ?? {})) { const link=document.createElement("link");link.rel="alternate";link.hreflang=language;link.href=href;document.head.append(link); }
+    setMeta('meta[property="og:locale:alternate"]', "property", "og:locale:alternate", meta.language==="sq" ? "en_US" : "sq_AL");
+    const imageAlt=meta.language==="sq" ? "Disbunk – Verifikimi i fakteve dhe reagimi ndaj dezinformimit" : "Disbunk – Collaborative fact-checking and disinformation response";
+    setMeta('meta[property="og:image:alt"]',"property","og:image:alt",imageAlt);
+    setMeta('meta[name="twitter:image:alt"]',"name","twitter:image:alt",imageAlt);
     let structured = document.getElementById("site-structured-data");
-    if (meta.home) {
+    if (meta.publicPage) {
       if (!structured) { structured = document.createElement("script"); structured.id = "site-structured-data"; structured.setAttribute("type", "application/ld+json"); document.head.append(structured); }
-      structured.textContent = JSON.stringify({ ...SITE_SCHEMA, description: meta.description });
+      structured.textContent = JSON.stringify(structuredData(pathname,meta.title,meta.description));
     } else structured?.remove();
 
   }, [pathname, t, i18n.language]);

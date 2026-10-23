@@ -25,7 +25,7 @@ it("uses translated titles for every app route without indexing private pages", 
 it("updates head metadata on navigation and removes homepage structured data from the workspace", async () => {
   const i18n=createInstance();
   await i18n.use(initReactI18next).init({lng:"en",resources:{en:{translation:en}}});
-  render(<I18nextProvider i18n={i18n}><MemoryRouter><RouteMetadata/><Link to="/evidence?claim=private-id">Evidence</Link><Link to="/">Home</Link></MemoryRouter></I18nextProvider>);
+  render(<I18nextProvider i18n={i18n}><MemoryRouter initialEntries={["/en/"]}><RouteMetadata/><Link to="/evidence?claim=private-id">Evidence</Link><Link to="/en/">Home</Link></MemoryRouter></I18nextProvider>);
   expect(document.title).toBe(en.seo.homeTitle);
   expect(document.getElementById("site-structured-data")).not.toBeNull();
   fireEvent.click(screen.getByRole("link",{name:"Evidence"}));
