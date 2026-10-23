@@ -4,7 +4,7 @@ import { afterEach, expect, it, vi } from "vitest";
 import en from "@/i18n/en.json";
 import sq from "@/i18n/sq.json";
 const workspace = vi.hoisted(() => ({ load: vi.fn() }));
-vi.mock("@/App", () => { workspace.load(); return { default: () => <p>Workspace loaded</p> }; });
+vi.mock("@/App", async () => { workspace.load(); const {Routes,Route}=await import("react-router-dom"); return { default: () => <Routes><Route path="/login" element={<p>Workspace loaded</p>}/></Routes> }; });
 import RootApp from "@/RootApp";
 import { ClaimStatusBadge } from "@/components/ClaimStatusBadge";
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllEnvs(); });
