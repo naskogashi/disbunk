@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowUpRight, ArrowRight, Search, FileCheck2, Users, Quote, Network, Check, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PublicTechnology } from "@/components/PublicTechnology";
 import { PublicHeader } from "@/components/PublicHeader";
 import { ProjectFooter } from "@/components/ProjectFooter";
 
@@ -38,13 +39,14 @@ export default function Landing() {
           </div>
         </div>
       </section>
-      <section className="page-wrap py-14 lg:py-20" aria-labelledby="modules-title">
+      <section id="platform" className="page-wrap py-14 lg:py-20" aria-labelledby="modules-title">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4"><div><p className="eyebrow">{t("identity.workspaceLabel")}</p><h2 id="modules-title" className="mt-3 text-3xl font-extrabold">{t("identity.workspaceTitle")}</h2></div><p className="max-w-sm text-sm leading-relaxed text-muted-foreground">{t("identity.workspaceDesc")}</p></div>
         <div className="grid border-y border-border md:grid-cols-2 lg:grid-cols-4">{modules.map(({ icon: Icon, title, detail, path }, index) => <Link to={path} key={path} className="group border-b border-border px-2 py-7 transition-colors hover:bg-secondary/60 md:px-5 lg:border-b-0 lg:border-r last:border-0"><div className="flex items-center justify-between"><Icon className="h-5 w-5 text-primary" /><span className="font-mono text-[10px] text-muted-foreground">0{index+1}</span></div><h3 className="mt-8 flex items-center justify-between gap-2 text-lg font-bold">{title}<ArrowUpRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></h3><p className="mt-2 text-sm leading-relaxed text-muted-foreground">{detail}</p></Link>)}</div>
       </section>
       <section id="how-it-works" className="border-y border-border bg-card">
         <div className="page-wrap grid gap-10 py-14 lg:grid-cols-[1fr_1.35fr] lg:gap-24 lg:py-20"><div><p className="eyebrow">{t("redesign.howLabel")}</p><h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">{t("identity.howTitle")}</h2><p className="mt-5 text-muted-foreground">{t("redesign.howDesc")}</p><Link to="/templates" className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-primary">{t("tools.templates")}<ArrowRight className="h-4 w-4" /></Link></div><ol>{steps.map((step, index) => <li key={step.title} className="grid grid-cols-[2.5rem_1fr] gap-4 border-b border-border py-6 first:pt-0 last:border-0 last:pb-0"><span className="font-mono text-sm text-primary">0{index+1}</span><div><h3 className="text-xl font-bold">{step.title}</h3><p className="mt-2 leading-relaxed text-muted-foreground">{step.desc}</p></div></li>)}</ol></div>
       </section>
+      <PublicTechnology />
       <section className="page-wrap py-14 lg:py-16"><div className="flex flex-wrap items-center justify-between gap-6"><div><p className="eyebrow">{t("identity.joinLabel")}</p><h2 className="mt-3 text-3xl font-extrabold">{t("redesign.joinTitle")}</h2></div><Button asChild size="lg" className="h-12 rounded-lg px-6"><Link to="/login">{t("redesign.getStarted")}<ArrowUpRight className="ml-3 h-5 w-5" /></Link></Button></div></section>
     </main>
     <ProjectFooter />
