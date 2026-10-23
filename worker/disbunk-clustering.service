@@ -1,0 +1,22 @@
+[Unit]
+Description=Disbunk multilingual narrative clustering
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/disbunk2/clustering
+EnvironmentFile=/home/disbunk2/clustering/.env
+Environment=HF_HOME=/home/disbunk2/clustering/model-cache
+Environment=HF_HUB_OFFLINE=1
+ExecStart=/home/disbunk2/clustering/.venv/bin/python run.py
+CPUQuota=100%
+MemoryMax=2G
+MemorySwapMax=0
+Nice=15
+IOSchedulingClass=idle
+TimeoutStartSec=1800
+TimeoutStopSec=30
+UMask=0077
+NoNewPrivileges=true
+

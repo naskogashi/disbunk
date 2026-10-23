@@ -1,6 +1,9 @@
 # Practical HDBSCAN integration for Disbunk
 
-This is a proposed design, not a deployed feature.
+The first bounded server-worker implementation is now in `worker/`; see
+`worker/README.md` for operation, limits and rollback. This document retains the
+broader design and evaluation goals. Nearest-neighbor retrieval, partial-overlap
+reconciliation and split/link review are future work, not implemented features.
 
 ## Recommended first version
 

@@ -316,3 +316,12 @@ workspace and that language switching persists across reloads.
 
 HDBSCAN-PLAN.md describes a proposed background clustering design; no clustering
 worker, model downloads or external embedding calls are deployed by this update.
+# Narrative clustering worker
+
+The HDBSCAN worker runs separately from the static website, under the
+`disbunk2` server user. It is not deployed by the frontend SCP workflow.
+See [worker/README.md](worker/README.md) for dependencies, the dedicated database
+login, resource limits, nightly scheduling, validation and rollback. Supabase
+migrations `202610230002` and `202610230003` were applied in the SQL Editor;
+do not rerun them against production. The first production batch completed with
+zero recent claims; no campaign or investigation was created automatically.

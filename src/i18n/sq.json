@@ -563,7 +563,8 @@
     "menu": "Menuja",
     "setupRequired": "Kërkohet konfigurim në server",
     "authEmailService": "Shërbimi për email-et e autentikimit dhe miratimit është vendosur. Diagnostikimi i administratorit kontrollon konfigurimin e kredencialeve, jo dorëzimin ose gjendjen e ofruesit.",
-    "hoursShort": "orë"
+    "hoursShort": "orë",
+    "clusteringService": "Grupim shumëgjuhësh i narrativave gjatë natës në serverin e Disbunk, me shqyrtim nga administratori. Ngjashmëria nuk është përfundim i verifikimit të fakteve."
   },
   "identity": {
     "kicker": "Hapësirë e pavarur për informacion të verifikuar",
@@ -670,5 +671,26 @@
     "pixels": "Përdorni imazh më të vogël se 25 megapikselë.",
     "processing": "Përpunimi i imazhit nuk është i disponueshëm.",
     "prepare": "Fotografia nuk mund të përgatitej."
+  },
+  "clustering": {
+    "title": "Grupet e sugjeruara të narrativave",
+    "description": "Analiza semantike shumëgjuhëshe grupon pretendime të ngjashme brenda secilit ekip. Vetëm administratorët mund t’i shqyrtojnë sugjerimet.",
+    "refresh": "Rifresko",
+    "loading": "Duke ngarkuar sugjerimet…",
+    "unavailable": "Analiza e narrativave nuk është ende e disponueshme. Duhet të aktivizohen migrimi i bazës së të dhënave dhe shërbimi në server.",
+    "notRun": "Nuk është kryer ende asnjë analizë. Sugjerimet do të shfaqen pas përpunimit të parë të planifikuar.",
+    "run": "Analiza e fundit: {{date}} · {{status}} · {{claims}} pretendime · {{groups}} grupe",
+    "running": "Në proces",
+    "completed": "Përfunduar",
+    "failed": "Dështoi",
+    "empty": "Nuk ka grupe në pritje të shqyrtimit. HDBSCAN i lë pretendimet pa grup kur ngjashmëria është e pamjaftueshme.",
+    "name": "Emri i fushatës",
+    "strength": "Shkalla e përkatësisë: {{value}}%",
+    "accept": "Krijo fushatë nga grupi",
+    "reject": "Hidh poshtë sugjerimin",
+    "accepted": "Fushata u krijua",
+    "rejected": "Sugjerimi u hodh poshtë",
+    "reviewError": "Shqyrtimi dështoi. Rifresko sugjerimet; pretendimet mund të kenë ndryshuar.",
+    "caution": "Eksperimentale: ngjashmëria dhe shkalla e përkatësisë nuk vërtetojnë saktësinë, qëllimin apo koordinimin. Një grup kërkon të paktën pesë pretendime. Administratori duhet t’i shqyrtojë të gjitha para krijimit të fushatës."
   }
 }

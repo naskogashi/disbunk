@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
+import { NarrativeSuggestions } from "@/components/NarrativeSuggestions";
 import { ClaimStatusBadge } from "@/components/ClaimStatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import {
   Plus, Search, Loader2, Network, Calendar, Users, FileText,
-  ArrowLeft, ChevronRight, AlertTriangle, Sparkles, X,
+  ArrowLeft, ChevronRight,
 } from "lucide-react";
 import type { ClaimStatus } from "@/types/database";
 
@@ -66,7 +67,6 @@ export default function Campaigns() {
   const [search, setSearch] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [similarBanner, setSimilarBanner] = useState<{ count: number; claimIds: string[] } | null>(null);
 
   const fetchCampaigns = async () => {
     setLoading(true);
@@ -88,44 +88,8 @@ export default function Campaigns() {
     setLoading(false);
   };
 
-  // Check for similar claims (pgvector cosine similarity suggestion)
-  const checkSimilarClaims = async () => {
-    // Simple heuristic: find claims not in any campaign that share words in title
-    const { data: unlinked } = await supabase
-      .from("claims")
-      .select("id, title")
-      .limit(100);
-
-    if (!unlinked || unlinked.length < 2) return;
-
-    const { data: linked } = await supabase
-      .from("campaign_claims")
-      .select("claim_id");
-
-    const linkedSet = new Set((linked ?? []).map((r: { claim_id: string }) => r.claim_id));
-    const orphans = unlinked.filter((c: { id: string }) => !linkedSet.has(c.id));
-
-    // Simple word-overlap similarity (real implementation would use pgvector)
-    if (orphans.length >= 2) {
-      const words = (s: string) => new Set(s.toLowerCase().split(/\s+/).filter((w: string) => w.length > 4));
-      const first = words(orphans[0].title);
-      const similar = orphans.filter((c: { id: string; title: string }, i: number) => {
-        if (i === 0) return true;
-        const cw = words(c.title);
-        let overlap = 0;
-        first.forEach((w: string) => { if (cw.has(w)) overlap++; });
-        return overlap >= 1;
-      });
-
-      if (similar.length >= 2) {
-        setSimilarBanner({ count: similar.length, claimIds: similar.map((c: { id: string }) => c.id) });
-      }
-    }
-  };
-
   useEffect(() => {
     fetchCampaigns();
-    checkSimilarClaims();
   }, []);
 
   const filtered = campaigns.filter(
@@ -184,44 +148,7 @@ export default function Campaigns() {
         )}
       </div>
 
-      {/* Similar claims banner */}
-      {similarBanner && (
-        <Card className="border-warning/30 bg-warning/5 animate-fade-in">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Sparkles className="h-5 w-5 text-warning shrink-0" />
-              <div>
-                <p className="text-sm font-medium text-foreground">
-                  {t("campaigns.similarFound", { count: similarBanner.count })}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("campaigns.similarDesc")}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              {canManage && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="gap-1 text-warning border-warning/30 hover:bg-warning/10"
-                  onClick={() => setCreateOpen(true)}
-                >
-                  <Network className="h-3.5 w-3.5" /> {t("campaigns.createFromSimilar")}
-                </Button>
-              )}
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-7 w-7"
-                onClick={() => setSimilarBanner(null)}
-              >
-                <X className="h-3.5 w-3.5" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <NarrativeSuggestions onAccepted={() => void fetchCampaigns()} />
 
       {/* Search */}
       <div className="animate-fade-in">

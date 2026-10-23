@@ -13,7 +13,9 @@
     create table public.team_members(team_id uuid references teams,user_id uuid references auth.users,role text,unique(team_id,user_id));
     alter table public.team_members enable row level security;
     create policy "Read team members" on team_members for select to authenticated using(true);
-    create table public.claims(id uuid primary key default gen_random_uuid(), title text, description text, source_url text, language text, status text default 'pending', created_by uuid references auth.users, assigned_to uuid references auth.users, sbunker_source_url text);
+    create table public.claims(id uuid primary key default gen_random_uuid(), title text, description text, source_url text, language text, status text default 'pending', created_by uuid references auth.users, assigned_to uuid references auth.users, sbunker_source_url text,team_id uuid references teams,created_at timestamptz default now(),updated_at timestamptz default now());
+    create table public.campaigns(id uuid primary key default gen_random_uuid(),name text not null,description text,team_id uuid references teams,created_by uuid references auth.users,created_at timestamptz default now());
+    create table public.campaign_claims(id uuid primary key default gen_random_uuid(),campaign_id uuid references campaigns,claim_id uuid references claims,unique(campaign_id,claim_id));
     create table public.evidence(id uuid primary key default gen_random_uuid(), claim_id uuid references claims, title text, uploaded_by uuid references auth.users);
     create table public.notifications(id uuid primary key default gen_random_uuid(), user_id uuid references auth.users, type text, payload jsonb default '{}', read boolean default false, created_at timestamptz default now());
     alter table public.notifications enable row level security;

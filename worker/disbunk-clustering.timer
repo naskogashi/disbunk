@@ -1,0 +1,10 @@
+[Unit]
+Description=Nightly Disbunk narrative analysis
+
+[Timer]
+OnCalendar=*-*-* 03:30:00 UTC
+RandomizedDelaySec=600
+Persistent=false
+
+[Install]
+WantedBy=timers.target

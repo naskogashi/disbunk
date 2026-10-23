@@ -12,6 +12,9 @@ node_modules
 dist
 dist-ssr
 artifacts/
+__pycache__/
+.venv/
+worker/model-cache/
 *.local
 .env
 .env.*

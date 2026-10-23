@@ -7,6 +7,7 @@ const services = [
   { name: "Supabase", category: "coreService", state: "implemented", url: "https://supabase.com/docs" },
   { name: "Sbunker", category: "disinfoResource", state: "externalResource", url: "https://sbunker.org/category/disinfo/" },
   { name: "SMTP2GO", category: "authEmailService", state: "implemented", url: "https://developers.smtp2go.com/docs/send-an-email" },
+  { name: "HDBSCAN", category: "clusteringService", state: "implemented", url: "https://scikit-learn.org/stable/modules/generated/sklearn.cluster.HDBSCAN.html" },
   { name: "Google Cloud Translation", category: "translationService", state: "setupRequired", url: "https://docs.cloud.google.com/translate/docs/languages" },
   { name: "Slack / Discord / Telegram", category: "teamService", state: "requiresIntegration", url: "https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/" },
   { name: "DocumentCloud", category: "documentsService", state: "requiresIntegration", url: "https://help.muckrock.com/API-19ef889269638147bbb7d8cc8af8e0fc" },

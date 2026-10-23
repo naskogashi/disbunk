@@ -563,7 +563,8 @@
     "menu": "Menu",
     "setupRequired": "Server setup required",
     "authEmailService": "Deployed email adapter for authentication and approval notifications. Check server credential configuration with the admin email diagnostic below; this card does not verify delivery or provider health.",
-    "hoursShort": "h"
+    "hoursShort": "h",
+    "clusteringService": "Nightly multilingual narrative grouping on the Disbunk server, with admin review. Similarity is not a fact-check verdict."
   },
   "identity": {
     "kicker": "An independent workspace for verified information",
@@ -670,5 +671,26 @@
     "pixels": "Use an image smaller than 25 megapixels.",
     "processing": "Image processing is unavailable.",
     "prepare": "Unable to prepare the picture."
+  },
+  "clustering": {
+    "title": "Suggested narrative groups",
+    "description": "Multilingual semantic analysis groups related claims within each team. Only admins can review these suggestions.",
+    "refresh": "Refresh",
+    "loading": "Loading suggestions…",
+    "unavailable": "Narrative analysis is not available yet. The database migration and server worker must be activated.",
+    "notRun": "No analysis has run yet. Suggestions will appear after the first scheduled batch.",
+    "run": "Last analysis: {{date}} · {{status}} · {{claims}} claims · {{groups}} groups",
+    "running": "Running",
+    "completed": "Completed",
+    "failed": "Failed",
+    "empty": "No groups awaiting review. HDBSCAN leaves claims ungrouped when there is insufficient evidence of similarity.",
+    "name": "Campaign name",
+    "strength": "Membership strength: {{value}}%",
+    "accept": "Create campaign from group",
+    "reject": "Dismiss suggestion",
+    "accepted": "Campaign created",
+    "rejected": "Suggestion dismissed",
+    "reviewError": "Review failed. Refresh the suggestions; claims may have changed.",
+    "caution": "Experimental: similarity and membership strength do not establish truth, intent or coordination. Groups need at least five claims. An admin must review all claims before creating a campaign."
   }
 }
