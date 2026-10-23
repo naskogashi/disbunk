@@ -5,7 +5,7 @@ echo "🔧 Installing dependencies..."
 npm ci
 
 echo "🏗️  Building Disbunk.org..."
-npm run build
+npm run build:production
 
 echo "📦 Syncing to CloudPanel htdocs..."
 rsync -av --delete dist/ /home/disbunk/htdocs/disbunk.org/
