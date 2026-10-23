@@ -1,3 +1,4 @@
+import { LanguageSelect } from "@/components/LanguageSelect";
 import { PrivateAvatar } from "@/components/ProfilePictures";
 import { useProfilePicture } from "@/hooks/useProfilePicture";
 import { Sun, Moon, LogOut, ArrowUpRight, Bell } from "lucide-react";
@@ -20,14 +21,9 @@ export function AppHeader() {
   const { theme, toggleTheme } = useTheme();
   const { user, signOut } = useAuth();
   const picture=useProfilePicture(user?.id);
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const currentLang = i18n.language?.startsWith("sq") ? "sq" : "en";
-  const toggleLang = () => {
-    const next = currentLang === "en" ? "sq" : "en";
-    i18n.changeLanguage(next);
-  };
 
   const initials = (user?.user_metadata?.full_name || user?.email || "U")
     .split(/[\s@]/)
@@ -50,15 +46,7 @@ export function AppHeader() {
         <Button asChild variant="ghost" size="icon"><Link to="/alerts" aria-label={t("tools.alerts")}><Bell className="h-4 w-4" /></Link></Button>
         <Button asChild size="sm" className="mr-2 hidden rounded-full px-4 md:inline-flex"><Link to="/claims/new">{t("dashboard.newClaim")}<ArrowUpRight className="ml-2 h-4 w-4" /></Link></Button>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-10 px-3 text-xs font-bold text-muted-foreground hover:text-primary"
-          onClick={toggleLang}
-          title="Language"
-        >
-          {currentLang === "en" ? "EN → SQ" : "SQ → EN"}
-        </Button>
+        <LanguageSelect/>
 
         <Button
           variant="ghost"

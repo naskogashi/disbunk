@@ -143,7 +143,8 @@
     "activityFeed": "Activity Feed",
     "teamSummary": "Team Summary",
     "noActivity": "No recent activity",
-    "continue": "Continue where you left off"
+    "continue": "Continue where you left off",
+    "activityClaim": "Claim “{{title}}” — {{status}}"
   },
   "claims": {
     "title": "Claims",
@@ -182,7 +183,20 @@
     "selectLanguage": "Select language",
     "submit": "Submit Claim",
     "demoNotice": "This form is pre-filled with a demo claim for your first submission.",
-    "clearDemo": "Clear demo data"
+    "clearDemo": "Clear demo data",
+    "startInvestigation": "Start investigation",
+    "escalate": "Escalate",
+    "markVerified": "Mark verified",
+    "markDebunked": "Mark debunked",
+    "notFound": "Claim not found",
+    "backToClaims": "Back to claims",
+    "noDescription": "No description provided.",
+    "submitted": "Claim submitted successfully",
+    "statusUpdated": "Status updated to {{status}}",
+    "sbunkerSource": "Sbunker source",
+    "viewSbunker": "View on Sbunker.org",
+    "demoTitle": "Viral video claims parliament building was stormed during protest",
+    "demoDescription": "A video circulating on social media claims to show a storming of the parliament building during a protest. Initial analysis suggests the footage may show a different event. This is a fictional example for learning the workflow."
   },
   "sbunker": {
     "title": "Sbunker Disinfo Feed",
@@ -308,7 +322,16 @@
     "next": "Next",
     "previous": "Back",
     "finish": "Get Started",
-    "letsGo": "Let's go!"
+    "letsGo": "Let's go!",
+    "checkClaimContext": "Report suspicious claims with context",
+    "checkClaimStatus": "Track claims from initial report to review",
+    "checkClaimDemo": "Try the fictional example, then clear it",
+    "checkEvidenceUpload": "Upload screenshots, documents and links",
+    "checkEvidenceTags": "Tag evidence by type for easy filtering",
+    "checkEvidenceVault": "Build a shared evidence vault with your team",
+    "checkTeamCoordinate": "Coordinate investigations in real time",
+    "checkTeamAssign": "Assign claims to team members",
+    "checkTeamImpact": "Track team performance and impact"
   },
   "evidence": {
     "title": "Evidence Vault",
@@ -400,7 +423,27 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
-    "close": "Close"
+    "close": "Close",
+    "interfaceLanguage": "Interface language",
+    "justNow": "just now",
+    "all": "All",
+    "created": "Created",
+    "updated": "Updated",
+    "status": "Status",
+    "languageSq": "Shqip",
+    "languageEn": "English",
+    "previous": "Previous",
+    "next": "Next",
+    "morePages": "More pages",
+    "pagination": "Pagination",
+    "more": "More",
+    "previousSlide": "Previous slide",
+    "nextSlide": "Next slide",
+    "toggleSidebar": "Toggle navigation",
+    "externalSbunker": "Sbunker (opens in a new tab)",
+    "sbunkerDisinfo": "Sbunker · Disinfo",
+    "newest": "Newest first",
+    "oldest": "Oldest first"
   },
   "tools": {
     "responseTools": "Response workspace",
@@ -519,7 +562,8 @@
     "feedStale": "The source could not be refreshed. Showing previously fetched articles.",
     "menu": "Menu",
     "setupRequired": "Server setup required",
-    "authEmailService": "Deployed email adapter for authentication and approval notifications. Check server credential configuration with the admin email diagnostic below; this card does not verify delivery or provider health."
+    "authEmailService": "Deployed email adapter for authentication and approval notifications. Check server credential configuration with the admin email diagnostic below; this card does not verify delivery or provider health.",
+    "hoursShort": "h"
   },
   "identity": {
     "kicker": "An independent workspace for verified information",
@@ -597,5 +641,34 @@
     "translate": "Translate with Google",
     "review": "Machine translation — editorial review required; select text to copy",
     "limit": "Translate a passage of up to 5000 characters."
+  },
+  "roles": {
+    "visitor": "Visitor",
+    "analyst": "Analyst",
+    "editor": "Editor",
+    "team_lead": "Team lead",
+    "admin": "Administrator"
+  },
+  "accountStatus": {
+    "approved": "Approved",
+    "pending_approval": "Pending approval",
+    "rejected": "Rejected",
+    "suspended": "Suspended"
+  },
+  "notFound": {
+    "message": "Page not found",
+    "home": "Return to home"
+  },
+  "setup": {
+    "title": "Disbunk setup required",
+    "description": "Copy .env.example to .env and configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.",
+    "restart": "Restart the development server or rebuild and redeploy."
+  },
+  "pictureErrors": {
+    "format": "Use a JPEG, PNG or WebP image.",
+    "size": "The picture must be 5 MB or smaller.",
+    "pixels": "Use an image smaller than 25 megapixels.",
+    "processing": "Image processing is unavailable.",
+    "prepare": "Unable to prepare the picture."
   }
 }

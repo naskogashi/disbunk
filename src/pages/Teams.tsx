@@ -1,3 +1,4 @@
+import { displayDate } from "@/lib/locale";
 import { TeamDetailsEditor } from "@/components/TeamDetailsEditor";
 import { PictureEditor, PrivateAvatar } from "@/components/ProfilePictures";
 import { useState, useEffect } from "react";
@@ -160,7 +161,7 @@ export default function Teams() {
                     <div>
                       <h3 className="text-sm font-semibold text-foreground">{team.name}</h3>
                       <p className="text-[11px] text-muted-foreground font-mono">
-                        {new Date(team.created_at).toLocaleDateString()}
+                        {displayDate(team.created_at)}
                       </p>
                     </div>
                   </div>
@@ -417,7 +418,7 @@ function TeamDetail({ teamId, onBack }: { teamId: string; onBack: () => void }) 
                       {member.role === "lead" ? t("teams.lead") : t("teams.member")}
                     </Badge>
                     <span className="text-[10px] text-muted-foreground font-mono">
-                      {new Date(member.joined_at).toLocaleDateString()}
+                      {displayDate(member.joined_at)}
                     </span>
                   </div>
                 </div>

@@ -1142,3 +1142,7 @@ create policy "Admin integration access only" on public.integration_connections 
   using(public.is_approved(auth.uid()) and public.has_role(auth.uid(),'admin'))
   with check(public.is_approved(auth.uid()) and public.has_role(auth.uid(),'admin'));
 commit;
+
+-- Preserve existing language preferences; new profiles start in Albanian.
+alter table public.profiles add column if not exists language_pref text not null default 'sq';
+alter table public.profiles alter column language_pref set default 'sq';

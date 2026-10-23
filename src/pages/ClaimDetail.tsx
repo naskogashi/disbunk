@@ -1,3 +1,4 @@
+import { displayDate, displayDateTime } from "@/lib/locale";
 import { DraftTranslation } from "@/components/DraftTranslation";
 import { C5Assessment } from "@/components/C5Assessment";
 import { useState, useEffect } from "react";
@@ -56,18 +57,18 @@ interface Comment {
 
 const statusTransitions: Record<ClaimStatus, { label: string; icon: typeof CheckCircle; target: ClaimStatus; color: string }[]> = {
   pending: [
-    { label: "Start Investigation", icon: Search, target: "investigating", color: "text-primary" },
-    { label: "Escalate", icon: AlertTriangle, target: "escalated", color: "text-destructive" },
+    { label: "claims.startInvestigation", icon: Search, target: "investigating", color: "text-primary" },
+    { label: "claims.escalate", icon: AlertTriangle, target: "escalated", color: "text-destructive" },
   ],
   investigating: [
-    { label: "Mark Verified", icon: CheckCircle, target: "verified", color: "text-success" },
-    { label: "Mark Debunked", icon: XCircle, target: "debunked", color: "text-destructive" },
-    { label: "Escalate", icon: AlertTriangle, target: "escalated", color: "text-warning" },
+    { label: "claims.markVerified", icon: CheckCircle, target: "verified", color: "text-success" },
+    { label: "claims.markDebunked", icon: XCircle, target: "debunked", color: "text-destructive" },
+    { label: "claims.escalate", icon: AlertTriangle, target: "escalated", color: "text-warning" },
   ],
   verified: [],
   debunked: [],
   escalated: [
-    { label: "Start Investigation", icon: Search, target: "investigating", color: "text-primary" },
+    { label: "claims.startInvestigation", icon: Search, target: "investigating", color: "text-primary" },
   ],
 };
 
@@ -125,7 +126,7 @@ export default function ClaimDetail() {
       toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
     } else {
       setClaim((prev) => prev ? { ...prev, status: newStatus } : null);
-      toast({ title: `Status updated to ${newStatus}` });
+      toast({ title: t("claims.statusUpdated", { status: t(`claims.${newStatus}`) }) });
     }
     setUpdatingStatus(false);
   };
@@ -163,10 +164,10 @@ export default function ClaimDetail() {
     return (
       <div className="text-center py-20">
         <FileText className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
-        <h2 className="text-lg font-bold text-foreground">Claim not found</h2>
+        <h2 className="text-lg font-bold text-foreground">{t("claims.notFound")}</h2>
         <Link to="/claims">
           <Button variant="outline" className="mt-4 gap-1.5">
-            <ArrowLeft className="h-4 w-4" /> Back to Claims
+            <ArrowLeft className="h-4 w-4" /> {t("claims.backToClaims")}
           </Button>
         </Link>
       </div>
@@ -203,7 +204,7 @@ export default function ClaimDetail() {
               {claim.description ? (
                 <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{claim.description}</p>
               ) : (
-                <p className="text-sm text-muted-foreground italic">No description provided.</p>
+                <p className="text-sm text-muted-foreground italic">{t("claims.noDescription")}</p>
               )}
 
               {claim.source_url && (
@@ -227,15 +228,15 @@ export default function ClaimDetail() {
                 </div>
                 <div>
                   <p className="text-muted-foreground">{t("claims.assignedTo")}</p>
-                  <p className="font-mono text-foreground mt-0.5">{claim.assigned_to?.slice(0, 8) ?? "Unassigned"}</p>
+                  <p className="font-mono text-foreground mt-0.5">{claim.assigned_to?.slice(0, 8) ?? t("tools.unassigned")}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Created</p>
-                  <p className="font-mono text-foreground mt-0.5">{new Date(claim.created_at).toLocaleDateString()}</p>
+                  <p className="text-muted-foreground">{t("common.created")}</p>
+                  <p className="font-mono text-foreground mt-0.5">{displayDate(claim.created_at)}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Updated</p>
-                  <p className="font-mono text-foreground mt-0.5">{new Date(claim.updated_at).toLocaleDateString()}</p>
+                  <p className="text-muted-foreground">{t("common.updated")}</p>
+                  <p className="font-mono text-foreground mt-0.5">{displayDate(claim.updated_at)}</p>
                 </div>
               </div>
             </CardContent>
@@ -270,7 +271,7 @@ export default function ClaimDetail() {
                         <div className="min-w-0">
                           <p className="text-sm font-medium text-foreground truncate">{ev.title}</p>
                           <div className="flex items-center gap-2 mt-0.5">
-                            <Badge variant="outline" className="text-[9px] uppercase">{ev.type}</Badge>
+                            <Badge variant="outline" className="text-[9px] uppercase">{t(`evidence.${ev.type === "social_post" ? "socialPost" : ev.type}`, { defaultValue: t("evidence.other") })}</Badge>
                             {ev.tags?.map((tag) => (
                               <Badge key={tag} variant="secondary" className="text-[9px]">{tag}</Badge>
                             ))}
@@ -278,7 +279,7 @@ export default function ClaimDetail() {
                         </div>
                       </div>
                       <span className="text-[10px] text-muted-foreground font-mono shrink-0">
-                        {new Date(ev.created_at).toLocaleDateString()}
+                        {displayDate(ev.created_at)}
                       </span>
                     </div>
                   ))}
@@ -312,7 +313,7 @@ export default function ClaimDetail() {
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-medium text-foreground font-mono">{c.user_id.slice(0, 8)}</span>
                           <span className="text-[10px] text-muted-foreground font-mono">
-                            {new Date(c.created_at).toLocaleString()}
+                            {displayDateTime(c.created_at)}
                           </span>
                         </div>
                         <p className="text-sm text-foreground mt-1 leading-relaxed">{c.body}</p>
@@ -372,7 +373,7 @@ export default function ClaimDetail() {
                     ) : (
                       <action.icon className="h-4 w-4" />
                     )}
-                    {action.label}
+                    {t(action.label)}
                   </Button>
                 ))}
               </CardContent>
@@ -383,7 +384,7 @@ export default function ClaimDetail() {
           <Card className="border-border">
             <CardContent className="p-5 space-y-4">
               <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium mb-1">Status</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium mb-1">{t("common.status")}</p>
                 <ClaimStatusBadge status={claim.status} />
               </div>
               <Separator />
@@ -395,14 +396,14 @@ export default function ClaimDetail() {
                 <>
                   <Separator />
                   <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium mb-1">Sbunker Source</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium mb-1">{t("claims.sbunkerSource")}</p>
                     <a
                       href={claim.sbunker_source_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs text-primary hover:underline flex items-center gap-1"
                     >
-                      View on Sbunker.org <ExternalLink className="h-3 w-3" />
+                      {t("claims.viewSbunker")} <ExternalLink className="h-3 w-3" />
                     </a>
                   </div>
                 </>

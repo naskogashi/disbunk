@@ -21,7 +21,7 @@ it("offers configured Facebook and modern X and invokes the matching providers",
   const cache = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   render(<QueryClientProvider client={cache}><MemoryRouter><Login/></MemoryRouter></QueryClientProvider>);
   fireEvent.click(await screen.findByRole("button", { name: "Facebook" }));
-  fireEvent.click(screen.getByRole("button", { name: "X", exact: true }));
+  fireEvent.click(screen.getByRole("button", { name: /^X$/ }));
   await waitFor(() => expect(mocks.oauth.mock.calls).toEqual([["facebook"], ["x"]]));
 });
 it("does not expose unconfigured providers or substitute deprecated Twitter", async () => {

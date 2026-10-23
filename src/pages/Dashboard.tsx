@@ -1,3 +1,4 @@
+import { relativeTime } from "@/lib/locale";
 import { useState, useEffect, useRef } from "react";
 import type { ClaimStatus } from "@/types/database";
 import { useTranslation } from "react-i18next";
@@ -56,8 +57,8 @@ interface ClaimRow {
 interface ActivityItem {
   id: string;
   type: string;
-  message: string;
-  time: string;
+  title: string;
+  createdAt: string;
 }
 
 export default function Dashboard() {
@@ -102,8 +103,8 @@ export default function Dashboard() {
         (recentRes.data ?? []).slice(0, 4).map((c: ClaimRow) => ({
           id: c.id,
           type: c.status,
-          message: `Claim "${c.title.slice(0, 50)}${c.title.length > 50 ? "..." : ""}" — ${c.status}`,
-          time: formatTimeAgo(c.created_at),
+          title: c.title.slice(0, 50) + (c.title.length > 50 ? "…" : ""),
+          createdAt: c.created_at,
         }))
       );
 
@@ -207,7 +208,7 @@ export default function Dashboard() {
                   <div className="flex items-center gap-3 shrink-0">
                     <ClaimStatusBadge status={claim.status as ClaimStatus} />
                     <span className="text-xs text-muted-foreground hidden sm:inline">
-                      {formatTimeAgo(claim.created_at)}
+                      {relativeTime(claim.created_at)}
                     </span>
                   </div>
                 </Link>
@@ -238,8 +239,8 @@ export default function Dashboard() {
                       <span className="h-1.5 w-1.5 rounded-full bg-primary block" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-foreground leading-relaxed truncate">{item.message}</p>
-                      <p className="text-muted-foreground font-mono">{item.time}</p>
+                      <p className="text-foreground leading-relaxed truncate">{t("dashboard.activityClaim", { title: item.title, status: t(`claims.${item.type}`) })}</p>
+                      <p className="text-muted-foreground font-mono">{relativeTime(item.createdAt)}</p>
                     </div>
                   </div>
                 ))
@@ -251,19 +252,4 @@ export default function Dashboard() {
       </div>
     </div>
   );
-}
-
-function formatTimeAgo(dateStr: string): string {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-
-  if (diffMins < 1) return "just now";
-  if (diffMins < 60) return `${diffMins}m ago`;
-  const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24) return `${diffHours}h ago`;
-  const diffDays = Math.floor(diffHours / 24);
-  if (diffDays < 7) return `${diffDays}d ago`;
-  return date.toLocaleDateString();
 }

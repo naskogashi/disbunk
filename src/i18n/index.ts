@@ -12,11 +12,12 @@ i18n
       en: { translation: en },
       sq: { translation: sq },
     },
-    fallbackLng: "en",
-    supportedLngs: ["en", "sq"],
+    initImmediate: false,
+    fallbackLng: "sq",
+    supportedLngs: ["sq", "en"],
     interpolation: { escapeValue: false },
     detection: {
-      order: ["localStorage", "navigator"],
+      order: ["localStorage"],
       caches: ["localStorage"],
       lookupLocalStorage: "disbunk_language",
     },
@@ -25,7 +26,7 @@ i18n
 const updateDocumentLanguage = (language: string) => {
   if (typeof document !== "undefined") document.documentElement.lang = language.startsWith("sq") ? "sq" : "en";
 };
-updateDocumentLanguage(i18n.language ?? "en");
+updateDocumentLanguage(i18n.language ?? "sq");
 i18n.on("languageChanged", updateDocumentLanguage);
 
 export default i18n;

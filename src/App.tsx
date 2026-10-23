@@ -1,14 +1,13 @@
 import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
-import { RouteMetadata } from "@/components/RouteMetadata";
+import { PageLoading } from "@/components/PageLoading";
 const AppLayout = lazy(() => import("./components/AppLayout").then(module => ({ default: module.AppLayout })));
-const Landing = lazy(() => import("./pages/Landing"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Login = lazy(() => import("./pages/Login"));
@@ -34,13 +33,10 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <BrowserRouter>
-        <RouteMetadata />
         <AuthProvider>
           <RouteErrorBoundary>
-          <Suspense fallback={<div className="p-8 text-sm" role="status">Loading Disbunk…</div>}>
+          <Suspense fallback={<PageLoading/>}>
           <Routes>
-            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
@@ -73,7 +69,6 @@ const App = () => (
           </Suspense>
           </RouteErrorBoundary>
         </AuthProvider>
-      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );

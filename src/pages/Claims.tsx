@@ -1,3 +1,4 @@
+import { displayDate } from "@/lib/locale";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -116,9 +117,9 @@ export default function Claims() {
             <SelectValue placeholder={t("claims.selectLanguage")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="en">English</SelectItem>
+            <SelectItem value="all">{t("common.all")}</SelectItem>
             <SelectItem value="sq">Shqip</SelectItem>
+            <SelectItem value="en">English</SelectItem>
           </SelectContent>
         </Select>
         <Button
@@ -126,7 +127,7 @@ export default function Claims() {
           size="icon"
           className="h-10 w-10 shrink-0"
           onClick={() => setSortOrder((o) => (o === "desc" ? "asc" : "desc"))}
-          title={sortOrder === "desc" ? "Newest first" : "Oldest first"}
+          title={sortOrder === "desc" ? t("common.newest") : t("common.oldest")}
         >
           <ArrowUpDown className="h-4 w-4" />
         </Button>
@@ -184,7 +185,7 @@ export default function Claims() {
                             {new URL(claim.source_url).hostname}
                           </span>
                         )}
-                        <span>{new Date(claim.created_at).toLocaleDateString()}</span>
+                        <span>{displayDate(claim.created_at)}</span>
                       </div>
                     </div>
                   </div>

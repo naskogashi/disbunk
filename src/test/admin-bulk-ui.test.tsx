@@ -6,7 +6,7 @@ vi.mock("@/lib/supabase",()=>({supabase:{rpc:vi.fn()}}));
 vi.mock("@/lib/invoke-function",()=>({invokeFunction:mocks.invoke}));
 vi.mock("@/hooks/use-toast",()=>({useToast:()=>({toast:mocks.toast})}));
 vi.mock("@/components/ProfilePictures",()=>({PrivateAvatar:()=>null}));
-vi.mock("react-i18next",()=>({useTranslation:()=>({t:(key:string,args?:{name?:string})=>key+(args?.name?`: ${args.name}`:"")})}));
+vi.mock("react-i18next",async importOriginal=>({...await importOriginal<typeof import("react-i18next")>(),useTranslation:()=>({t:(key:string,args?:{name?:string})=>key+(args?.name?`: ${args.name}`:"")})}));
 import {AdminAccountList,type ManagedAccount} from "@/components/AdminAccountList";
 const users:ManagedAccount[]=[{id:"profile-admin",user_id:"admin",full_name:"Admin",status:"approved",roles:["admin"],created_at:"2026-10-22"},{id:"p1",user_id:"one",full_name:"Person One",status:"pending_approval",roles:["analyst"],created_at:"2026-10-22"},{id:"p2",user_id:"two",full_name:"Person Two",status:"pending_approval",roles:["analyst"],created_at:"2026-10-22"}];
 afterEach(cleanup);beforeEach(()=>vi.clearAllMocks());

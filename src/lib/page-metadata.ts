@@ -25,5 +25,5 @@ export function pageMetadata(pathname: string, translate: (key: string) => strin
 
 export const SITE_SCHEMA = {
   "@context": "https://schema.org", "@type": "WebSite", name: "Disbunk.org",
-  url: `${SITE_URL}/`, description: HOME_DESCRIPTION, inLanguage: ["en", "sq"],
+  url: `${SITE_URL}/`, description: HOME_DESCRIPTION, inLanguage: ["sq", "en"],
 };

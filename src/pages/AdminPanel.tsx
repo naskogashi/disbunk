@@ -1,3 +1,4 @@
+import { displayDateTime } from "@/lib/locale";
 import { AdminAccountList, type ManagedAccount } from "@/components/AdminAccountList";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
@@ -208,7 +209,7 @@ export default function AdminPanel() {
                   <div>
                     <p className="text-sm font-medium text-foreground font-mono">{flag.key}</p>
                     <p className="text-[11px] text-muted-foreground">
-                      {t("admin.lastUpdated")}: {new Date(flag.updated_at).toLocaleString()}
+                      {t("admin.lastUpdated")}: {displayDateTime(flag.updated_at)}
                     </p>
                   </div>
                   <Switch
@@ -246,7 +247,7 @@ export default function AdminPanel() {
                     <TableRow key={log.id}>
                       <TableCell>
                         <span className="text-xs text-muted-foreground font-mono">
-                          {new Date(log.created_at).toLocaleString()}
+                          {displayDateTime(log.created_at)}
                         </span>
                       </TableCell>
                       <TableCell>

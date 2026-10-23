@@ -19,7 +19,7 @@ export function DraftTranslation({ text }: { text: string }) {
   return <Card><CardHeader><CardTitle>{t("translation.title")}</CardTitle></CardHeader><CardContent className="space-y-4">
     <p className="text-sm text-muted-foreground">{t("translation.note")}</p>
     <div className="space-y-2"><Label>{t("translation.original")}</Label><pre className="max-h-48 overflow-auto whitespace-pre-wrap break-words rounded-xl border p-3 text-sm">{text}</pre></div>
-    <div className="space-y-2"><Label htmlFor="translation-target">{t("translation.target")}</Label><select id="translation-target" className="h-11 w-full rounded-xl border bg-card px-3" disabled={busy} value={target} onChange={event => { setTarget(event.target.value); setResult(""); }}>{[["en","English"],["sq","Shqip"],["sr","Srpski"]].map(([value,name]) => <option key={value} value={value}>{name}</option>)}</select></div>
+    <div className="space-y-2"><Label htmlFor="translation-target">{t("translation.target")}</Label><select id="translation-target" className="h-11 w-full rounded-xl border bg-card px-3" disabled={busy} value={target} onChange={event => { setTarget(event.target.value); setResult(""); }}>{[["sq","Shqip"],["en","English"],["sr","Srpski"]].map(([value,name]) => <option key={value} value={value}>{name}</option>)}</select></div>
     <label className="flex items-start gap-2 text-sm"><input type="checkbox" className="mt-1" checked={consent} disabled={busy} onChange={event => setConsent(event.target.checked)}/>{t("translation.consent")}</label>
     <Button disabled={busy || !consent || !text.trim() || text.length > 5000} onClick={async () => {
       setBusy(true); setError(""); setResult("");

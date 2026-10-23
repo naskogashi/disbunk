@@ -293,3 +293,26 @@ Facebook needs its app ID/secret and email permission. X needs OAuth 2.0 client
 ID/secret and the production website URL https://disbunk.org. Keep email required;
 new social users still follow the existing Disbunk approval workflow. Never put
 provider secrets in frontend variables. End-to-end sign-in awaits provider setup.
+
+## Albanian default and public startup
+
+The public homepage now renders directly through RootApp without loading the
+Supabase/auth/workspace bundle first. Workspace routes still load on demand and
+use a styled skeleton instead of a plain-text startup message. Public HTML stays
+prerendered, with Albanian content and metadata available before JavaScript.
+
+Albanian is the fallback language, independent of browser locale. The language
+selector lists Shqip first and English second, and remembers explicit choices in
+localStorage. Existing saved choices are preserved. The profile-language default
+migration 202610230001 is applied in production; it changes new-profile defaults
+without overwriting existing preferences.
+
+The translation sweep covers claim status badges/actions, onboarding tips, account
+roles/statuses, relative activity, date labels, profile calendar headings and
+shared accessibility controls. User-generated titles, evidence and documents are
+preserved in their original language. External API error messages may be supplied
+by their providers. Browser checks verify the public route does not preload the
+workspace and that language switching persists across reloads.
+
+HDBSCAN-PLAN.md describes a proposed background clustering design; no clustering
+worker, model downloads or external embedding calls are deployed by this update.

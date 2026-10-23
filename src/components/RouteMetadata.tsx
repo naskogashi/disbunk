@@ -26,7 +26,7 @@ export function RouteMetadata() {
     let structured = document.getElementById("site-structured-data");
     if (meta.home) {
       if (!structured) { structured = document.createElement("script"); structured.id = "site-structured-data"; structured.setAttribute("type", "application/ld+json"); document.head.append(structured); }
-      structured.textContent = JSON.stringify(SITE_SCHEMA);
+      structured.textContent = JSON.stringify({ ...SITE_SCHEMA, description: meta.description });
     } else structured?.remove();
 
   }, [pathname, t, i18n.language]);

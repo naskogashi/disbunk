@@ -124,8 +124,8 @@ export function AppSidebar() {
 
       <SidebarFooter className="border-t border-sidebar-border p-3">
         <SidebarMenu><SidebarMenuItem><SidebarMenuButton asChild tooltip="Sbunker · Disinfo">
-          <a href="https://sbunker.org/category/disinfo/" target="_blank" rel="noopener noreferrer" aria-label="Sbunker Disinfo (opens in a new tab)">
-            <ExternalLink className="h-4 w-4" />{!collapsed && <span>Sbunker · Disinfo</span>}
+          <a href="https://sbunker.org/category/disinfo/" target="_blank" rel="noopener noreferrer" aria-label={t("common.externalSbunker")}>
+            <ExternalLink className="h-4 w-4" />{!collapsed && <span>{t("common.sbunkerDisinfo")}</span>}
           </a>
         </SidebarMenuButton></SidebarMenuItem></SidebarMenu>
         {!collapsed && (

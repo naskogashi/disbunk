@@ -1,3 +1,4 @@
+import { displayDate } from "@/lib/locale";
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -298,7 +299,7 @@ export default function Evidence() {
                       {item.title}
                     </h3>
                     <Badge className={`${TYPE_COLORS[item.type]} text-[10px] shrink-0 font-mono uppercase`}>
-                      {item.type.replace("_", " ")}
+                      {t(`evidence.${item.type === "social_post" ? "socialPost" : item.type}`, { defaultValue: t("evidence.other") })}
                     </Badge>
                   </div>
 
@@ -339,7 +340,7 @@ export default function Evidence() {
                       </span>
                       <span className="flex items-center gap-1 font-mono">
                         <Calendar className="h-3 w-3" />
-                        {new Date(item.created_at).toLocaleDateString()}
+                        {displayDate(item.created_at)}
                       </span>
                     </div>
                   </div>

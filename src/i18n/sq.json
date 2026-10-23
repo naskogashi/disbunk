@@ -103,7 +103,7 @@
     "claims": "Pretendimet",
     "evidence": "Dëshmi",
     "campaigns": "Fushatat",
-    "sbunker": "Sbunker Feed",
+    "sbunker": "Artikujt e Sbunker",
     "teams": "Ekipet",
     "analytics": "Analitika",
     "docs": "Dokumentacioni",
@@ -138,12 +138,13 @@
     "inProgress": "Në Proces",
     "recentClaims": "Pretendimet e Fundit",
     "viewAll": "Shiko të gjitha",
-    "sbunkerFeed": "Sbunker Feed",
+    "sbunkerFeed": "Artikujt e Sbunker",
     "more": "Më shumë",
     "activityFeed": "Aktiviteti i Fundit",
     "teamSummary": "Përmbledhja e Ekipit",
     "noActivity": "Asnjë aktivitet i fundit",
-    "continue": "Vazhdo ku e le"
+    "continue": "Vazhdo ku e le",
+    "activityClaim": "Pretendimi “{{title}}” — {{status}}"
   },
   "claims": {
     "title": "Pretendimet",
@@ -153,9 +154,9 @@
     "allStatuses": "Të gjitha statuset",
     "pending": "Në Pritje",
     "investigating": "Në Hetim",
-    "verified": "E Verifikuar",
-    "debunked": "E Demantuar",
-    "escalated": "E Eskaluar",
+    "verified": "I verifikuar",
+    "debunked": "I demantuar",
+    "escalated": "Për shqyrtim të mëtejshëm",
     "noResults": "Asnjë pretendim nuk përputhet me filtrat tuaja.",
     "clearFilters": "Pastro filtrat",
     "detail": "Detajet e Pretendimit",
@@ -182,10 +183,23 @@
     "selectLanguage": "Zgjidhni gjuhën",
     "submit": "Paraqit Pretendimin",
     "demoNotice": "Ky formular është plotësuar paraprakisht me një pretendim demo.",
-    "clearDemo": "Pastro të dhënat demo"
+    "clearDemo": "Pastro të dhënat demo",
+    "startInvestigation": "Fillo hetimin",
+    "escalate": "Përcill për shqyrtim të mëtejshëm",
+    "markVerified": "Shëno si të verifikuar",
+    "markDebunked": "Shëno si të demantuar",
+    "notFound": "Pretendimi nuk u gjet",
+    "backToClaims": "Kthehu te pretendimet",
+    "noDescription": "Nuk është dhënë përshkrim.",
+    "submitted": "Pretendimi u paraqit me sukses",
+    "statusUpdated": "Statusi u ndryshua në: {{status}}",
+    "sbunkerSource": "Burimi nga Sbunker",
+    "viewSbunker": "Shiko në Sbunker.org",
+    "demoTitle": "Një video virale pretendon se protestuesit sulmuan ndërtesën e Kuvendit",
+    "demoDescription": "Një video që qarkullon në rrjetet sociale pretendohet se tregon sulmin ndaj ndërtesës së Kuvendit gjatë një proteste. Analiza fillestare sugjeron se pamjet mund të jenë nga një ngjarje tjetër. Ky është shembull i trilluar për të mësuar procesin e punës."
   },
   "sbunker": {
-    "title": "Sbunker Disinfo Feed",
+    "title": "Artikujt e Sbunker për dezinformimin",
     "subtitle": "Mbulimi i fundit i dezinformimit nga Sbunker.org nga Fondacioni Metamorfozis",
     "viewOnSbunker": "Shiko në Sbunker.org",
     "importAsClaim": "Importo si Pretendim",
@@ -226,13 +240,13 @@
     "createFromSimilar": "Krijo Fushatë"
   },
   "admin": {
-    "title": "Paneli i Admin",
+    "title": "Paneli i administratorit",
     "subtitle": "Menaxho regjistrimet e përdoruesve, rolet dhe cilësimet e sistemit",
     "pendingApprovals": "Miratime në Pritje",
     "allUsers": "Të Gjithë Përdoruesit",
-    "featureFlags": "Flamujt e Veçorive",
+    "featureFlags": "Cilësimet e veçorive",
     "auditLog": "Regjistri i Auditimit",
-    "approve": "Miratohu",
+    "approve": "Mirato",
     "reject": "Refuzo",
     "suspend": "Pezullo",
     "unsuspend": "Aktivizo",
@@ -246,7 +260,7 @@
     "userUnsuspended": "Përdoruesi u aktivizua",
     "userDeleted": "Përdoruesi u fshi",
     "roleUpdated": "Roli u përditësua",
-    "flagUpdated": "Flamuri i veçorisë u përditësua",
+    "flagUpdated": "Cilësimi i veçorisë u përditësua",
     "error": "Gabim",
     "totalUsers": "Gjithsej Përdorues",
     "totalClaims": "Gjithsej Pretendime",
@@ -263,7 +277,7 @@
     "actions": "Veprimet",
     "deleteConfirm": "Fshi këtë përdorues?",
     "deleteConfirmDesc": "Ky veprim nuk mund të zhbëhet. Profili dhe rolet e përdoruesit do të fshihen përgjithmonë.",
-    "noFlags": "Asnjë flamur veçorie nuk është konfiguruar ende.",
+    "noFlags": "Ende nuk ka cilësime veçorish.",
     "lastUpdated": "Përditësuar së fundmi",
     "noLogs": "Asnjë regjistrim auditimi ende.",
     "timestamp": "Koha",
@@ -297,7 +311,7 @@
   },
   "onboarding": {
     "welcome": "Mirë se vini në Disbunk!",
-    "welcomeDesc": "Le t'ju fillojmë me një tur të shpejtë të platformës.",
+    "welcomeDesc": "Njihuni me platformën përmes këtij udhëzimi të shkurtër.",
     "step1Title": "Paraqit një Pretendim",
     "step1Desc": "Provoni të paraqisni pretendimin tuaj të parë. Kemi plotësuar një demo për ju.",
     "step2Title": "Shto Dëshmi",
@@ -305,10 +319,19 @@
     "step3Title": "Bashkohu me një Ekip",
     "step3Desc": "Ekipet koordinojnë hetimet. Bashkohuni me një ose krijoni tuajin.",
     "skip": "Kalo turin",
-    "next": "Tjetri",
+    "next": "Vazhdo",
     "previous": "Mbrapa",
     "finish": "Fillo",
-    "letsGo": "Nisemi!"
+    "letsGo": "Nisemi!",
+    "checkClaimContext": "Paraqitni pretendime të dyshimta me kontekst",
+    "checkClaimStatus": "Ndiqni pretendimet nga raportimi deri te shqyrtimi",
+    "checkClaimDemo": "Provoni shembullin e trilluar, pastaj pastrojeni",
+    "checkEvidenceUpload": "Ngarkoni pamje ekrani, dokumente dhe lidhje",
+    "checkEvidenceTags": "Etiketoni provat sipas llojit për filtrim të lehtë",
+    "checkEvidenceVault": "Krijoni një arkiv të përbashkët provash me ekipin",
+    "checkTeamCoordinate": "Koordinoni hetimet në kohë reale",
+    "checkTeamAssign": "Caktoni pretendime anëtarëve të ekipit",
+    "checkTeamImpact": "Ndiqni punën dhe ndikimin e ekipit"
   },
   "evidence": {
     "title": "Arkivi i Dëshmive",
@@ -400,7 +423,27 @@
     "cancel": "Anulo",
     "delete": "Fshi",
     "edit": "Ndrysho",
-    "close": "Mbyll"
+    "close": "Mbyll",
+    "interfaceLanguage": "Gjuha e ndërfaqes",
+    "justNow": "sapo",
+    "all": "Të gjitha",
+    "created": "Krijuar",
+    "updated": "Përditësuar",
+    "status": "Statusi",
+    "languageSq": "Shqip",
+    "languageEn": "English",
+    "previous": "E mëparshmja",
+    "next": "E ardhshmja",
+    "morePages": "Më shumë faqe",
+    "pagination": "Faqosja",
+    "more": "Më shumë",
+    "previousSlide": "Pamja e mëparshme",
+    "nextSlide": "Pamja e ardhshme",
+    "toggleSidebar": "Hap ose mbyll navigimin",
+    "externalSbunker": "Sbunker (hapet në skedë të re)",
+    "sbunkerDisinfo": "Sbunker · Dezinformimi",
+    "newest": "Më të rejat së pari",
+    "oldest": "Më të vjetrat së pari"
   },
   "tools": {
     "responseTools": "Hapësira e përgjigjes",
@@ -426,7 +469,7 @@
     "approve": "Mirato shabllonin",
     "manualDistribution": "Shqyrtoni tekstin para shpërndarjes. Kopjimi nuk dërgon dhe nuk publikon asgjë. Shpërndarja automatike dhe përkthimi i drejtpërdrejtë nuk janë të lidhura.",
     "selectTemplate": "Zgjidhni një shabllon për ta plotësuar me një pretendim.",
-    "draft": "Draft",
+    "draft": "Në përgatitje",
     "approved": "I miratuar",
     "email": "Email",
     "social": "Postim social",
@@ -500,7 +543,7 @@
     "externalService": "Hyrja me GitHub nuk nënkupton qasje në depo. Integrimet e publikimit kërkojnë leje të veçanta.",
     "retiredService": "Pocket u mbyll më 8 korrik 2025 dhe nuk është objektiv integrimi.",
     "projectPartners": "Partnerët e projektit",
-    "codonCredit": "in co-operation with CODON a part of Progon LLC.",
+    "codonCredit": "Në bashkëpunim me CODON, pjesë e Progon LLC.",
     "metadataRemoved": "Metadatat e imazhit u hoqën",
     "verifyIntegrity": "Verifiko integritetin e skedarit",
     "integrityPassed": "SHA-256 përputhet me gjurmën e ruajtur",
@@ -519,7 +562,8 @@
     "feedStale": "Burimi nuk mund të përditësohej. Po shfaqen artikujt e ruajtur më parë.",
     "menu": "Menuja",
     "setupRequired": "Kërkohet konfigurim në server",
-    "authEmailService": "Shërbimi për email-et e autentikimit dhe miratimit është vendosur. Diagnostikimi i administratorit kontrollon konfigurimin e kredencialeve, jo dorëzimin ose gjendjen e ofruesit."
+    "authEmailService": "Shërbimi për email-et e autentikimit dhe miratimit është vendosur. Diagnostikimi i administratorit kontrollon konfigurimin e kredencialeve, jo dorëzimin ose gjendjen e ofruesit.",
+    "hoursShort": "orë"
   },
   "identity": {
     "kicker": "Hapësirë e pavarur për informacion të verifikuar",
@@ -597,5 +641,34 @@
     "translate": "Përkthe me Google",
     "review": "Përkthim automatik — kërkohet shqyrtim redaktorial; zgjidhni tekstin për kopjim",
     "limit": "Përktheni një fragment deri në 5000 karaktere."
+  },
+  "roles": {
+    "visitor": "Vizitor",
+    "analyst": "Analist",
+    "editor": "Redaktor",
+    "team_lead": "Udhëheqës ekipi",
+    "admin": "Administrator"
+  },
+  "accountStatus": {
+    "approved": "Miratuar",
+    "pending_approval": "Në pritje të miratimit",
+    "rejected": "Refuzuar",
+    "suspended": "Pezulluar"
+  },
+  "notFound": {
+    "message": "Faqja nuk u gjet",
+    "home": "Kthehu në kryefaqe"
+  },
+  "setup": {
+    "title": "Kërkohet konfigurimi i Disbunk",
+    "description": "Kopjoni .env.example në .env dhe konfiguroni VITE_SUPABASE_URL dhe VITE_SUPABASE_ANON_KEY.",
+    "restart": "Rinisni serverin e zhvillimit ose rindërtoni dhe vendosni aplikacionin përsëri."
+  },
+  "pictureErrors": {
+    "format": "Përdorni një imazh JPEG, PNG ose WebP.",
+    "size": "Fotografia duhet të jetë deri në 5 MB.",
+    "pixels": "Përdorni imazh më të vogël se 25 megapikselë.",
+    "processing": "Përpunimi i imazhit nuk është i disponueshëm.",
+    "prepare": "Fotografia nuk mund të përgatitej."
   }
 }

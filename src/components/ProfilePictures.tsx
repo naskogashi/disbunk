@@ -1,3 +1,4 @@
+import i18n from "@/i18n";
 import { useProfilePicture } from "@/hooks/useProfilePicture";
 import { useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,16 +16,16 @@ export function PrivateAvatar({path,fallbackUrl,name,className}:{path?:string|nu
   return <Avatar className={className}><AvatarImage src={path?query.data:fallbackUrl||undefined} alt={name}/><AvatarFallback>{name.split(/\s+/).slice(0,2).map(part=>part[0]).join("").toUpperCase()}</AvatarFallback></Avatar>;
 }
 async function preparePicture(file:File) {
-  if(!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("Use a JPEG, PNG, or WebP image.");
-  if(file.size>5*1024*1024)throw new Error("The picture must be 5 MB or smaller.");
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error(i18n.t("pictureErrors.format"));
+  if(file.size>5*1024*1024)throw new Error(i18n.t("pictureErrors.size"));
   const bitmap=await createImageBitmap(file);
   try {
-    if(bitmap.width*bitmap.height>25_000_000)throw new Error("Use an image smaller than 25 megapixels.");
+    if(bitmap.width*bitmap.height>25_000_000)throw new Error(i18n.t("pictureErrors.pixels"));
     const canvas=document.createElement("canvas");canvas.width=512;canvas.height=512;
-    const context=canvas.getContext("2d");if(!context)throw new Error("Image processing is unavailable.");
+    const context=canvas.getContext("2d");if(!context)throw new Error(i18n.t("pictureErrors.processing"));
     const side=Math.min(bitmap.width,bitmap.height);
     context.drawImage(bitmap,(bitmap.width-side)/2,(bitmap.height-side)/2,side,side,0,0,512,512);
-    const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(value=>value?resolve(value):reject(new Error("Unable to prepare the picture.")),"image/webp",0.9));
+    const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(value=>value?resolve(value):reject(new Error(i18n.t("pictureErrors.prepare"))),"image/webp",0.9));
     return new File([blob],"picture.webp",{type:blob.type});
   } finally{bitmap.close();}
 }

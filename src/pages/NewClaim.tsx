@@ -15,16 +15,8 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, FileText, Loader2, Sparkles, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const DEMO_CLAIM = {
-  title: "Viral video claims parliament building was stormed during protest",
-  description:
-    "A video circulating on social media claims to show a storming of the parliament building during a political protest. The video has been shared over 50,000 times across Facebook, Twitter, and Telegram. Initial analysis suggests the footage may be from a different event in a different country, repurposed with misleading captions.",
-  sourceUrl: "https://facebook.com/example/post/12345",
-  language: "sq",
-};
-
 export default function NewClaim() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -32,10 +24,10 @@ export default function NewClaim() {
 
   const isFirstTime = !onboardingDone;
 
-  const [title, setTitle] = useState(isFirstTime ? DEMO_CLAIM.title : "");
-  const [description, setDescription] = useState(isFirstTime ? DEMO_CLAIM.description : "");
-  const [sourceUrl, setSourceUrl] = useState(isFirstTime ? DEMO_CLAIM.sourceUrl : "");
-  const [language, setLanguage] = useState(isFirstTime ? DEMO_CLAIM.language : "en");
+  const [title, setTitle] = useState(isFirstTime ? t("claims.demoTitle") : "");
+  const [description, setDescription] = useState(isFirstTime ? t("claims.demoDescription") : "");
+  const [sourceUrl, setSourceUrl] = useState(isFirstTime ? "https://example.com/demo-claim" : "");
+  const [language, setLanguage] = useState(i18n.language.startsWith("en") ? "en" : "sq");
   const [submitting, setSubmitting] = useState(false);
   const [showDemo, setShowDemo] = useState(isFirstTime);
 
@@ -43,7 +35,7 @@ export default function NewClaim() {
     setTitle("");
     setDescription("");
     setSourceUrl("");
-    setLanguage("en");
+    setLanguage(i18n.language.startsWith("en") ? "en" : "sq");
     setShowDemo(false);
   };
 
@@ -70,7 +62,7 @@ export default function NewClaim() {
     if (error) {
       toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Claim submitted successfully" });
+      toast({ title: t("claims.submitted") });
       navigate(`/claims/${data.id}`);
     }
   };
@@ -159,8 +151,8 @@ export default function NewClaim() {
                     <SelectValue placeholder={t("claims.selectLanguage")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="en">English</SelectItem>
                     <SelectItem value="sq">Shqip</SelectItem>
+                    <SelectItem value="en">English</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

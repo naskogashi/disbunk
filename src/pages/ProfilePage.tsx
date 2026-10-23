@@ -1,3 +1,5 @@
+import { uiLocale } from "@/lib/locale";
+import { displayDate } from "@/lib/locale";
 import { ProfilePictureEditor } from "@/components/ProfilePictures";
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -78,7 +80,8 @@ function ActivityHeatmap({ data }: { data: ActivityDay[] }) {
     }
   });
 
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = Array.from({ length: 12 }, (_, month) => new Intl.DateTimeFormat(uiLocale(), { month: "short" }).format(new Date(2026, month, 1)));
+  const weekdays = Array.from({ length: 7 }, (_, day) => new Intl.DateTimeFormat(uiLocale(), { weekday: "short" }).format(new Date(2026, 0, 4 + day)));
 
   return (
     <div className="space-y-2">
@@ -103,7 +106,7 @@ function ActivityHeatmap({ data }: { data: ActivityDay[] }) {
       <div className="flex gap-1">
         {/* Day labels */}
         <div className="flex flex-col gap-[3px] pr-1">
-          {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
+          {["", weekdays[1], "", weekdays[3], "", weekdays[5], ""].map((d, i) => (
             <div key={i} className="h-[11px] text-[9px] text-muted-foreground leading-[11px]">
               {d}
             </div>
@@ -122,7 +125,7 @@ function ActivityHeatmap({ data }: { data: ActivityDay[] }) {
                     />
                   </TooltipTrigger>
                   <TooltipContent side="top" className="text-xs">
-                    <p className="font-mono">{day.date}</p>
+                    <p className="font-mono">{displayDate(day.date)}</p>
                     <p>{day.count} {t("profile.contributions")}</p>
                   </TooltipContent>
                 </Tooltip>
@@ -261,12 +264,12 @@ export default function ProfilePage() {
               <div className="flex items-center gap-2 flex-wrap">
                 {profile?.roles.map((role) => (
                   <Badge key={role} variant="outline" className="text-[10px] font-mono uppercase">
-                    {role}
+                    {t(`roles.${role}`)}
                   </Badge>
                 ))}
                 <span className="text-xs text-muted-foreground flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
-                  {t("profile.memberSince")} {stats?.memberSince ? new Date(stats.memberSince).toLocaleDateString() : "—"}
+                  {t("profile.memberSince")} {stats?.memberSince ? displayDate(stats.memberSince) : "—"}
                 </span>
               </div>
             </div>

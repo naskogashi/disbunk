@@ -132,23 +132,23 @@ export function OnboardingModal({ open, onComplete }: OnboardingModalProps) {
             <div className="pt-2">
               {step === 0 && (
                 <StepChecklist items={[
-                  "Report suspicious claims with context",
-                  "Track claim status from pending to verified",
-                  "Demo claim pre-filled for your first try",
+                  t("onboarding.checkClaimContext"),
+                  t("onboarding.checkClaimStatus"),
+                  t("onboarding.checkClaimDemo"),
                 ]} />
               )}
               {step === 1 && (
                 <StepChecklist items={[
-                  "Upload screenshots, documents, and links",
-                  "Tag evidence by type for easy filtering",
-                  "Build a shared evidence vault with your team",
+                  t("onboarding.checkEvidenceUpload"),
+                  t("onboarding.checkEvidenceTags"),
+                  t("onboarding.checkEvidenceVault"),
                 ]} />
               )}
               {step === 2 && (
                 <StepChecklist items={[
-                  "Coordinate investigations in real-time",
-                  "Assign claims to team members",
-                  "Track team performance and impact",
+                  t("onboarding.checkTeamCoordinate"),
+                  t("onboarding.checkTeamAssign"),
+                  t("onboarding.checkTeamImpact"),
                 ]} />
               )}
             </div>

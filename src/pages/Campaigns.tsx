@@ -1,3 +1,4 @@
+import { displayDate } from "@/lib/locale";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -282,7 +283,7 @@ export default function Campaigns() {
                       )}
                       <span className="flex items-center gap-1 font-mono">
                         <Calendar className="h-3 w-3" />
-                        {new Date(campaign.created_at).toLocaleDateString()}
+                        {displayDate(campaign.created_at)}
                       </span>
                     </div>
                   </div>
@@ -383,7 +384,7 @@ function CampaignDetail({ campaignId, onBack }: { campaignId: string; onBack: ()
             </span>
           )}
           <span className="font-mono">
-            {new Date(campaign.created_at).toLocaleDateString()}
+            {displayDate(campaign.created_at)}
           </span>
         </div>
       </div>
@@ -413,7 +414,7 @@ function CampaignDetail({ campaignId, onBack }: { campaignId: string; onBack: ()
                     <div className="flex items-center gap-3 shrink-0">
                       <ClaimStatusBadge status={cc.claims.status} />
                       <span className="text-xs text-muted-foreground font-mono">
-                        {new Date(cc.claims.created_at).toLocaleDateString()}
+                        {displayDate(cc.claims.created_at)}
                       </span>
                     </div>
                   </CardContent>

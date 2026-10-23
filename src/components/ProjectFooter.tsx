@@ -13,7 +13,7 @@ export function ProjectFooter() {
         <img src="/partners/metamorphosis.webp" width="560" height="175" decoding="async" alt="Metamorphosis Foundation" className="h-auto max-h-16 w-48 max-w-full object-contain" loading="lazy" />
         <img src="/partners/civic-literacy-initiative.webp" width="560" height="294" decoding="async" alt="Civic Literacy Initiative" className="h-auto max-h-20 w-36 max-w-full object-contain" loading="lazy" />
         <img src="/partners/civicus.webp" width="353" height="320" decoding="async" alt="CIVICUS" className="h-auto max-h-20 w-24 max-w-full object-contain" loading="lazy" />
-        <a href="https://sbunker.org" target="_blank" rel="noopener noreferrer" aria-label="Sbunker (opens in a new tab)" className="rounded-md p-2 transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
+        <a href="https://sbunker.org" target="_blank" rel="noopener noreferrer" aria-label={t("common.externalSbunker")} className="rounded-md p-2 transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
           <img src="/partners/sbunker.webp" alt="Sbunker" width="200" height="258" className="h-20 w-auto object-contain" loading="lazy" decoding="async" />
         </a>
       </div>
