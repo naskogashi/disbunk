@@ -20,13 +20,10 @@ it("defaults to Albanian on an English browser and loads the workspace only afte
   expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(sq.identity.heroFirst);
   expect(screen.getByText(sq.claims.investigating)).toBeVisible();
   expect(workspace.load).not.toHaveBeenCalled();
-  const languages = screen.getByRole("combobox", { name: sq.common.interfaceLanguage });
-  expect(Array.from(languages.querySelectorAll("option"), option => option.value)).toEqual(["sq", "en"]);
-  fireEvent.change(languages, { target: { value: "en" } });
-  await waitFor(() => expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(en.identity.heroFirst));
-  expect(localStorage.getItem("disbunk_language")).toBe("en");
-  expect(document.documentElement.lang).toBe("en");
-  fireEvent.click(screen.getByRole("link", { name: en.landing.signIn }));
+  expect(screen.getAllByRole("link", { name: "English" })[0]).toHaveAttribute("href", "/en/");
+  expect(screen.getAllByRole("link", { name: "Shqip" })[0]).toHaveAttribute("href", "/");
+  expect(document.documentElement.lang).toBe("sq");
+  fireEvent.click(screen.getByRole("link", { name: sq.landing.signIn }));
   expect(await screen.findByText("Workspace loaded")).toBeVisible();
   expect(workspace.load).toHaveBeenCalledTimes(1);
 });

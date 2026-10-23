@@ -1,6 +1,11 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import PublicPage from "./pages/PublicPage";
+import NotFound from "./pages/NotFound";
+import { PublicLocale } from "./components/PublicLocale";
+import { publicRoutes } from "./lib/public-site";
+import { APP_PATHS } from "./lib/page-metadata";
 import Landing from "./pages/Landing";
 import { PageLoading } from "./components/PageLoading";
 import { RouteMetadata } from "./components/RouteMetadata";
@@ -16,8 +21,11 @@ function WorkspaceEntry() {
   return <Suspense fallback={<PageLoading/>}><Workspace/></Suspense>;
 }
 export default function RootApp() {
-  return <BrowserRouter><RouteMetadata/><RouteErrorBoundary><Routes>
-    <Route path="/" element={<Landing/>}/>
-    <Route path="*" element={<WorkspaceEntry/>}/>
+  return <BrowserRouter><PublicLocale/><RouteMetadata/><RouteErrorBoundary><Routes>
+    {Object.entries(publicRoutes).flatMap(([id,paths])=>Object.values(paths).map(path=><Route key={path} path={path} element={id==="home" ? <Landing/> : <PublicPage/>}/>))}
+    {APP_PATHS.map(path=><Route key={path} path={path} element={<WorkspaceEntry/>}/>)}
+    <Route path="/claims/:id" element={<WorkspaceEntry/>}/>
+    <Route path="/sbunker" element={<WorkspaceEntry/>}/>
+    <Route path="*" element={<NotFound/>}/>
   </Routes></RouteErrorBoundary></BrowserRouter>;
 }

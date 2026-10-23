@@ -3,6 +3,7 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import en from "./en.json";
 import sq from "./sq.json";
+import { publicRoute, languageOf } from "@/lib/public-site";
 
 i18n
   .use(LanguageDetector)
@@ -13,6 +14,7 @@ i18n
       sq: { translation: sq },
     },
     initImmediate: false,
+    lng: typeof window !== "undefined" && (publicRoute(window.location.pathname) || (window.location.pathname==="/en" || window.location.pathname.startsWith("/en/"))) ? languageOf(window.location.pathname) : undefined,
     fallbackLng: "sq",
     supportedLngs: ["sq", "en"],
     interpolation: { escapeValue: false },
