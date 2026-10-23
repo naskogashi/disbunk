@@ -4,7 +4,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AppHeader } from "@/components/AppHeader";
 import { Outlet } from "react-router-dom";
-import { ProjectFooter } from "@/components/ProjectFooter";
+import { WorkspaceFooter } from "@/components/WorkspaceFooter";
 
 export function AppLayout() {
   const { t } = useTranslation();
@@ -18,7 +18,7 @@ export function AppLayout() {
           <main id="content" className="flex-1 p-5 sm:p-8 lg:p-10">
             <Suspense fallback={<p role="status">{t("common.loading")}</p>}><Outlet /></Suspense>
           </main>
-          <ProjectFooter />
+          <WorkspaceFooter />
         </div>
       </div>
     </SidebarProvider>
