@@ -14,11 +14,11 @@ it('provides public section links from login and closes the accessible mobile me
   render(<I18nextProvider i18n={i18n}><MemoryRouter initialEntries={['/login']}><PublicHeader/></MemoryRouter></I18nextProvider>);
   expect(screen.getByRole('link',{name:sq.publicNav.technology})).toHaveAttribute('href','/#technology');
   expect(screen.getByRole('link',{name:sq.landing.signIn})).toHaveAttribute('href','/login');
-  fireEvent.click(screen.getByRole('button',{name:sq.publicNav.open}));
-  const dialog=await screen.findByRole('dialog',{name:sq.publicNav.menu});
-  expect(dialog).toBeInTheDocument();
+  fireEvent.click(screen.getByLabelText(sq.publicNav.open));
+  const menu=screen.getByLabelText(sq.publicNav.open).closest('details')!;
+  expect(menu).toHaveAttribute('open');
   fireEvent.click(screen.getByRole('link',{name:new RegExp(sq.publicNav.technologyHint)}));
-  await waitFor(()=>expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  expect(menu).not.toHaveAttribute('open');
 });
 
 it('explains current limitations and distinguishes planned integrations in both languages',async()=>{

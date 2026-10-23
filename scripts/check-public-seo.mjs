@@ -14,6 +14,8 @@ for(const entry of entries) {
   assert.equal(doc.querySelector('link[rel="canonical"]').href,url);
   assert.match(doc.querySelector('meta[name="robots"]').content,/^index/);
   assert.equal(doc.querySelectorAll('h1').length,1,url);
+  assert.equal(doc.querySelectorAll('script[type="module"]').length,0,url);
+  assert.ok(doc.querySelector('script[src="/public-site.js"][defer]'),url);
   assert.ok(doc.querySelector('main').textContent.length>400,url);
   assert.equal(doc.querySelectorAll('link[hreflang]').length,3,url);
   assert.equal(entry.querySelector('lastmod').textContent,'2026-10-23');

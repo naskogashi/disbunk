@@ -23,6 +23,10 @@ try {
     doc.querySelectorAll('link[hreflang]').forEach(element=>element.remove());
     for(const [language,href] of Object.entries(meta.alternates??{})){const link=doc.createElement('link');link.rel='alternate';link.hreflang=language;link.href=href;doc.head.append(link);}
     doc.getElementById('site-structured-data')?.remove();
+    if(meta.publicPage){
+      doc.querySelectorAll('script[type="module"],link[rel="modulepreload"]').forEach(element=>element.remove());
+      const enhancement=doc.createElement('script');enhancement.src='/public-site.js';enhancement.defer=true;doc.body.append(enhancement);
+    }
     const schema=structuredData(path,meta.title,meta.description);
     if(schema){const script=doc.createElement('script');script.id='site-structured-data';script.type='application/ld+json';script.textContent=JSON.stringify(schema).replaceAll('<','\\u003c');doc.head.append(script);}
     const target=file??(path==='/'?'dist/index.html':`dist${path.replace(/\/$/,'')}/index.html`);

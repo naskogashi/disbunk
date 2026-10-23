@@ -23,3 +23,17 @@ New Albanian copy requires **TODO-SQ-REVIEW** by a native speaker. Pending facts
 - Google software app rich result requirements: https://developers.google.com/search/docs/appearance/structured-data/software-app
 
 Performance measurements and live routing verification are recorded below after deployment. Lab Lighthouse metrics are not a substitute for field INP data.
+
+## Live verification 2026-10-23
+
+Initial SEO deployment 50730ef succeeded. CloudPanel accepted the generated routing configuration; a local backup of the previous vhost is retained in ignored artifacts. HTTP checks confirmed English pages 200 with full English HTML, random sq/en paths 404, llms.txt 200 text/plain, `/en` → 301 `/en/`, `/login/` → 301 `/login`, and an existing UUID claim deep link 200. Public pages remain crawlable and app shells remain noindex.
+
+Schema.org validator: zero errors and warnings on the English homepage. Google Rich Results Test: one valid SoftwareApplication, no critical errors, two optional warnings (offers and aggregateRating). Test result: https://search.google.com/test/rich-results/result?id=S3DTTtRtFpVA61uNrqv6aA. No pricing or ratings were invented to remove optional warnings.
+
+Owner confirmed that Disbunk is part of Sbunker NGO and CODON is a technical partner. The public organization schema now identifies Sbunker as parentOrganization. Signed-in workspace footers show CODON only; public acknowledgements are retained.
+
+Public pages now use static HTML with a small progressive-enhancement script for menu, theme, section highlighting and language-link hashes. The React app bundle is not loaded on prerendered public pages. The native mobile details menu and all content/language links work without JavaScript. Login and authenticated workspace pages retain the React application and existing language select. A hydration experiment was discarded after it failed to improve the performance audit reliably.
+
+Initial live Lighthouse mobile scores before static delivery: Albanian performance 90 / SEO 100 / accessibility 100, English performance 86 / SEO 100 / accessibility 100, LCP 2.0 seconds and CLS 0 for both. The final static English production preview measured performance 99 / SEO 100 / accessibility 100, LCP 1.5 seconds, CLS 0 and total blocking time 50 ms. Re-run live measurements after deployment; reports are retained in ignored `artifacts/`. INP requires field data and is not claimed from a navigation-only lab test.
+
+The first route inventory exposed a nested React Router regression: the exact outer `/login` match consumed the path before the workspace router. Hotfix 98e9ffe restores a wildcard boundary with an explicit route allowlist inside WorkspaceEntry. A regression test now uses real nested workspace routes. The deployed login form was verified after the fix.
