@@ -21,15 +21,16 @@
 
 ## Step 2: Configure Nginx for SPA Routing
 
-In CloudPanel, go to **Sites → disbunk.org → Vhost** and add this inside the server block:
+In CloudPanel, go to **Sites → disbunk.org → Vhost**. After deploying the build,
+replace the broad `location /` SPA fallback with the generated contents of
+`deploy/nginx-public-routes.conf`, inside the HTTPS server block. Keep existing
+TLS, root, logs, global settings and ACME locations. CloudPanel validates Nginx
+before reloading. Save a backup of the original vhost first.
 
-```nginx
-location / {
-    try_files $uri $uri/ /index.html;
-}
-```
-
-This ensures all routes (e.g., `/dashboard`, `/claims`) are handled by the React SPA.
+The generated configuration serves public pages directly, restricts workspace
+shells to registered routes, normalizes trailing slashes and returns real 404s.
+It changes when the central route inventory changes; deploy files before updating
+the vhost. Run `npm run check:seo` after every build.
 
 ## Step 3: Enable SSL
 

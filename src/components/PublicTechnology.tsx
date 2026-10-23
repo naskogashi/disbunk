@@ -21,7 +21,7 @@ export function PublicTechnology() {
       </div>
       <article className="mt-10 overflow-hidden rounded-2xl border border-border bg-card">
         <div className="grid gap-6 border-b border-border p-6 sm:p-8 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
-          <div><span className="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success"><Check className="size-3.5"/>{t('publicTools.active')}</span><h3 className="mt-5 text-3xl font-extrabold">HDBSCAN</h3><p className="mt-2 text-sm text-muted-foreground">{t('publicTools.hdbscanLabel')}</p></div>
+          <div><span className="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success"><Check className="size-3.5"/>{t('publicTools.active')}</span><h3 className="mt-5 text-2xl font-extrabold">{t("publicTools.groupHeading")}</h3><p className="mt-2 text-sm text-muted-foreground">HDBSCAN · {t('publicTools.hdbscanLabel')}</p></div>
           <div className="space-y-4"><p className="text-lg font-semibold leading-relaxed">{t('publicTools.intro')}</p><p className="text-sm leading-relaxed text-muted-foreground">{t('publicTools.example')}</p></div>
         </div>
         <div className="grid md:grid-cols-3">{benefits.map(({key,icon:Icon},index)=><div key={key} className="border-b border-border p-6 last:border-0 sm:p-8 md:border-b-0 md:border-r">

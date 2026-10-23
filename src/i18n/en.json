@@ -58,8 +58,8 @@
     "loadFailed": "This page could not load",
     "retryMessage": "Refresh the page to try again. If you were editing, check your last saved changes before continuing.",
     "reload": "Refresh page",
-    "homeTitle": "Disbunk.org — Evidence first. A coordinated response.",
-    "homeDescription": "Verify claims, preserve evidence, and coordinate a credible response to misinformation. Disbunk connects journalists, researchers, and civil society.",
+    "homeTitle": "Disbunk – Fact-Checking & Disinformation Response",
+    "homeDescription": "Verify claims, preserve evidence and coordinate responses to disinformation. A workspace for journalists, researchers and civil society in the Western Balkans.",
     "loginDescription": "Sign in to Disbunk to collaborate on investigations and evidence-based responses to misinformation.",
     "workspaceDescription": "The Disbunk workspace for claims, evidence, investigations, and coordinated responses to misinformation.",
     "notFound": "Page not found"
@@ -567,23 +567,23 @@
     "clusteringService": "Nightly multilingual narrative grouping on the Disbunk server, with admin review. Similarity is not a fact-check verdict."
   },
   "identity": {
-    "kicker": "An independent workspace for verified information",
+    "kicker": "Collaborative fact-checking and disinformation response",
     "heroFirst": "Follow the claim.",
     "heroSecond": "Find the facts.",
-    "description": "Disinformation spreads fast. Bring the sources, evidence, and people together to build a response that holds up.",
+    "description": "Disbunk is a collaborative platform where journalists, researchers and civil society verify claims, preserve evidence and coordinate responses to disinformation.",
     "journalists": "For journalists",
     "researchers": "For researchers",
     "civilSociety": "For civil society",
     "traceLabel": "The verification trail",
     "principle": "Every finding should lead back to its evidence.",
     "workspaceLabel": "The working parts",
-    "workspaceTitle": "Less fragmented. More connected.",
+    "workspaceTitle": "Tools for collaborative fact-checking",
     "workspaceDesc": "Move from an isolated link to a shared investigation, with the context kept intact.",
     "claimsDesc": "Capture a claim, preserve its source, and follow its progress.",
     "evidenceDesc": "Keep files, fingerprints, and supporting context together.",
     "campaignsDesc": "Connect related claims and document the wider pattern.",
     "teamsDesc": "Give each investigation a clear owner and a shared next step.",
-    "howTitle": "A process people can stand behind.",
+    "howTitle": "How claim verification works",
     "joinLabel": "Put the evidence to work"
   },
   "accounts": {
@@ -721,7 +721,7 @@
   },
   "publicTools": {
     "eyebrow": "TECHNOLOGY IN SERVICE OF FACTS",
-    "title": "Less noise. More time to investigate.",
+    "title": "AI-assisted grouping for claim investigations",
     "mission": "At Disbunk, our mission is to identify and counter disinformation quickly, through evidence and human review.",
     "challenge": "Reviewing every claim or link one at a time takes significant effort. The internet is full of noise: repeated content and material unrelated to an investigation. Technology helps us organize that material so researchers can concentrate on verification.",
     "active": "In use · human reviewed",
@@ -745,6 +745,7 @@
     "documentsBody": "A planned integration for organizing documents and source material that support investigations. Documents and evidence remain part of a documented verification process.",
     "notificationsBody": "Planned channels for team notifications through Slack, Discord or Telegram. Notifications inside Disbunk are active today; delivery to these external channels is not connected yet.",
     "learnMore": "Explore the tool",
-    "visit": "More about {{name}} (opens in a new tab)"
+    "visit": "More about {{name}} (opens in a new tab)",
+    "groupHeading": "Bring similar claims together for review"
   }
 }

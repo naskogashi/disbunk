@@ -58,8 +58,8 @@
     "loadFailed": "Kjo faqe nuk mund të ngarkohej",
     "retryMessage": "Rifreskoni faqen për të provuar përsëri. Nëse po redaktonit, kontrolloni ndryshimet e fundit të ruajtura përpara se të vazhdoni.",
     "reload": "Rifresko faqen",
-    "homeTitle": "Disbunk.org — Provat të parat. Reagim i koordinuar.",
-    "homeDescription": "Verifikoni pretendimet, ruani provat dhe koordinoni një reagim të besueshëm ndaj dezinformimit me gazetarë, studiues dhe shoqërinë civile.",
+    "homeTitle": "Disbunk – Verifikim faktesh dhe reagim ndaj dezinformimit",
+    "homeDescription": "Platformë bashkëpunimi për gazetarë, hulumtues dhe shoqërinë civile: verifikoni pretendime, ruani prova dhe reagoni ndaj dezinformimit në Ballkanin Perëndimor.",
     "loginDescription": "Hyni në Disbunk për të bashkëpunuar në hetime dhe reagime të bazuara në prova ndaj dezinformimit.",
     "workspaceDescription": "Hapësira Disbunk për pretendime, prova, hetime dhe reagime të koordinuara ndaj dezinformimit.",
     "notFound": "Faqja nuk u gjet"
@@ -567,23 +567,23 @@
     "clusteringService": "Grupim shumëgjuhësh i narrativave gjatë natës në serverin e Disbunk, me shqyrtim nga administratori. Ngjashmëria nuk është përfundim i verifikimit të fakteve."
   },
   "identity": {
-    "kicker": "Hapësirë e pavarur për informacion të verifikuar",
+    "kicker": "Platformë bashkëpunimi për verifikimin e fakteve",
     "heroFirst": "Ndiq pretendimin.",
     "heroSecond": "Gjej faktet.",
-    "description": "Dezinformimi përhapet shpejt. Bashkoni burimet, provat dhe njerëzit për një përgjigje të mbështetur në fakte.",
+    "description": "Disbunk është platformë bashkëpunimi ku gazetarët, hulumtuesit dhe shoqëria civile verifikojnë pretendime, ruajnë prova dhe koordinojnë reagimin ndaj dezinformimit.",
     "journalists": "Për gazetarët",
     "researchers": "Për hulumtuesit",
     "civilSociety": "Për shoqërinë civile",
     "traceLabel": "Rruga e verifikimit",
     "principle": "Çdo përfundim duhet të mbështetet në provat e tij.",
     "workspaceLabel": "Mjetet e punës",
-    "workspaceTitle": "Më pak shpërndarje. Më shumë bashkëpunim.",
+    "workspaceTitle": "Mjetet e platformës për verifikimin e fakteve",
     "workspaceDesc": "Nga një lidhje e veçuar te një hulumtim i përbashkët, duke ruajtur kontekstin.",
     "claimsDesc": "Regjistro pretendimin, ruaj burimin dhe ndiq ecurinë.",
     "evidenceDesc": "Mbaj skedarët, gjurmët dhe kontekstin mbështetës së bashku.",
     "campaignsDesc": "Lidh pretendimet dhe dokumento modelin më të gjerë.",
     "teamsDesc": "Cakto përgjegjësin dhe hapin e radhës për çdo hulumtim.",
-    "howTitle": "Një proces të cilit mund t'i besoni.",
+    "howTitle": "Si funksionon verifikimi",
     "joinLabel": "Vëri provat në punë"
   },
   "accounts": {
@@ -721,7 +721,7 @@
   },
   "publicTools": {
     "eyebrow": "TEKNOLOGJIA NË SHËRBIM TË FAKTEVE",
-    "title": "Më pak zhurmë. Më shumë kohë për hulumtim.",
+    "title": "Grupimi i pretendimeve me inteligjencë artificiale",
     "mission": "Në platformën Disbunk, misioni ynë është të identifikojmë dhe të çmontojmë dezinformimin sa më shpejt, me prova dhe shqyrtim njerëzor.",
     "challenge": "Shqyrtimi i çdo pretendimi apo lidhjeje, një nga një, kërkon shumë kohë. Interneti është i mbushur me zhurmë: përmbajtje e përsëritur ose pa lidhje me një hulumtim. Teknologjia na ndihmon ta organizojmë këtë material, që hulumtuesit të përqendrohen te verifikimi.",
     "active": "Në përdorim · me shqyrtim njerëzor",
@@ -745,6 +745,7 @@
     "documentsBody": "Integrim i planifikuar për të organizuar dokumente dhe burime që mbështesin hulumtimet. Dokumentet dhe provat mbeten pjesë e një procesi të dokumentuar verifikimi.",
     "notificationsBody": "Kanale të planifikuara për njoftime të ekipeve në Slack, Discord ose Telegram. Aktualisht, njoftimet brenda Disbunk janë aktive; dërgimi në këto kanale të jashtme nuk është ende i lidhur.",
     "learnMore": "Njihuni me mjetin",
-    "visit": "Më shumë për {{name}} (hapet në skedë të re)"
+    "visit": "Më shumë për {{name}} (hapet në skedë të re)",
+    "groupHeading": "Lidhni pretendimet e ngjashme për shqyrtim"
   }
 }
